@@ -1,0 +1,150 @@
+/* ==========
+   基本默认值
+   ========== */
+body {
+	height: 100%;
+}
+
+html {
+   	font-size: 62.5%;
+   	color:#222;
+   	height: 100%;
+   }
+
+::selection {
+    background-color: #b3d4fc;
+    text-shadow: none;
+}
+
+ul,p,h1,h2 {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+	text-decoration:none;
+}
+
+
+/* ==========
+   工具样式
+   ========== */
+
+
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.f-r {
+    float: right !important;
+}
+
+.f-l {
+    float: left !important;
+}
+
+.t-r {
+    text-align: right !important;
+}
+
+.t-l {
+    text-align: left !important;
+}
+
+.t-c {
+    text-align: center !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.t-h {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* ===============
+   浏览器更新提示
+   =============== */
+
+.browserupgrade {
+	font-size: 16px;
+    margin: 0;
+    padding: 1rem;
+    background: #ccc;
+}
+
+
+
+/* ===============
+   自定义页面样式
+   =============== */
+
+body {
+	font-size: 1.6rem;
+	line-height: 1.5;
+    background-color: #f7f7f7;
+}
+
+/* 网站头部 */
+
+
+/* 网站内容-文章区 */
+
+
+.container {
+	width: 100%;
+	background: rgb(240,240,240);
+}
+
+.container .bg-pic img {
+	width:100%;
+}
+
+
+.main {
+	width: 72%;
+}
+
+
+@media screen and (max-width:768px) {
+    .main {
+        width: 90%;
+        float: none !important ;
+        margin: 0 auto;
+  }
+}
+
+@media screen and (max-width:500px) {
+    .main {
+        width: 95%;
+  }
+}
