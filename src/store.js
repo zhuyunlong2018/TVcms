@@ -85,8 +85,7 @@ const state = {
     content: [],
     imgs: []
   },
-   //URL: 'http://www.ynxnw.top/bianquan.php'
-   URL: 'http://localhost:80/blogtest.php'
+   URL: 'http://localhost:80/bianquan.php'
 };
 
  //格式化时间

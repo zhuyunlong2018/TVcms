@@ -1,3 +1,10 @@
+
+
+-- 创建数据库
+CREATE DATABASE bianquan
+
+
+-- 创建用户表
 CREATE TABLE IF NOT EXISTS `user`(
    `u_id` INT UNSIGNED AUTO_INCREMENT,
    `u_name` VARCHAR(30) NOT NULL,
@@ -9,6 +16,8 @@ CREATE TABLE IF NOT EXISTS `user`(
    PRIMARY KEY ( `u_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 创建文章表
 CREATE TABLE IF NOT EXISTS `article`(
    `a_id` INT UNSIGNED AUTO_INCREMENT,
    `a_author` VARCHAR(30) NOT NULL,
@@ -24,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `article`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+-- 创建评论表
 CREATE TABLE IF NOT EXISTS `comment`(
    `c_id` INT UNSIGNED AUTO_INCREMENT,
    `c_article_id` INT(6) NOT NULL,
@@ -37,6 +47,8 @@ CREATE TABLE IF NOT EXISTS `comment`(
    PRIMARY KEY ( `c_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 创建图片地址表
 CREATE TABLE IF NOT EXISTS `images`(
    `i_id` INT UNSIGNED AUTO_INCREMENT,
    `i_src` TEXT NOT NULL,
@@ -45,6 +57,8 @@ CREATE TABLE IF NOT EXISTS `images`(
    PRIMARY KEY ( `i_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 创建网站统计表
 CREATE TABLE IF NOT EXISTS `webdata`(
    `total_article` INT NOT NULL,
    `total_user` INT NOT NULL,
@@ -54,19 +68,22 @@ CREATE TABLE IF NOT EXISTS `webdata`(
    `total_viewers` INT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 插入网站统计数据初始值
 INSERT INTO `webdata` (`total_article`, `total_user`, `total_comment`,`total_praise`,`total_tags`,`total_viewers`) VALUES   
 (0, 0, 0, 0, 0, 0);  
 
 
 
 
-
+-- 创建标签表
 CREATE TABLE IF NOT EXISTS `tags`(
    `tag_id` INT UNSIGNED AUTO_INCREMENT,
    `tag_name` TEXT NOT NULL,
    PRIMARY KEY ( `tag_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 创建友情链接表
 CREATE TABLE IF NOT EXISTS `neighbors`(
    `nb_id` INT UNSIGNED AUTO_INCREMENT,
    `nb_name` TEXT NOT NULL,
@@ -78,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `neighbors`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
+-- 创建个人作品表
 CREATE TABLE IF NOT EXISTS `production`(
    `pr_id` INT UNSIGNED AUTO_INCREMENT,
    `pr_name` TEXT NOT NULL,
@@ -90,10 +107,13 @@ CREATE TABLE IF NOT EXISTS `production`(
    PRIMARY KEY ( `pr_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 创建网站about内容表
 CREATE TABLE IF NOT EXISTS `about`(
    `about` TEXT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 插入网站about内容初始值
 INSERT INTO `about` (`about`) VALUES   
 ('hello');  
 
