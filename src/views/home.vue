@@ -5,7 +5,7 @@
       <log-in></log-in>
       <!-- 背景图 -->
       <div class="bg-pic">
-        <img src="../assets/imgs/1.png" alt="">
+        <img src="../assets/imgs/nav.jpg" alt="">
       </div>
        <!-- 面包屑导航 -->
       <div class="crumbs">

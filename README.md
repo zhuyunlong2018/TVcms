@@ -17,6 +17,7 @@ npm run build
 后端：
 1、先创建mysql数据库，将bianquan.sql中的语句复制到数据库中创建数据库和相应表
 2、将vendor文件夹和bianquan.php放入PHP环境网站跟目录，如D:\wamp\www文件夹下
+3、先注册一个账号充当管理员，在MySQL中将user表中该账号的u_status改为admin;
 
 
 
@@ -28,17 +29,17 @@ npm run build
 
 **主要功能**：
 > * 用户登录、注册；
-* 用户评论、游客评论；
-* 评论回复邮件提醒；
-* 页面文章标签检索展示；
-* 页面文章时间轴排序；
-* 页面项目展示；
-* 后台文章增加、编辑、删除、下架管理；
-* 后台评论屏蔽、解封管理；
-* 后台图片上传、删除功能；
-* 后台标签新增、删除功能；
-* 后台友情链接新增、删除功能；
-* 后台实验室项目新增、下架功能；
+> * 用户评论、游客评论；
+> * 评论回复邮件提醒；
+> * 页面文章标签检索展示；
+> * 页面文章时间轴排序；
+> * 页面项目展示；
+> * 后台文章增加、编辑、删除、下架管理；
+> * 后台评论屏蔽、解封管理；
+> * 后台图片上传、删除功能；
+> * 后台标签新增、删除功能；
+> * 后台友情链接新增、删除功能；
+> * 后台实验室项目新增、下架功能；
 
 **目前存在问题**： 
 1.  页面响应式布局方面，还有一些元素在特殊窗口尺寸中显示不协调；
@@ -94,9 +95,9 @@ npm run build
 ├── package.json// 项目基本信息
 ├── README.md// 项目说明
 ```
-组件结构图：
+**组件结构图：**
 ![](http://www.ynxnw.top/static/imgs/20180405/jiegoutu.jpg)
-**主要页面展示**：
+**主要页面展示：**
 首页：![](http://www.ynxnw.top/static/imgs/20180409/HOME.jpg)
 文章详情：![](http://www.ynxnw.top/static/imgs/20180409/article.jpg)
 留言板：![](http://www.ynxnw.top/static/imgs/20180409/MESSAGE.jpg)
@@ -114,13 +115,13 @@ npm run build
 实验室管理：![](http://www.ynxnw.top/static/imgs/20180406/lab.png)
 
 
-引用：
-[vue-simplemde](https://github.com/gamegos/php-jwt)
-[PHP-JWT](https://packagist.org/packages/firebase/php-jwt)
-sendMail
+**引用：**
+> [vue-simplemde](https://github.com/gamegos/php-jwt)
+> [PHP-JWT](https://packagist.org/packages/firebase/php-jwt)
+> sendMail
 
-参考文章：
-[Vue.js实现文章评论和回复评论功能](https://blog.csdn.net/weixin_35987513/article/details/53748707)
+**参考文章：**
+> [Vue.js实现文章评论和回复评论功能](https://blog.csdn.net/weixin_35987513/article/details/53748707)
 
 
 测试账号：zhonghuatuzi@163.com
