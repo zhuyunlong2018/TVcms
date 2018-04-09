@@ -1,6 +1,8 @@
 # bianquan-blog
-vue.js+php博客系统 [Demo](http://www.ynxnw.top)
-
+vue.js+php博客系统 
+> * [Demo](http://www.ynxnw.top)
+> * 测试账号：zhonghuatuzi@163.com
+> * 密码：zhonghuatuzi
 
 ## Build Setup
 前端：
@@ -15,17 +17,17 @@ npm run dev
 npm run build
 ```
 后端：
-1、先创建mysql数据库，将bianquan.sql中的语句复制到数据库中创建数据库和相应表
-2、将vendor文件夹和bianquan.php放入PHP环境网站跟目录，如D:\wamp\www文件夹下
-3、先注册一个账号充当管理员，在MySQL中将user表中该账号的u_status改为admin;
+1.  先创建mysql数据库，将bianquan.sql中的语句复制到数据库中创建数据库和相应表
+2.  将vendor文件夹和bianquan.php放入PHP环境网站跟目录，如D:\wamp\www文件夹下
+3.  先注册一个账号充当管理员，在MySQL中将user表中该账号的u_status改为admin;
 
 
 
 **项目简介**：
-> 名称：边泉博客管理平台；
-> 前端：Vue+Vuex+Vue-Router+axios；
-> 后端：PHP+MySQL；
-> 兼容性：ie9+，移动端，PC端；
+> * 名称：边泉博客管理平台；
+> * 前端：Vue+Vuex+Vue-Router+axios；
+> * 后端：PHP+MySQL；
+> * 兼容性：ie9+，移动端，PC端；
 
 **主要功能**：
 > * 用户登录、注册；
@@ -116,7 +118,7 @@ npm run build
 
 
 **引用：**
-> [vue-simplemde](https://github.com/gamegos/php-jwt)
+> [vue-simplemde](https://github.com/F-loat/vue-simplemde)
 > [PHP-JWT](https://packagist.org/packages/firebase/php-jwt)
 > sendMail
 
@@ -124,5 +126,3 @@ npm run build
 > [Vue.js实现文章评论和回复评论功能](https://blog.csdn.net/weixin_35987513/article/details/53748707)
 
 
-测试账号：zhonghuatuzi@163.com
-密码：zhonghuatuzi
