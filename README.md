@@ -6,8 +6,7 @@ vue.js+php(TP5)博客系统
 > * 密码：zhonghuatuzi
 
 说明：若在博客提问题，请不要使用测试账号，直接退出登录使用游客评论，填写真实邮箱，或用真实邮箱注册账号回复，方便作者回复邮件通知，也可直接给作者发邮件或在此提出issue。
-回复邮件自动提醒功能，需在\bianquan\servers\application/common.php的send_mail函数中填写相应邮箱参数。
-
+回复邮件自动提醒功能，需在\bianquan-blog\servers\application/common.php的send_mail函数中填写相应邮箱参数。
 
 >更新记录
 #commits5 之前：后端为原生php；
@@ -28,7 +27,9 @@ npm run build
 后端：
 1.  将bianquan.sql导入到mysql数据库中
 2.  默认管理员账号名为admin，邮箱：920@qq.com，密码：123456,修改请到MySQL中修改
-3.  后台改用thinkPHP5框架，请自行下载tp5的核心文件thinkphp文件夹，放到\bianquan\servers下。
+3.  后台改用thinkPHP5框架，请自行下载tp5的核心文件thinkphp文件夹，放到\bianquan-blog\servers下。
+4.  到\bianquan-blog\servers\application下修改database.php文件的数据库地址、名称和密码为自己的。
+5.  若后端地址为非localhost：80，前台请求地址需相应修改，请到\bianquan-blog\src\vuex下的state.js和actions.js中(共两处URL)修改请求地址URL。
 
 
 
