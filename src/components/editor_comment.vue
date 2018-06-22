@@ -3,7 +3,7 @@
 		<div class="table clearfix" v-for="(item,index) in all_comment" :key=index>
 			<p class="clearfix" @click="_show_detail(index)">
         <span class="id" >ID</span>
-        <span>所属文章ID:{{item.index}}</span>
+        <span>所属文章ID:{{item.index}} &nbsp;&nbsp;&nbsp;&nbsp; 标题:{{item.title}} </span>
         <span>状态</span>
       </p>
       <transition-group name='slide-fade' >
@@ -12,18 +12,18 @@
           <ul class="clearfix" >
             <!-- <li><span></span></li> -->
             <li>
-              <span class="id">{{comment.id}}</span>
-              <span :class="{'pull_right': comment.oldComment}">
-                <span class="name">{{comment.user}}</span>
-                  <i v-if="comment.oldComment">回复</i> 
-                  <span class="name">{{comment.oldComment}}</span>
-                  <span class="time">{{comment.time}}</span>
-                  <span>{{comment.content}}</span>
+              <span class="id">{{comment.c_id}}</span>
+              <span :class="{'pull_right': comment.c_oldComment}">
+                <span class="name">{{comment.c_user}}</span>
+                  <i v-if="comment.c_oldComment">回复</i> 
+                  <span class="name">{{comment.c_oldComment}}</span>
+                  <span class="time">{{comment.c_time}}</span>
+                  <span>{{comment.c_content}}</span>
               </span>
             </li>
             <li>
                 <label  class="el-switch">
-                  <input  @click="_publish(index,_index,comment.id,comment.published)" type="checkbox" name="switch" :checked="comment.published==1?'checked':null " :disabled="status=='admin'?null:'disabled'" >
+                  <input  @click="_publish(index,_index,comment.c_id,comment.c_published)" type="checkbox" name="switch" :checked="comment.c_published==1?'checked':null " :disabled="status=='admin'?null:'disabled'" >
                   <span class="el-switch-style"></span>
                 </label>
               
@@ -61,15 +61,10 @@ export default {
       data._index = _index;
       data.id = id;
       data.publish = published == 1?0:1;
-      //console.log(data.index);
-      //console.log(data._index);
-      //console.log(data.id);
-      //console.log(data.publish);
       this.comment_publish(data);
     },
     _show_detail(index) {
       this.show_detail = index;
-      console.log(index);
     },
     ...mapActions(["get_all_comment","comment_publish"])
 
@@ -82,9 +77,6 @@ export default {
 
   },
   mounted:function() {
-
-     // this.$store.dispatch('getList');
-    //console.log(this.$store);
   }
 }
 </script>

@@ -1,8 +1,17 @@
 # bianquan-blog
-vue.js+php博客系统 
+
+vue.js+php(TP5)博客系统
 > * [Demo](http://www.ynxnw.top)
 > * 测试账号：zhonghuatuzi@163.com
 > * 密码：zhonghuatuzi
+
+说明：若在博客提问题，请不要使用测试账号，直接退出登录使用游客评论，填写真实邮箱，或用真实邮箱注册账号回复，方便作者回复邮件通知，也可直接给作者发邮件或在此提出issue。
+回复邮件自动提醒功能，需在\bianquan\servers\application/common.php的send_mail函数中填写相应邮箱参数。
+
+
+>更新记录
+#commits5 之前：后端为原生php；
+#commits6 后端改为thinkPHP5框架
 
 ## Build Setup
 前端：
@@ -17,9 +26,9 @@ npm run dev
 npm run build
 ```
 后端：
-1.  先创建mysql数据库，将bianquan.sql中的语句复制到数据库中创建数据库和相应表
-2.  将vendor文件夹和bianquan.php放入PHP环境网站跟目录，如D:\wamp\www文件夹下
-3.  先注册一个账号充当管理员，在MySQL中将user表中该账号的u_status改为admin;
+1.  将bianquan.sql导入到mysql数据库中
+2.  默认管理员账号名为admin，邮箱：920@qq.com，密码：123456,修改请到MySQL中修改
+3.  后台改用thinkPHP5框架，请自行下载tp5的核心文件thinkphp文件夹，放到\bianquan\servers下。
 
 
 
@@ -43,7 +52,7 @@ npm run build
 > * 后台友情链接新增、删除功能；
 > * 后台实验室项目新增、下架功能；
 
-**目前存在问题**： 
+**目前存在问题**：
 1.  页面响应式布局方面，还有一些元素在特殊窗口尺寸中显示不协调；
 2.  虽然开放注册功能，但未加入验证码、邮箱验证功能，并且关闭普通会员文章操作权限，普通会员投稿默认为不发布，并且无法编辑状态，需管理员发布和编辑。
 3.  评论被回复邮件通知还是半成品；
@@ -53,8 +62,8 @@ npm run build
 **文件目录**
 ```
 ├──node_modules// 项目依赖的模块    
-├── src// 源码目录 
-│ ├──  assets// 资源目录 
+├── src// 源码目录
+│ ├──  assets// 资源目录
 │ ├── components// vue公共组件
 │ │ ├── header.vue// 前台头部组件
 │ │ ├── footer.vue// 前台底部组件
@@ -84,11 +93,34 @@ npm run build
 │ │ └── home.vue// 前台根组件
 │ ├── App.vue// 页面入口文件（根组件）
 │ ├── routes.js// 页面路由操作文件
-│ ├── store.js// 页面数据仓库文件
+│ ├── vuex// 页面数据仓库文件夹
+│ │ ├── actions.js// 异步操作文件
+│ │ ├── mutations.js// 同步操作文件
+│ │ ├── state.js// 数据状态存储文件
+│ │ ├── common.js// 公用函数文件
+│ │ └── store.js// 数据仓库文件
 │ └── main.js// 程序入口文件（入口js文件）
-├── vendor// php包文件夹，含jwt和sendMail
 ├── bianquan.sql// 数据库语句
-├── bianquan.php// 后台php主体
+├── servers// 后台服务端文件夹
+│ ├── application//后台应用文件夹
+│ │ └── index// index模块
+│ │   ├── controller// index控制器
+│ │   │ ├── About.php// about类
+│ │   │ ├── Article.php// Article类
+│ │   │ ├── Comment.php// Comment类
+│ │   │ ├── Images.php// Images类
+│ │   │ └── ...略
+│ │   └── model// index模型
+│ │     ├── About.php// about类
+│ │     ├── Article.php// Article类
+│ │     ├── Comment.php// Comment类
+│ │     ├── Images.php// Images类
+│ │     └── ...略
+│ ├── extend//扩展文件夹
+│ ├── public//公共文件夹
+│ ├── thinkphp//框架核心文件夹，需下载
+│ ├── vendor//第三方类扩展文件夹
+│ └── ...其余略，具体参考thinkPHP5目录
 ├── static// 静态文件，比如一些图片，json数据等
 ├── .babelrc// ES6语法编译配置
 ├── .editorconfig// 定义代码格式
@@ -124,5 +156,3 @@ npm run build
 
 **参考文章：**
 > [Vue.js实现文章评论和回复评论功能](https://blog.csdn.net/weixin_35987513/article/details/53748707)
-
-

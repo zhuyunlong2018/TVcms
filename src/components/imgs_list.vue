@@ -4,11 +4,9 @@
       <div class="col-xs-6 col-sm-4 col-md-3" v-for="(img,index) in all_images.src" :key="index" >
         <div class="thumbnail">
           <i @click="_del_img(index)" class="glyphicon glyphicon-remove-circle" ></i>
-          <img :src="img" alt="">
+          <img :src="img.i_src" alt="">
         </div>
       </div>
-
-
     </div>
   </div>
 </template>
@@ -37,7 +35,6 @@ export default {
 
   },
   mounted:function() {
-
 
   }
 }

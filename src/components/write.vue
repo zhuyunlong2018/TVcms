@@ -163,25 +163,23 @@ import index from '../../node_modules/_vue@2.5.16@vue';
               url: this.URL,
               data: params
             }).then(function (res) {
-              //console.log('成功了');
-              //console.log(res.data);
-              if(res.data.result == 'success') {
+              if(res.data.result && res.data.data.result == 'success') {
                   _this.imgs = [];
                   _this.images = [];
                   _this.images_name = [];
                   // console.log(_this.imgs_url.length);
-                  let news = res.data.images.length;
+                  let news = res.data.data.images.length;
                   if(olds>0) {
                     for(let i=0;i<olds;i++) {
                       for(let j=0;j<news;j++) {
                         //console.log(old_imgs[i]);
-                        if(old_imgs[i] == res.data.images[j]) {
-                          res.data.images.splice(j,1);
+                        if(old_imgs[i] == res.data.data.images[j]) {
+                          res.data.data.images.splice(j,1);
                         }
                       }
                     }
                   }
-                  _this.imgs_url.push.apply(_this.imgs_url,res.data.images);
+                  _this.imgs_url.push.apply(_this.imgs_url,res.data.data.images);
                   //console.log(_this.imgs_url);
               }
 

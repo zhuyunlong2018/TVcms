@@ -5,14 +5,14 @@
         <div class="thumbnail">
           <div class="icon"><i class="glyphicon glyphicon-user"></i></div>
           <div class="name">
-            <h2>000{{user.id}}</h2>
+            <h2>000{{user.u_id}}</h2>
             <h4><span>{{user.name}}</span>
-              <span class="status" >{{user.status=='admin'?'管理员':user.status=='member'?'会员':'游客'}}</span>
+              <span class="status" >{{user.u_status=='admin'?'管理员':user.u_status=='member'?'会员':'游客'}}</span>
             </h4>
 
           </div>
-          <p>邮箱:{{user.email}}</p>
-          <p>注册时间:{{user.time?user.time:'未注册'}}</p>
+          <p>邮箱:{{user.u_email?user.u_email:'暂无权限查看邮箱'}}</p>
+          <p>注册时间:{{user.u_time?user.u_time:'未注册'}}</p>
         </div>
       </div>
 

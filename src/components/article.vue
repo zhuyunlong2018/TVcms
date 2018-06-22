@@ -2,30 +2,30 @@
   <div class="main f-l">
     <div class="article">
       <h3 class="title">
-        {{ show_article.title }}
+        {{ show_article.a_title }}
       </h3>
       <ul class="tag">
             <li>
               <i class="glyphicon glyphicon-tag" ></i>
-               {{show_article.tag}}
+               {{show_article.a_tag}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-pencil" ></i>{{show_article.author}}</li>
+              <i class="glyphicon glyphicon-pencil" ></i>{{show_article.a_author}}</li>
             <li>
-              <i class="glyphicon glyphicon-calendar" ></i>{{show_article.time}}
+              <i class="glyphicon glyphicon-calendar" ></i>{{show_article.a_time}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-comment" ></i>{{show_article.comment}}
+              <i class="glyphicon glyphicon-comment" ></i>{{show_article.a_comment}}
             </li>
             <li>
-              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{show_article.praise}}
+              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{show_article.a_praise}}
             </li>
       </ul>
-      <div class="content" v-html="show_article.content" v-highlight></div>
+      <div class="content" v-html="show_article.a_content" v-highlight></div>
       <p class="praise" >
         <i class="glyphicon glyphicon-thumbs-up" @click="_add_praise" ></i>
       </p>
-      <p class="praise" ><span>累计获得{{show_article.praise}}个赞</span></p>
+      <p class="praise" ><span>累计获得{{show_article.a_praise}}个赞</span></p>
       <comment></comment>
     </div>
   </div>
@@ -64,9 +64,7 @@
       ...mapState(["show_article"])
     },
     created:function() {
-      //console.log(this.$route.params.id);
-      //console.log(this.show_article.id);
-    if(!this.show_article.id){
+    if(!this.show_article.a_id){
         this.getShowArticle(this.$route.params.id);
       }
     },

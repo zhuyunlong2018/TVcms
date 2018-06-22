@@ -2,11 +2,11 @@
   <div class="main f-l">
     <div class="project">
 		<div class="project-container clearfix">
-			<a class="enter-detail" :href="production[src_index].src" target="view_window" >进入详情</a>
+			<a class="enter-detail" :href="show_production.src" target="view_window" >进入详情</a>
 			<div class="main-title">
 				<h2>实验室</h2>
 					<ul>
-						<li v-if="item.published==1?true:false" @click="_change_production(index)" v-for="(item,index) in production" :key="index" ><a :class="{'selected':show_item==index}" >{{item.name}}</a></li>
+						<li v-if="item.pr_published==1?true:false" @click="_change_production(index)" v-for="(item,index) in production" :key="index" ><a :class="{'selected':show_item==index}" >{{item.pr_name}}</a></li>
 					</ul>
 			</div>
 			<div class="project-container-main">
@@ -45,8 +45,7 @@ export default {
 		return {
 			show_page: 0,
 			show_item: 0,
-			change: null,
-			src_index: 0
+			change: null
 		}
 	},
 	methods: {
@@ -79,7 +78,6 @@ export default {
 			clearInterval(this.change);
 			this.show_page = 0;
 			this.show_item = index;
-			this.src_index = index;
 			this.change_production(index);
 			setTimeout(() => {
 				this.turn_page();

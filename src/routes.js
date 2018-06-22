@@ -17,7 +17,7 @@ import otherSeting from './components/other_seting.vue';
 import user from './components/user.vue';
 import timer from './components/timer.vue';
 import lab from './components/lab.vue';
-import store from './store.js';
+import store from './vuex/store.js';
 
 
 

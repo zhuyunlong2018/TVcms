@@ -31,21 +31,21 @@
               <h5>bianquan</h5>
             </div>
             <p><i class="glyphicon glyphicon-text-color"></i></p>
-          </div>		
+          </div>
           <div class="box box2">
             <div class="name">
               <h4>start time</h4>
               <h5>2018-01-23</h5>
             </div>
             <p><i class="glyphicon glyphicon-send"></i></p>
-          </div>	
+          </div>
           <div class="box box3">
             <div class="name">
               <h4>present time</h4>
               <h5>{{now_time}}</h5>
             </div>
             <p><i class="glyphicon glyphicon-time"></i></p>
-          </div>	
+          </div>
           <div class="box box4">
             <div class="name">
               <h4>time of duration</h4>
@@ -60,8 +60,8 @@
         <div class="content">
           <ul>
             <li v-for="(item,index) in all_neighbors" :key="index">
-              <a :href="item.url" target="view_window">
-              {{item.name}}</a>
+              <a :href="item.nb_url" target="view_window">
+              {{item.nb_name}}</a>
               <span><i class="glyphicon glyphicon-pushpin" ></i></span>
             </li>
           </ul>
@@ -93,8 +93,7 @@ export default {
       this.add_praise(id);
     },
     show_text:function(e) {
-      let element = e.toElement.className;
-      //console.log(element);
+      let element = e.target.className;
       switch(element) {
         case 'glyphicon glyphicon-star-empty':
           this.msg_text = '按control+d收藏本站';
@@ -122,7 +121,7 @@ export default {
             var z1 = tag.z * cos + (tag.y- this.CY) * sin;
             tag.y = y1;
             tag.z = z1;
-        } 
+        }
     },
     rotateY(angleY){
         var cos = Math.cos(angleY);
@@ -132,13 +131,13 @@ export default {
             var z1 = tag.z * cos + (tag.x-this.CX) * sin;
             tag.x = x1;
             tag.z = z1;
-        } 
+        }
     },
     listener(event){//响应鼠标移动
         var x = event.clientX - this.CX;
         var y = event.clientY - this.CY;
         this.speedX = x*0.0001>0 ? Math.min(this.RADIUS*0.00002, x*0.0001) : Math.max(-this.RADIUS*0.00002, x*0.0001);
-        this.speedY = y*0.0001>0 ? Math.min(this.RADIUS*0.00002, y*0.0001) : Math.max(-this.RADIUS*0.00002, y*0.0001); 
+        this.speedY = y*0.0001>0 ? Math.min(this.RADIUS*0.00002, y*0.0001) : Math.max(-this.RADIUS*0.00002, y*0.0001);
     },
       _get_article_by_tag:function(tag) {
         let obj = {};
@@ -148,7 +147,7 @@ export default {
         this.changePage(0);
         this.getPageCount();
         this.getPage(0);
-        this.$router.push('/');  
+        this.$router.push('/');
       }
   },
   mounted() {
@@ -156,7 +155,7 @@ export default {
                     this.rotateX(this.speedX);
                     this.rotateY(this.speedY);
                 }, 17)
-    
+
   },
   created() {
     clearInterval(make_cloud);
@@ -173,7 +172,7 @@ export default {
             let b = a * Math.sqrt(options.length * Math.PI)//计算标签相对于球心的角度
             tag.text = options[i].tag;
             tag.x = this.CX +  this.RADIUS * Math.sin(a) * Math.cos(b);//根据标签角度求出标签的x,y,z坐标
-            tag.y = this.CY +  this.RADIUS * Math.sin(a) * Math.sin(b); 
+            tag.y = this.CY +  this.RADIUS * Math.sin(a) * Math.sin(b);
             tag.z = this.RADIUS * Math.cos(a);
             tags.push(tag);
         }

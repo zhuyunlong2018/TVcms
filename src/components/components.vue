@@ -9,7 +9,7 @@
             </div>
             <div class="content">
               <button type="button" class="btn btn-info" @click="close_alert" >确认</button>
-            </div> 
+            </div>
         </div>
       </div>
     </transition>
@@ -63,8 +63,8 @@
         <div class="search">
           <div class="logo"></div>
           <div class="input">
-            <input @focus="input_event(true)" @blur="input_event(false)" type="text" placeholder="Search for..." />
-            <input type="submit" value="Go!" />
+            <input v-model="searchkey" @focus="input_event(true)" @blur="input_event(false)" type="text" placeholder="Search for..." />
+            <input type="submit" value="Go!" @click='_searchfor' />
           </div>
           <div @click="TOGGLE_SEARCH(false)" class="close-search"><i class="glyphicon glyphicon-menu-down" ></i></div>
         </div>
@@ -75,7 +75,7 @@
 
 <script>
 
-import { mapState,mapMutations } from 'vuex';
+import { mapState,mapMutations,mapActions } from 'vuex';
 export default {
        data(){
           return{
@@ -83,18 +83,28 @@ export default {
                   width: ''
               },
               bing_blur: false,
+              searchkey: ''
           }
       },
   methods: {
     ...mapMutations(['close_alert','take_img_src','close_show_img','TOGGLE_SEARCH']),
+    ...mapActions(['searchfor']),
     stopProp: function(e) {
         e = e || event;
         e.stopPropagation();
       },
-      input_event:function(bloor) {
+    input_event:function(bloor) {
         //console.log(bloor);
         this.bing_blur = bloor;
+      },
+    _searchfor: function() {
+      let key = this.searchkey;
+      key = key.replace(/\s+/g,"");
+      if(key == '') {
+         return;
       }
+      this.searchfor(key);
+    }
   },
   computed: {
     ...mapState(['alert','show_img','show_loading','search','alert_notice'])
@@ -108,20 +118,20 @@ export default {
         let img_width = e.target.naturalWidth;
         let scale = 0.9;
         let show_width,show_height;
-        if(img_height>h*scale) {//判断图片高度    
-            show_height = h*scale;//如大于窗口高度，图片高度进缩放    
-            show_width = show_height/img_height*img_width;//等比例缩宽度    
-            if(show_width>w*scale) {//如宽度扔大于窗口宽度    
-                show_width = w*scale;//再对宽度进行缩放    
-            }    
-        } else if(img_width>w*scale) {//如图片高度合适，判图片宽度    
-            show_width = w*scale;//如大于窗口宽度，图片宽度进缩放  
-        } else {//如果图片真实高度和宽度都符合要求，高宽不变    
-            show_width = img_width;    
-        }    
+        if(img_height>h*scale) {//判断图片高度
+            show_height = h*scale;//如大于窗口高度，图片高度进缩放
+            show_width = show_height/img_height*img_width;//等比例缩宽度
+            if(show_width>w*scale) {//如宽度扔大于窗口宽度
+                show_width = w*scale;//再对宽度进行缩放
+            }
+        } else if(img_width>w*scale) {//如图片高度合适，判图片宽度
+            show_width = w*scale;//如大于窗口宽度，图片宽度进缩放
+        } else {//如果图片真实高度和宽度都符合要求，高宽不变
+            show_width = img_width;
+        }
         this.show_width.width = show_width + 'px';
         this.take_img_src(e.target.src);
-      
+
     }
 })
   }
@@ -283,12 +293,12 @@ export default {
   bottom: 0;
   position: absolute;
 }
- 
+
 .container1 > div, .container2 > div, .container3 > div {
   width: 15px;
   height: 15px;
   background-color: #0099ff;
- 
+
   border-radius: 100%;
   position: absolute;
   -webkit-animation: bouncedelay 1.2s infinite ease-in-out;
@@ -296,88 +306,88 @@ export default {
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
- 
+
 .spinner7 .spinner-container {
   position: absolute;
   width: 100%;
   height: 100%;
 }
- 
+
 .container2 {
   -webkit-transform: rotateZ(45deg);
   transform: rotateZ(45deg);
 }
- 
+
 .container3 {
   -webkit-transform: rotateZ(90deg);
   transform: rotateZ(90deg);
 }
- 
+
 .circle1 { top: 0; left: 0; }
 .circle2 { top: 0; right: 0; }
 .circle3 { right: 0; bottom: 0; }
 .circle4 { left: 0; bottom: 0; }
- 
+
 .container2 .circle1 {
   -webkit-animation-delay: -1.1s;
   animation-delay: -1.1s;
 }
- 
+
 .container3 .circle1 {
   -webkit-animation-delay: -1.0s;
   animation-delay: -1.0s;
 }
- 
+
 .container1 .circle2 {
   -webkit-animation-delay: -0.9s;
   animation-delay: -0.9s;
 }
- 
+
 .container2 .circle2 {
   -webkit-animation-delay: -0.8s;
   animation-delay: -0.8s;
 }
- 
+
 .container3 .circle2 {
   -webkit-animation-delay: -0.7s;
   animation-delay: -0.7s;
 }
- 
+
 .container1 .circle3 {
   -webkit-animation-delay: -0.6s;
   animation-delay: -0.6s;
 }
- 
+
 .container2 .circle3 {
   -webkit-animation-delay: -0.5s;
   animation-delay: -0.5s;
 }
- 
+
 .container3 .circle3 {
   -webkit-animation-delay: -0.4s;
   animation-delay: -0.4s;
 }
- 
+
 .container1 .circle4 {
   -webkit-animation-delay: -0.3s;
   animation-delay: -0.3s;
 }
- 
+
 .container2 .circle4 {
   -webkit-animation-delay: -0.2s;
   animation-delay: -0.2s;
 }
- 
+
 .container3 .circle4 {
   -webkit-animation-delay: -0.1s;
   animation-delay: -0.1s;
 }
- 
+
 @-webkit-keyframes bouncedelay {
   0%, 80%, 100% { -webkit-transform: scale(0.0) }
   40% { -webkit-transform: scale(1.0) }
 }
- 
+
 @keyframes bouncedelay {
   0%, 80%, 100% {
     transform: scale(0.0);
@@ -395,7 +405,7 @@ export default {
     -o-filter: blur(5px);
     -ms-filter: blur(5px);
     filter: blur(5px);
-  
+
   }
   .search-box {
     height: 100%;
@@ -471,7 +481,7 @@ input[type="submit"]:hover{
   @-webkit-keyframes scaleout {
     0% {
          color: rgba(0, 0, 0, 1);
-    
+
     -webkit-transform: translateY(10px);
     }
     10% {
@@ -555,7 +565,7 @@ input[type="submit"]:hover{
       padding: 8px 15px 26px 15px;
     }
 
-    
+
 .alert-notice {
   width: 200px;
   height: 100px;

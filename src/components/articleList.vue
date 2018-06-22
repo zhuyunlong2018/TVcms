@@ -2,20 +2,20 @@
     <div class="main f-l">
       <article class="clearfix" v-for="(item,index) in page_items" :key="index">
         <div class="pic f-l t-c" >
-          <a href="javascript:;"><img :src="item.img" alt="">
+          <a href="javascript:;"><img :src="item.a_img" alt="">
           </a>
         </div>
         <div class="content f-l">
           <a @click="SHOWARTICLE(index)" href="javascript:scroll(0,0)">
-            <h3 class="title">{{item.title}}</h3>
+            <h3 class="title">{{item.a_title}}</h3>
           </a>
-          <p class="summary" v-html="item.content" v-highlight ></p>
+          <p class="summary" v-html="item.a_content" v-highlight ></p>
           <ul class="tag">
-            <li  @click="_get_article_by_tag(item.tag)"><i class="glyphicon glyphicon-tag" ></i>{{item.tag}}</li>
-            <li><i class="glyphicon glyphicon-pencil" ></i>{{item.author}}</li>
-            <li><i class="glyphicon glyphicon-calendar" ></i>{{item.time}}</li>
-            <li><i class="glyphicon glyphicon-comment" ></i>{{item.comment}}</li>
-            <li><i class="glyphicon glyphicon glyphicon-heart" ></i>{{item.praise}}</li>
+            <li  @click="_get_article_by_tag(item.a_tag)"><i class="glyphicon glyphicon-tag" ></i>{{item.a_tag}}</li>
+            <li><i class="glyphicon glyphicon-pencil" ></i>{{item.a_author}}</li>
+            <li><i class="glyphicon glyphicon-calendar" ></i>{{item.a_time}}</li>
+            <li><i class="glyphicon glyphicon-comment" ></i>{{item.a_comment}}</li>
+            <li><i class="glyphicon glyphicon glyphicon-heart" ></i>{{item.a_praise}}</li>
           </ul>
         </div>
       </article>

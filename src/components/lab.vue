@@ -33,10 +33,10 @@
             <ul>
               <li v-for="(item,index) in production" :key="index" >
                 <i class="glyphicon glyphicon-paperclip" ></i>
-                <span class="name" >name:</span><span :class="{'unpublished':item.published==0?true:false}" >{{item.name}}</span>
+                <span class="name" >name:</span><span :class="{'unpublished':item.pr_published==0?true:false}" >{{item.pr_name}}</span>
                  <i @click="change_production(index)" class="glyphicon glyphicon-pencil" ></i>
-                 <i @click="publish_production(item.id,0)" v-show="item.published==1?true:false" class="glyphicon glyphicon-remove-circle" ></i>
-                 <i @click="publish_production(item.id,1)" v-show="item.published==0?true:false" class="glyphicon glyphicon-ok-circle" ></i>
+                 <i @click="publish_production(item.pr_id,0)" v-show="item.pr_published==1?true:false" class="glyphicon glyphicon-remove-circle" ></i>
+                 <i @click="publish_production(item.pr_id,1)" v-show="item.pr_published==0?true:false" class="glyphicon glyphicon-ok-circle" ></i>
               </li>
             </ul>
           </div>
@@ -89,9 +89,7 @@ export default {
               url: this.URL,
               data: params
             }).then(function (res) {
-              //console.log('成功了');
-              //console.log(res.data);
-              if(res.data.result == 'success') {
+              if(res.data.result) {
                 _this.show_alert_notice('操作项目成功');
                 let data = [];
                 _this.clear_lab_img(data);
@@ -125,17 +123,16 @@ export default {
         this.remove_lab_img(index);
       },
       change_production:function(index) {
-        this.lab.name = this.production[index].name;
-        this.lab.content = this.production[index].content.toString();
-        this.lab.url = this.production[index].src;
-        this.lab.id = this.production[index].id;
-        this.clear_lab_img(this.production[index].img);
+        this.lab.name = this.production[index].pr_name;
+        this.lab.content = this.production[index].pr_content.toString();
+        this.lab.url = this.production[index].pr_src;
+        this.lab.id = this.production[index].pr_id;
+        this.clear_lab_img(this.production[index].pr_img);
         this.lab.change_btn = false;
       },
       publish_production:function(id,publish) {
-        console.log(publish);
         let params = {
-          'act': 'close_production',
+          'act': 'toggle_production',
           'id':id,
           'publish': publish
         }
@@ -145,9 +142,7 @@ export default {
               url: this.URL,
               data: params
             }).then(function (res) {
-              //console.log('成功了');
-              //console.log(res.data);
-              if(res.data.result == 'success') {
+              if(res.data.result) {
                 _this.show_alert_notice('操作项目成功')
                 _this.get_production();
               }

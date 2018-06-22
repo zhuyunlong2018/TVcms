@@ -82,7 +82,7 @@
           }
         },
         _get_article_by_tag:function() {
-          if(this._crumbs == this.show_article.tag) {
+          if(this._crumbs == this.show_article.a_tag) {
             //console.log(this._crumbs);
             let obj = {};
             obj.tag = this._crumbs;
@@ -125,9 +125,9 @@
             break;
           case 'article':
             obj.tag = '';
-            obj.title = this.show_article.title;
+            obj.title = this.show_article.a_title;
             this.CHANGE_CRUMBS(obj);
-            return this.show_article.tag;
+            return this.show_article.a_tag;
             break;
           case 'msgborder':
             this.CLEAR_CRUMBS();

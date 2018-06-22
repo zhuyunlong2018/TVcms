@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './routes.js';
-import store from './store.js';
+import store from './vuex/store.js';
 import axios from 'axios';
 import 'babel-polyfill';
 import VueSimplemde from 'vue-simplemde';
@@ -18,7 +18,7 @@ axios.interceptors.request.use(
       config.headers.common['X-token'] = store.state.token;
       //console.log(config.headers);
     } else {
-      config.headers.common['X-token'] = null;
+      config.headers.common['X-token'] = '';
     }
     store.state.show_loading = true;
     return config;

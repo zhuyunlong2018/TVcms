@@ -38,6 +38,9 @@ export default {
     border-radius: 10px;
     box-shadow: 3px 3px 8px 2px #ccc;
   }
+  .main .about img {
+    max-width: 100%;
+  }
 
 
 </style>

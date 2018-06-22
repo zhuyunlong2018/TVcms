@@ -4,7 +4,7 @@
       <div class="mask" v-show="all_images.box" @click="close_all_imgs" >
         <div class="all-images"  >
               <div v-for="(img,index) in all_images.src"  :key="index" class="imgContainer">
-                <img :src="img" alt="">
+                <img :src="img.i_src" alt="">
                 <p v-show="all_images.write" class="set-background" @click="_set_background(index)" >设为封面</p>
                 <p v-show="all_images.write" @click="_add_img_article(index)" >加入正文</p>
                 <p v-show="!all_images.write" @click="_add_lab_imgs(index)" >加入项目</p>
@@ -28,15 +28,15 @@ export default {
         e.stopPropagation();
         },
         _add_img_article:function(index) {
-          let url = this.all_images.src[index];
+          let url = this.all_images.src[index].i_src;
           this.add_img_article(url);
         },
         _set_background:function(index) {
-          let url = this.all_images.src[index];
+          let url = this.all_images.src[index].i_src;
           this.set_background(url);
         },
         _add_lab_imgs:function(index) {
-          let url = this.all_images.src[index];
+          let url = this.all_images.src[index].i_src;
           if(this.lab_imgs.length>0) {
             for(let i=0;i<this.lab_imgs.length;i++) {
               if(url == this.lab_imgs[i]) {

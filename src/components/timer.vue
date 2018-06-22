@@ -11,7 +11,7 @@
                 <a>{{month.month}}</a>
               </dt>
               <dd class="timeline-article">
-                <p @click="show_detail(list.id)" v-for="(list,index_) in month.list" :key="index_" > {{list.time}} {{list.title}}</p>
+                <p @click="show_detail(list.id)" v-for="(list,index_) in month.list" :key="index_" > {{list.a_time}} {{list.a_title}}</p>
               </dd>
             </dl>
           </div>

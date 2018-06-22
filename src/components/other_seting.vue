@@ -52,10 +52,10 @@
             <ul>
               <li v-for="(item,index) in all_neighbors" :key="index" >
                 <i class="glyphicon glyphicon-paperclip" ></i>
-                <span>name:</span>{{item.name}}
-                <span>url:</span>{{item.url}}
-                <span>icon:</span>{{item.icon}}
-                <span>time:</span>{{item.time}}
+                <span>name:</span>{{item.nb_name}}
+                <span>url:</span>{{item.nb_url}}
+                <span>icon:</span>{{item.nb_icon}}
+                <span>time:</span>{{item.nb_time}}
                  <i @click="_del_neighbors(index)" class="remove glyphicon glyphicon-remove-circle" ></i>
               </li>
             </ul>
