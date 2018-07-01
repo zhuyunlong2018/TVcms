@@ -160,7 +160,7 @@ export default {
   created() {
     clearInterval(make_cloud);
     let make_cloud = setInterval(() => {
-      if(this.options) {
+      if(this.options.length) {
              let tags=[];
              let options = this.options;
              options = options.concat(this.options);
