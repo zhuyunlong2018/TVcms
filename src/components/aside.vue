@@ -197,7 +197,6 @@
                 return this.height / 2;
             }
         }
-    }
 </script>
 
 
