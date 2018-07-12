@@ -2,7 +2,7 @@
 namespace app\index\controller;
 use think\Controller;
 use \Firebase\JWT\JWT;
-vendor('Firebase.php-jwt.src.JWT');
+vendor('firebase.php-jwt.src.JWT');
 define('KEY', 'f1e6585wefweda');
 class User extends Controller
 {

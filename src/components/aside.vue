@@ -182,7 +182,6 @@
                         tags.push(tag);
                     }
                     this.tags = tags;
-                    console.log('tags', this.tags);
                     clearInterval(make_cloud);
                 }
             }, 2000)
@@ -197,6 +196,7 @@
                 return this.height / 2;
             }
         }
+    }
 </script>
 
 
