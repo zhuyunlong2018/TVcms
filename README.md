@@ -1,12 +1,9 @@
 # bianquan-blog
 
 vue.js+php(TP5)博客系统
-> * [Demo](http://www.ynxnw.top)
-> * 测试账号：zhonghuatuzi@163.com
-> * 密码：zhonghuatuzi
 
 说明：若在博客提问题，请不要使用测试账号，直接退出登录使用游客评论，填写真实邮箱，或用真实邮箱注册账号回复，方便作者回复邮件通知，也可直接给作者发邮件或在此提出issue。
-回复邮件自动提醒功能，需在\bianquan-blog\servers\application/common.php的send_mail函数中填写相应邮箱参数。
+
 
 >更新记录
 #commits5 之前：后端为原生php；
@@ -27,10 +24,10 @@ npm run build
 后端：
 1.  将bianquan.sql导入到mysql数据库中
 2.  默认管理员账号名为admin，邮箱：920@qq.com，密码：123456,修改请到MySQL中修改
-3.  后台改用thinkPHP5框架，请自行下载tp5的核心文件thinkphp文件夹，放到\bianquan-blog\servers下。
+3.  后台改用thinkPHP5框架，进入servers文件夹，composer install，或者请自行下载tp5的核心文件thinkphp文件夹，放到\bianquan-blog\servers下。
 4.  到\bianquan-blog\servers\application下修改database.php文件的数据库地址、名称和密码为自己的。
 5.  若后端地址为非localhost：80，前台请求地址需相应修改，请到\bianquan-blog\src\vuex下的state.js和actions.js中(共两处URL)修改请求地址URL。
-
+6.  回复邮件自动提醒功能，需在\bianquan-blog\servers\application\common.php的send_mail函数中填写相应邮箱参数。
 
 
 **项目简介**：
@@ -131,23 +128,23 @@ npm run build
 ├── README.md// 项目说明
 ```
 **组件结构图：**
-![](http://www.ynxnw.top/static/imgs/20180405/jiegoutu.jpg)
+![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180405/jiegoutu.jpg)
 **主要页面展示：**
-首页：![](http://www.ynxnw.top/static/imgs/20180409/HOME.jpg)
-文章详情：![](http://www.ynxnw.top/static/imgs/20180409/article.jpg)
-留言板：![](http://www.ynxnw.top/static/imgs/20180409/MESSAGE.jpg)
-实验室：![](http://www.ynxnw.top/static/imgs/20180409/PROJECT.jpg)
-时间轴：![](http://www.ynxnw.top/static/imgs/20180409/SEARCH.jpg)
-搜索：![](http://www.ynxnw.top/static/imgs/20180409/TIMER.jpg)
-网站概要：![](http://www.ynxnw.top/static/imgs/20180406/outline.png)
-个人中心：![](http://www.ynxnw.top/static/imgs/20180406/user.jpg)
-发布文章：![](http://www.ynxnw.top/static/imgs/20180406/write.png)
-编辑文章列表：![](http://www.ynxnw.top/static/imgs/20180406/edit.png)
-评论管理：![](http://www.ynxnw.top/static/imgs/20180406/comment.png)
-会员管理：![](http://www.ynxnw.top/static/imgs/20180406/member.png)
-图片管理：![](http://www.ynxnw.top/static/imgs/20180406/imgs.png)
-其他设置：![](http://www.ynxnw.top/static/imgs/20180406/otherseting.png)
-实验室管理：![](http://www.ynxnw.top/static/imgs/20180406/lab.png)
+首页：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/HOME.jpg)
+文章详情：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/article.jpg)
+留言板：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/MESSAGE.jpg)
+实验室：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/PROJECT.jpg)
+时间轴：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/SEARCH.jpg)
+搜索：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180409/TIMER.jpg)
+网站概要：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/outline.png)
+个人中心：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/user.jpg)
+发布文章：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/write.png)
+编辑文章列表：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/edit.png)
+评论管理：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/comment.png)
+会员管理：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/member.png)
+图片管理：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/imgs.png)
+其他设置：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/otherseting.png)
+实验室管理：![](https://github.com/920200256/bianquan-blog/blob/master/static/imgs/20180406/lab.png)
 
 
 **引用：**
