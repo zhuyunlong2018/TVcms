@@ -3,6 +3,7 @@
 
 namespace app\adminApi\validate;
 
+use app\lib\exception\ParameterException;
 use think\Request;
 use think\Validate;
 
@@ -21,11 +22,8 @@ class BaseValidate extends Validate
      */
     public function goCheck()
     {
-        //必须设置contetn-type:application/json
         $request = Request::instance();
         $params = $request->param();
-        $params['token'] = $request->header('token');
-
         if (!$this->check($params)) {
             $exception = new ParameterException(
                 [

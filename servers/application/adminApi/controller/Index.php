@@ -10,9 +10,12 @@ namespace app\adminApi\controller;
 
 
 
+use think\Request;
+
 class Index extends BaseController
 {
     public function index() {
         echo 'index';
+
     }
 }
