@@ -20,10 +20,10 @@ class BaseValidate extends Validate
      * @throws ParameterException
      * @return true
      */
-    public function goCheck()
-    {
+    public function goCheck() {
         $request = Request::instance();
         $params = $request->param();
+        $params['method'] = $request->method();
         if (!$this->check($params)) {
             $exception = new ParameterException(
                 [
@@ -35,6 +35,43 @@ class BaseValidate extends Validate
         }
         return true;
     }
+    protected function isMobile($value) {
+        $rule = '^1(3|4|5|7|8)[0-9]\d{8}$^';
+        $result = preg_match($rule, $value);
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    protected function isPost($value, $rule='', $data='', $field='') {
+        if($value == 'POST') {
+            return true;
+        }
+        return $field . '必须为POST';
+    }
+    protected function isGet($value, $rule='', $data='', $field='') {
+        if($value == 'GET') {
+            return true;
+        }
+        return $field . '必须为GET';
+    }
+    protected function isPositiveInteger($value, $rule='', $data='', $field='')
+    {
+        if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
+            return true;
+        }
+        return $field . '必须是正整数';
+    }
+
+    protected function isNotEmpty($value, $rule='', $data='', $field='')
+    {
+        if (empty($value)) {
+            return $field . '不允许为空';
+        } else {
+            return true;
+        }
+    }
 
 }

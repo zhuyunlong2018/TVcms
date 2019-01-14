@@ -100,7 +100,7 @@ class smtp
         #auth 
         if($this->auth) 
         { 
-            if (!$this->smtp_putcmd("AUTH LOGIN", base64_encode($this->user)))  
+            if (!$this->smtp_putcmd("CORS LOGIN", base64_encode($this->user)))
             { 
                 return $this->smtp_error("sending HELO command"); 
             } 

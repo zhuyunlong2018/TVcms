@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Created by bianquan
+ * User: ZhuYunlong
+ * Email: 920200256@qq.com
+ * Date: 2019/1/12
+ * Time: 20:07
+ */
 
 namespace app\lib\exception;
 
@@ -38,7 +44,8 @@ class ExceptionHandler extends Handle
             }
 
             $this->code = 500;
-            $this->msg = 'sorry，we make a mistake. (^o^)Y';
+            $this->msg = $e->getMessage();
+//            $this->msg = 'sorry，we make a mistake. (^o^)Y';
             $this->errorCode = 999;
             $this->recordErrorLog($e);
         }

@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pc
- * Date: 2019/1/8
- * Time: 20:36
+ * Created by bianquan
+ * User: ZhuYunlong
+ * Email: 920200256@qq.com
+ * Date: 2019/1/12
+ * Time: 20:07
  */
 
 namespace app\adminApi\controller;
@@ -16,6 +17,5 @@ class Index extends BaseController
 {
     public function index() {
         echo 'index';
-
     }
 }

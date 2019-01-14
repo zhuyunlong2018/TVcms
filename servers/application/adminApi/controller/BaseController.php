@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Created by bianquan
+ * User: ZhuYunlong
+ * Email: 920200256@qq.com
+ * Date: 2019/1/12
+ * Time: 20:07
+ */
 
 namespace app\adminApi\controller;
 
@@ -20,8 +26,8 @@ class BaseController extends Controller
             return json(['msg'=>'success'],200);
         }
         $path = $request->path();
-        if($path != 'adminApi/user/login') {
-            $token = $request->header('http_x_token');
+        if(!in_array($path, config('auth.allowedNoToken'))) {
+            $token = $request->header('X-Api-Token');
             $adminID = Token::checkToken($token);
             $auth = Token::checkAuth($adminID,$path);
             if(!$auth) {
@@ -29,4 +35,5 @@ class BaseController extends Controller
             }
         }
     }
+
 }

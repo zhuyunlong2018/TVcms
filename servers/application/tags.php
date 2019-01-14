@@ -13,7 +13,7 @@
 return [
     // 应用初始化
     'app_init'     => [
-        'app\\adminApi\\behavior\\AUTH'
+        'app\\adminApi\\behavior\\CORS'
     ],
     // 应用开始
     'app_begin'    => [],
