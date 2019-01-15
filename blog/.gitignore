@@ -3,12 +3,10 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
-blog/node_modules/
-blog/static/
+
 # Editor directories and files
 .idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-
