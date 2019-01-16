@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '../routes.js'
-import { login} from '@/api/login'
+
 const common = require('./common');
 
 const _axios= params => {
@@ -49,29 +49,7 @@ const actions = {
 
 
 
-    // 登录
-    login({ commit }, state) {
-      console.log('hhhh')
-      const username = state.userEmail
-      return new Promise((resolve, reject) => {
-        login(username, state.userPwd).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
+   
 
 
  //用户提交登录

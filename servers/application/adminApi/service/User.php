@@ -10,7 +10,7 @@
 namespace app\adminApi\service;
 
 use app\lib\exception\LoginException;
-use app\adminApi\model\User as UserModel;
+use app\common\model\User as UserModel;
 class User
 {
     public static function login($username,$password) {

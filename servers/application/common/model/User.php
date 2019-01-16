@@ -7,8 +7,9 @@
  * Time: 20:07
  */
 
-namespace app\adminApi\model;
+namespace app\common\model;
 
+use app\adminApi\model\BaseModel;
 
 class User extends BaseModel
 {
@@ -22,6 +23,10 @@ class User extends BaseModel
     }
     public static function getByName($name){
         $user = self::where('user_name', '=', $name)->find();
+        return $user;
+    }
+    public static function getByEmail($email){
+        $user = self::where('user_email', '=', $email)->find();
         return $user;
     }
 

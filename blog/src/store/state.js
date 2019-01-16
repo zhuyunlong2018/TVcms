@@ -2,9 +2,9 @@ const state = {
     loginbox:false,//控制登录页面显示
     register_login_btn: false,//控制登录页和注册页切换
     change_notice: "未注册？点击进行注册",//控制登录页和注册页切换提示
-    userName: null,//登录用户名
-    userEmail:null,//登录邮箱
-    userPwd:null,//登录密码
+    userName: '920200256@qq.com',//登录用户名
+    userEmail:'920200256@qq.com',//登录邮箱
+    userPwd:'920200256',//登录密码
     login_user:(window.localStorage.getItem("bianquan_user"))?'欢迎您!'+ window.localStorage.getItem("bianquan_user") : '登录',//登录与后台用户名标识
     //token,本地若有token值，则注入store，若无则为null
     token:(window.localStorage.getItem("bianquan_token"))?window.localStorage.getItem("bianquan_token"):null,

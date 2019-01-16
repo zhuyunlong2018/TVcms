@@ -17,7 +17,9 @@ use think\Request;
 class Admin extends BaseController
 {
     //管理员登录，判断用户是否为管理员。
-    public function login($username,$password) {
+    public function login() {
+        $username = input('username');
+        $password = input('password');
         $adminData = AdminService::adminLogin($username,$password);
         return json($adminData);
     }

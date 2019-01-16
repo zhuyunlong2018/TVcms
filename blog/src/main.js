@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './routes.js';
-import store from './vuex/store.js';
+import store from './store';
 import axios from 'axios';
 import 'babel-polyfill';
 import VueSimplemde from 'vue-simplemde';

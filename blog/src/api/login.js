@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(useremail, password) {
   return request({
-    url: '/admin/login',
+    url: 'blogApi/user/login',
     method: 'post',
     data: {
-      username,
+      useremail,
       password
     }
   })

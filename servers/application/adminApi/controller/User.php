@@ -11,7 +11,7 @@ namespace app\adminApi\controller;
 
 
 use app\adminApi\service\Token;
-use app\adminApi\model\User as UserModel;
+use app\common\model\User as UserModel;
 use app\adminApi\validate\pagingParameter;
 
 class User extends BaseController

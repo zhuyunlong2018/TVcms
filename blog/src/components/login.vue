@@ -21,7 +21,7 @@
           <i class="glyphicon" :class="icon.cpwd"></i>
         </p> 
          <p v-show="!register_login_btn">
-           <button type="button" class="btn btn-info"  @click="login" :disabled="login_btn" >立即登录</button>
+           <button type="button" class="btn btn-info"  @click="handleLogin" :disabled="login_btn" >立即登录</button>
           </p> 
           <p v-show="register_login_btn">
             <button type="button" class="btn btn-success" @click="register" :disabled="register_btn">立即注册</button>
@@ -62,6 +62,15 @@
           } else {
             this.show_login_box();
           }
+      },
+      handleLogin() {
+          this.$store.dispatch('login', userEmail,userPwd).then(() => {
+        
+            
+          }).catch(error => {
+            console.log(error)
+            
+          })
       },
       check_email:function() {
         this.check_result.email = false;
