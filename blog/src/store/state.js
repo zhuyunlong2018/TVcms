@@ -5,9 +5,9 @@ const state = {
     userName: '920200256@qq.com',//登录用户名
     userEmail:'920200256@qq.com',//登录邮箱
     userPwd:'920200256',//登录密码
-    login_user:(window.localStorage.getItem("bianquan_user"))?'欢迎您!'+ window.localStorage.getItem("bianquan_user") : '登录',//登录与后台用户名标识
+    
     //token,本地若有token值，则注入store，若无则为null
-    token:(window.localStorage.getItem("bianquan_token"))?window.localStorage.getItem("bianquan_token"):null,
+    //token:(window.localStorage.getItem("bianquan_token"))?window.localStorage.getItem("bianquan_token"):null,
     //用户身份
     status:(window.localStorage.getItem("bianquan_status"))?window.localStorage.getItem("bianquan_status"):null,
     logout_box: false,//注销弹框

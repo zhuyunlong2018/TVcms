@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\adminApi\validate;
+namespace app\common\validate;
 
 use app\lib\exception\ParameterException;
 use think\Request;

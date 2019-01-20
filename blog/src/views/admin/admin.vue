@@ -21,9 +21,9 @@
 
 
 <script>
-  import adminHeader from '../components/admin_header.vue';
-  import adminAside from '../components/admin_aside.vue';
-  import allImages from '../components/all_images.vue';
+  import adminHeader from './admin_header.vue';
+  import adminAside from './admin_aside.vue';
+  import allImages from '@/views/components/all_images.vue';
   import { mapActions,mapState,mapMutations } from 'vuex';
 
     export default {

@@ -5,7 +5,7 @@
       <log-in></log-in>
       <!-- 背景图 -->
       <div class="bg-pic">
-        <img src="../assets/imgs/nav.jpg" alt="">
+        <img src="../../assets/imgs/nav.jpg" alt="">
       </div>
        <!-- 面包屑导航 -->
       <div class="crumbs">
@@ -28,7 +28,6 @@
     <main class="center-block clearfix">
       <router-view></router-view>
 
-
         <!-- 侧边区域 -->
       <aside-bar></aside-bar>
       </main>
@@ -45,11 +44,11 @@
 <script>
 
 
-  import NavHeader from '../components/header.vue';
-  import NavFooter from '../components/footer.vue';
-  import ArticleList from '../components/articleList.vue';
-  import AsideBar from '../components/aside.vue';
-  import LogIn from '../components/login.vue';
+  import NavHeader from './header.vue';
+  import NavFooter from './footer.vue';
+  import ArticleList from '@/views/article/articleList.vue';
+  import AsideBar from './aside.vue';
+  import LogIn from '@/views/login.vue';
 
   import { mapMutations,mapState,mapActions } from 'vuex';
 
@@ -96,10 +95,7 @@
         },
         go_home:function() {
           this.CLEAR_CRUMBS();
-          this.changePage(0);
-          this.getPage();
           this.$router.push('/');
-          this.getPageCount();
         }
     },
     computed: {
@@ -112,43 +108,36 @@
         }
       },
       _crumbs:function() {
-        let obj = {};
+        let first
         switch(this.$route.name) {
           case 'articleList':
-            obj.title = '';
-            this.CHANGE_CRUMBS(obj);
             if(this.crumbs.first) {
-              return this.crumbs.first;
+              first = this.crumbs.first
             } else {
-              return '所有文章';
+              first = '所有文章'
             }
-            break;
+            return first
+            break
           case 'article':
-            obj.tag = '';
-            obj.title = this.show_article.a_title;
-            this.CHANGE_CRUMBS(obj);
-            return this.show_article.a_tag;
-            break;
+            first = this.crumbs.first
+            return first
+            break
           case 'msgborder':
-            this.CLEAR_CRUMBS();
-            return '留言板';
+            first = '留言板'
             break;
           case 'project':
-            this.CLEAR_CRUMBS();
-            return '实验室';
+            first = '实验室'
             break;
           case 'timer':
-            this.CLEAR_CRUMBS();
-            return '时间轴';
+            first = '时间轴'
             break;
           case 'about':
-            this.CLEAR_CRUMBS();
-            return '关于';
+            first = '关于'
             break;
           default:
-            this.CLEAR_CRUMBS();
         }
-       // console.log(this.$route.name);
+        this.CLEAR_CRUMBS()
+        return first
       }
     },
      

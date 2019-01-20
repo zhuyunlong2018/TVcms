@@ -5,7 +5,7 @@ class Index extends Controller
 {
 	private $check = [];//存储用户登录状态及身份
 	public function _initialize() {
-		$this->check = action('User/check_login');
+		$this->check = action('CommonUser/check_login');
 	}
     public function index()
     {
@@ -112,13 +112,13 @@ class Index extends Controller
 			case 'check_login'://检查用户登录情况
 				break;
 			case 'register'://注册账号
-				$data['data'] = action('User/register');
+				$data['data'] = action('CommonUser/register');
 				break;
 			case 'login'://登录验证
-				$data['data'] = action('User/login');
+				$data['data'] = action('CommonUser/login');
 				break;
 			case 'show_all_user'://获取所有用户
-			 	$data['data'] = action('User/show_all_user',$status);
+			 	$data['data'] = action('CommonUser/show_all_user',$status);
 			 	break;
 		//图片操作
 			case 'get_all_imgs'://获取所有图片地址

@@ -25,7 +25,7 @@ class Comment extends Controller
 	}
 	/*添加评论*/
 	public function addComment() {
-		$checkname = model('User')->insert_visitor();
+		$checkname = model('CommonUser')->insert_visitor();
 		if(!$checkname) {
 			return ['msg'=>'用户名或邮箱已被占用，且两个值与当前所填不一致。'];
 		}
@@ -52,7 +52,7 @@ class Comment extends Controller
 			 $href = 'localhost:8080/articleList/article/' .$id;
 		 }
 		 if(input('oldComment') && input('commenter') != input('oldComment') ) {
-			 $mailto = model('User')->getUserEmail(input('oldComment'));
+			 $mailto = model('CommonUser')->getUserEmail(input('oldComment'));
 			 $title = '您在[边泉小栈]的留言有了回复';
 			$content = input('oldComment').',您好！<br><br>&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color: blue;" >'.input('commenter').'</span>]在文章评论区[<span style="color: blue;">第'.input('index').'楼</span>]回复了您在[<span style="color: blue;" >边泉小栈</span>]的留言，内容如下:<br><br>&nbsp;&nbsp;&nbsp;&nbsp; “'. input('commentText') .'”<br><br>详细信息请<a href="'.$href.'" style="color:CornflowerBlue;cursor: pointer;" >点击查看</a><br>若点击无反应，请复制下方地址打开：<br><span style="color: #aaa; fontSize: 12px;" >'.$href.'</span>' ;
 			 send_mail($mailto,$title,$content);

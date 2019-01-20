@@ -7,7 +7,7 @@
 
 <script>
 
-import components from './components/components.vue';
+import components from '@/views/components/components.vue';
 import { mapActions,mapMutations } from 'vuex';
 
 export default {

@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by bianquan
- * User: ZhuYunlong
+ * CommonUser: ZhuYunlong
  * Email: 920200256@qq.com
  * Date: 2019/1/12
  * Time: 20:07
  */
-namespace app\adminApi\model;
+namespace app\common\model;
 
 
 use think\Model;
@@ -19,7 +19,7 @@ class BaseModel extends Model
     // 可以对比下SQL语句，看看whereOr的SQL
     use SoftDelete;
 
-    protected $hidden = ['delete_time'];
+    protected $hidden = ['create_time','delete_time','update_time','pivot'];
 
 
 }

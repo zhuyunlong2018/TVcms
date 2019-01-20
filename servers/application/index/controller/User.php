@@ -13,7 +13,7 @@ class User extends Controller
 	public function login() {
 		$email = input('email');
 		$pwd = input('pwd');
-		 $result = model('User')->login($email,$pwd);
+		 $result = model('CommonUser')->login($email,$pwd);
 		 if($result) {
 		 		$nowtime = time();
 	            $token = [
@@ -76,7 +76,7 @@ class User extends Controller
 			$name = input('name');
 			$pwd = input('pwd');
 			$time = input('time');
-		 $result = model('User')->register($email,$name,$pwd,$time);
+		 $result = model('CommonUser')->register($email,$name,$pwd,$time);
 		 if(!$result[0]) {
 		 	return ['result'=>false,'msg'=>$result[1]];
 		 }else {
@@ -88,7 +88,7 @@ class User extends Controller
 
 	/*显示所有用户*/
 	public function show_all_user($status) {
-		$result = model('User')->show_all_user($status);
+		$result = model('CommonUser')->show_all_user($status);
 		 if($result) {
 		 	return $result;
 		 }

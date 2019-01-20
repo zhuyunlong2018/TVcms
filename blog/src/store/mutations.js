@@ -39,7 +39,7 @@ const mutations = {
     },
   //登录成功，同步token到store中
   token(state,data) {
-    state.token = data.jwt;
+    state.token = data.token;
     state.userPwd = '';
     state.commenter = data.name;
     state.status = data.userstatus;
@@ -219,27 +219,27 @@ const mutations = {
     state.c_button=true;//切换按钮为发送状态
   },
   //获取页面的数量，并生成递增数组
-  GETPAGECOUNT(state,count) {
-    state.page_count = [];
-    for(let i=0;i<count;i++){
-      state.page_count.push(i+1);
-    }
-    // console.log(count);
-  },
+  // GETPAGECOUNT(state,count) {
+  //   state.page_count = [];
+  //   for(let i=0;i<count;i++){
+  //     state.page_count.push(i+1);
+  //   }
+  //   // console.log(count);
+  // },
   //点击文章列表第n页，将n注入到store中的page_index中
-  changePage(state,index) {
-    state.page_index = index;
-    //console.log(state.page_index);
-    window.localStorage.setItem("page_index", state.page_index);
-  },
+  // changePage(state,index) {
+  //   state.page_index = index;
+  //   //console.log(state.page_index);
+  //   window.localStorage.setItem("page_index", state.page_index);
+  // },
   //获取第n页文章列表数据
-  GETPAGE(state,pageDate) {
-    state.page_items = pageDate;
-    for(let i=0;i<pageDate.length;i++) {
-      let _content = simplemde.prototype.markdown(pageDate[i].a_content);
-      state.page_items[i].a_content = _content;
-    }
-  },
+  // GETPAGE(state,pageDate) {
+  //   state.page_items = pageDate;
+  //   for(let i=0;i<pageDate.length;i++) {
+  //     let _content = simplemde.prototype.markdown(pageDate[i].a_content);
+  //     state.page_items[i].a_content = _content;
+  //   }
+  // },
   //获取所点击的文章展示数据
   SHOWARTICLE(state,index) {
     state.show_article = state.page_items[index];
@@ -253,20 +253,21 @@ const mutations = {
     state.crumbs.second = '';
   },//添加面包屑导航文章标题和标签
   CHANGE_CRUMBS:function(state,obj) {
+    console.log(obj)
     if(obj.tag) {
       state.crumbs.first = obj.tag;
     }
     state.crumbs.second = obj.title;
     //console.log(state.crumbs);
   },
-  GETSHOWARTICLE(state,data) {
-    state.show_article = data;
-   // console.log(data.content);
-   //转码
-    let _content = simplemde.prototype.markdown(data.a_content);
-    state.show_article.a_content = _content;
-   // console.log(state.show_article.content);
-  },
+  // GETSHOWARTICLE(state,data) {
+  //   state.show_article = data;
+  //  // console.log(data.content);
+  //  //转码
+  //   let _content = simplemde.prototype.markdown(data.a_content);
+  //   state.show_article.a_content = _content;
+  //  // console.log(state.show_article.content);
+  // },
     //清空文章评论列表
     CLEARCOMMENT(state) {
       state.comment = [];

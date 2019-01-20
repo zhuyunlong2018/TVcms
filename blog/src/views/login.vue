@@ -5,15 +5,15 @@
         <i @click="change" class="close-box glyphicon glyphicon-remove-circle" ></i>
         <h2>欢迎登录bianquan'blog</h2>
         <p>
-          <input type="text" ref="input_email" @input="check_email" v-model="userEmail" placeholder="邮箱">
+          <input type="text" ref="input_email" @input="check_email" v-model="loginForm.email" placeholder="邮箱">
           <i class="glyphicon" :class="icon.email" ></i>
         </p>
         <p v-show="register_login_btn" >
-          <input type="text"  ref="input_name" @input="check_name" v-model="userName" placeholder="用户名">
+          <input type="text"  ref="input_name" @input="check_name" v-model="loginForm.userName" placeholder="用户名">
           <i class="glyphicon" :class="icon.name" ></i>
         </p>
         <p>
-          <input type="password" ref="input_pwd" @input="check_pwd" v-model="userPwd" placeholder="密码">
+          <input type="password" ref="input_pwd" @input="check_pwd" v-model="loginForm.password" placeholder="密码">
           <i class="glyphicon" :class="icon.pwd"></i>
         </p> 
         <p v-show="register_login_btn">
@@ -34,15 +34,20 @@
 
 <script>
   import { mapState,mapMutations,mapActions } from "vuex";
-
+  import { register } from '@/api/login'
   export default{
       data(){
         return {
+          loginForm: {
+            email: '920200256@qq.com',
+            password: '920200256',
+            userName: ''
+          },
           c_userPwd: '',
           check_result: {
-            email: false,
+            email: true,
             name: false,
-            pwd: false,
+            pwd: true,
             cpwd: false
           },
           icon: {
@@ -51,11 +56,12 @@
             pwd: '',
             cpwd: '',
           }
+
         }
       },
     methods:{
-      ...mapMutations(["change","show_login_box","show_register_box"]),
-      ...mapActions(["login","register"]),
+      ...mapMutations(["change","show_login_box","show_register_box",'show_alert','show_alert_notice']),
+      ...mapActions(["login"]),
       change_btn: function() {
           if(!this.register_login_btn) {
               this.show_register_box();
@@ -64,13 +70,19 @@
           }
       },
       handleLogin() {
-          this.$store.dispatch('login', userEmail,userPwd).then(() => {
-        
-            
+          this.$store.dispatch('login',this.loginForm).then(() => {
           }).catch(error => {
-            console.log(error)
             
           })
+      },
+      register() {
+        let data = this.loginForm
+        register(data.userName,data.email,data.password).then(response => {
+           this.show_alert_notice('注册成功，请登录')
+           this.show_login_box();
+        }).catch(error => {
+            this.show_alert(error.response.data.msg)
+        })
       },
       check_email:function() {
         this.check_result.email = false;
@@ -147,7 +159,8 @@
     computed: {
       ...mapState(["loginbox","register_login_btn","change_notice"]),
       register_btn:function() {
-        if(this.check_result.email && this.check_result.name && this.check_result.pwd && this.check_result.cpwd) {
+        return false
+        if(1 || this.check_result.email && this.check_result.name && this.check_result.pwd && this.check_result.cpwd) {
           return false;
         } else {
           return "disabled";
@@ -160,30 +173,7 @@
            return "disabled";
         }
       } , 
-      userEmail: {
-        get () {
-          return this.$store.state.userEmail;
-        },
-        set (value) {
-          this.$store.commit('updateuserEmail', value)
-        }
-      },
-      userName: {
-        get () {
-          return this.$store.state.userName
-        },
-        set (value) {
-          this.$store.commit('updateuserName', value)
-        }
-      },
-      userPwd: {
-        get () {
-          return this.$store.state.userPwd
-        },
-        set (value) {
-          this.$store.commit('updateuserPwd', value)
-        }
-      }
+
     }
   }
 </script>

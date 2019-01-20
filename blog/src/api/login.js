@@ -1,27 +1,22 @@
 import request from '@/utils/request'
 
-export function login(useremail, password) {
+export function login(email, password) {
   return request({
     url: 'blogApi/user/login',
     method: 'post',
     data: {
-      useremail,
+      email,
       password
     }
   })
 }
 
-export function getInfo(token) {
+export function register(name,email,password) {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
+    url: 'blogApi/user/register',
+    method: 'post',
+    data: {
+      name,email,password
+    }
   })
 }

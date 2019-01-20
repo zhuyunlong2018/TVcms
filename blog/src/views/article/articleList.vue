@@ -1,17 +1,17 @@
 <template>
     <div class="main f-l">
-      <article class="clearfix" v-for="(item,index) in page_items" :key="index">
+      <article class="clearfix" v-for="(item,index) in articleList.data" :key="item.a_id">
         <div class="pic f-l t-c" >
           <a href="javascript:;"><img :src="item.a_img" alt="">
           </a>
         </div>
         <div class="content f-l">
-          <a @click="SHOWARTICLE(index)" href="javascript:scroll(0,0)">
+          <a @click="showArticle(item.a_id)" href="javascript:scroll(0,0)">
             <h3 class="title">{{item.a_title}}</h3>
           </a>
           <p class="summary" v-html="item.a_content" v-highlight ></p>
           <ul class="tag">
-            <li  @click="_get_article_by_tag(item.a_tag)"><i class="glyphicon glyphicon-tag" ></i>{{item.a_tag}}</li>
+            <li  @click="getListByTag(item.tag_id)"><i class="glyphicon glyphicon-tag" ></i>{{item.a_tag}}</li>
             <li><i class="glyphicon glyphicon-pencil" ></i>{{item.a_author}}</li>
             <li><i class="glyphicon glyphicon-calendar" ></i>{{item.a_time}}</li>
             <li><i class="glyphicon glyphicon-comment" ></i>{{item.a_comment}}</li>
@@ -22,11 +22,11 @@
 
       <div class="page t-c">
         <ul>
-          <li><a href="javascript:scroll(0,0);" @click="_changePage(0)" >首页</a></li>
-          <li class="list-before" ><a href="javascript:scroll(0,0);" @click="_changePage('before')" >上一页</a></li>
-          <li v-for="(count,index) in page_count" @click="_changePage(index)" :key="index" v-if="range(index)" ><a href="javascript:scroll(0,0); " :class="{actived:index==page_index}">{{ count }}</a></li>
-          <li class="list-next"><a href="javascript:scroll(0,0);" @click="_changePage('next')" >下一页</a></li>
-          <li><a href="javascript:scroll(0,0);" @click="_changePage(page_count.length-1)" >末页</a></li>
+          <li><a href="javascript:scroll(0,0);" @click="changePage(1)" >首页</a></li>
+          <li class="list-before" ><a href="javascript:scroll(0,0);" @click="changePage(articleList.current_page-1)" >上一页</a></li>
+          <li v-for="(count,index) in articleList.last_page" @click="changePage(index+1)" :key="index" ><a href="javascript:scroll(0,0); " v-show='range(index)' :class="{actived:(index+1)==articleList.current_page}">{{ count }}</a></li>
+          <li class="list-next"><a href="javascript:scroll(0,0);" @click="changePage(articleList.current_page+1)" >下一页</a></li>
+          <li><a href="javascript:scroll(0,0);" @click="changePage(articleList.last_page)" >末页</a></li>
         </ul>
       </div>
     </div>
@@ -36,53 +36,52 @@
 
 <script>
   import { mapActions,mapState,mapMutations } from 'vuex';
+  import { getList } from '@/api/article'
   export default {
     name: 'articleList',
     data(){
         return{
+          articleList: [],
+          listInfo: {
+            page: 1,
+            limit: 10,
+            userID: '',
+            tagID: ''
+          }
         };
     },
     methods:{
-      ...mapActions(["getPage","getPageCount"]),
-      ...mapMutations(["SHOWARTICLE","changePage","CHANGE_CRUMBS"]),
-      _changePage: function(str) {
-            if (str === "next") {
-                if (this.page_index < this.page_count.length-1) {
-                  //console.log(this.page_index);
-                  //console.log(this.page_count.length-1);
-                     let index = this.page_index + 1;
-                     this.changePage(index);
-                }
-            } else if (str === "before") {
-                if (this.page_index > 0) {
-                    let index = this.page_index - 1;
-                    this.changePage(index);
-                }
-            } else if (typeof str === "number") {
-                this.changePage(str);
-            } else {
-              return;
-            }
-            this.getPage();
+      ...mapMutations(['show_alert']),
+      getList() {
+        getList(this.listInfo.tagID,this.listInfo.userID,this.listInfo.page,this.listInfo.limit).then(response => {
+          this.articleList = response.data.data
+          
+        }).catch(error => {
+            this.show_alert(error.response.data.msg)
+        })
       },
-      _get_article_by_tag:function(tag) {
-            //console.log(this._crumbs);
-            let obj = {};
-            obj.tag = tag;
-            obj.title = '';
-            this.CHANGE_CRUMBS(obj);
-            this.changePage(0);
-            this.getPageCount();
-            this.getPage(0);
-            this.$router.push('/');
+      changePage(page) {
+        if(page<=0 || page>this.articleList.last_page) {
+          return
+        }
+        this.listInfo.page = page
+        this.getList()
+      },
+      getListByTag(tagID) {
+        this.listInfo.page =1
+        this.listInfo.tagID = tagID
+        this.getList()
+      },
+      showArticle(id) {
+        this.$router.push({name:'article',params:{id}});
       },
       range: function(k) {
             let pageStart;
             let pageEnd;
             let pageRange = 5;
             let x = (pageRange-1)/2;
-            let max = this.page_count.length-1;
-            let index = this.page_index;
+            let max = this.articleList.last_page-1;
+            let index = this.articleList.current_page-1;
             //尾部区间
             if (index > (max - x)) {
                 pageStart = max - x-2;
@@ -107,11 +106,10 @@
         }
     },
     computed: {
-      ...mapState(["page_count","page_items","page_index"])
+      
     },
     created:function(){
-      this.getPage();
-      this.getPageCount();
+      this.getList()
     },
 
     components: {

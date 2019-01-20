@@ -5,8 +5,7 @@ use think\Model;
 class About extends Model
 {
 	public function get_about() {
-		$result = $this
-				->find();
+		$result = $this->find();
 		return $result;
 	}
 	public function update_about($about) {

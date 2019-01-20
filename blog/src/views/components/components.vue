@@ -429,7 +429,7 @@ export default {
     height: 72px;
     margin-right: 20px;
     opacity: 0.8;
-    background: url(../../static/imgs/bian.png) no-repeat;
+    background: url(../../../static/imgs/bian.png) no-repeat;
   }
   .search .input {
     text-align: center;

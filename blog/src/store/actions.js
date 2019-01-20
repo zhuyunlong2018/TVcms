@@ -20,29 +20,29 @@ const actions = {
 
 
 
-   //验证用户是否登录
-   check_login({state,commit}) {
-    //console.log(state.token);
-    let params = {
-      'act':'check_login'
-    }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-      //console.log(res.data);
-      if (res.data.login) {
-       router.push('/admin');
-      } else {
-        commit('change');
-        commit('logout');
-        commit('show_login_box');
-      }
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
+  //  //验证用户是否登录
+  //  check_login({state,commit}) {
+  //   //console.log(state.token);
+  //   let params = {
+  //     'act':'check_login'
+  //   }
+  //   _axios(params).then(function (res) {
+  //     //console.log('成功了');
+  //     //console.log(res.data);
+  //     if (res.data.login) {
+  //      router.push('/admin');
+  //     } else {
+  //       commit('change');
+  //       commit('logout');
+  //       commit('show_login_box');
+  //     }
+  //   })
+  //     .catch(function (err) {
+  //       console.log(err);
+  //       console.log('失败了');
+  //     });
 
-  },
+  // },
 
 
 
@@ -91,34 +91,38 @@ const actions = {
 //      });
 
 //  },
-//用户提交注册
- register({commit,state}) {
-   // console.log(state.userPwd);
-   let params = {
-         'act':'register',
-         'email':state.userEmail,
-         'name':state.userName,
-         'pwd':state.userPwd,
-         'time':common.getTime()
-   }
-   _axios(params).then(function (res) {
-     if(!res.data.result){ return; }
-     if(res.data.data.msg) {
-       commit('show_alert',res.data.data.msg);
-     } else {
-       commit('show_alert','注册失败');
-     }
 
-     if (res.data.data.result) {
-       commit('show_login_box');
-     }
-   })
-     .catch(function (err) {
-       // console.log(err);
-       console.log('失败了');
-     });
 
- },
+
+
+// //用户提交注册
+//  register({commit,state}) {
+//    // console.log(state.userPwd);
+//    let params = {
+//          'act':'register',
+//          'email':state.userEmail,
+//          'name':state.userName,
+//          'pwd':state.userPwd,
+//          'time':common.getTime()
+//    }
+//    _axios(params).then(function (res) {
+//      if(!res.data.result){ return; }
+//      if(res.data.data.msg) {
+//        commit('show_alert',res.data.data.msg);
+//      } else {
+//        commit('show_alert','注册失败');
+//      }
+
+//      if (res.data.data.result) {
+//        commit('show_login_box');
+//      }
+//    })
+//      .catch(function (err) {
+//        // console.log(err);
+//        console.log('失败了');
+//      });
+
+//  },
 
  //获取所有文章列表
  getList:function({commit,state}) {

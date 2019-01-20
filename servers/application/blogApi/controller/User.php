@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by bianquan
- * User: ZhuYunlong
+ * CommonUser: ZhuYunlong
  * Email: 920200256@qq.com
  * Date: 2019/1/16
  * Time: 20:24
@@ -16,10 +16,15 @@ use app\blogApi\service\User as ServiceUser;
 class User extends Controller
 {
     public function login() {
-        $useremail = input('useremail');
+        $email = input('email');
         $password = input('password');
-        $userData = ServiceUser::login($useremail,$password);
+        $userData = ServiceUser::login($email,$password);
         return json($userData);
+    }
+
+    public function register($name,$email,$password) {
+        $result = ServiceUser::register($name,$email,$password);
+        return $result;
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by bianquan
- * User: ZhuYunlong
+ * CommonUser: ZhuYunlong
  * Email: 920200256@qq.com
  * Date: 2019/1/12
  * Time: 20:07
@@ -10,27 +10,15 @@
 namespace app\adminApi\controller;
 
 
-use app\adminApi\service\Token;
-use app\common\model\User as UserModel;
-use app\adminApi\validate\pagingParameter;
+use app\adminApi\model\User as UserModel;
+use app\common\validate\PagingParameter;
 
 class User extends BaseController
 {
-    /**
-     *
-     */
-    public function index() {
-//        $jwt = Token::generateToken('1','123@.qq.com','www');
-//        dump($jwt);
-//        $result = UserModel::getUserList();
-//        $result = UserModel::getSummaryByPage();
-//        dump($result);
-    }
 
     public function login() {
-        dump(111);
+        dump(3);
     }
-
 
     public function userList() {
         (new PagingParameter())->goCheck();

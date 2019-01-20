@@ -1,17 +1,15 @@
 <?php
 /**
  * Created by bianquan
- * User: ZhuYunlong
+ * CommonUser: ZhuYunlong
  * Email: 920200256@qq.com
  * Date: 2019/1/14
  * Time: 21:54
  */
 
-namespace app\adminApi\validate;
+namespace app\common\validate;
 
-
-
-class pagingParameter extends BaseValidate
+class PagingParameter extends BaseValidate
 {
     protected $rule = [
         'page' => 'require|number|gt:0',

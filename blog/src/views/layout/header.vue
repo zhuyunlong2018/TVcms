@@ -47,7 +47,7 @@
             </a>
           </li>
           <li class="logout_user" :class="{'touch-logout': if_touch }" v-show="logout_register" >
-            <a href="javascript:;" @click="logout">
+            <a href="javascript:;" @click="FedLogOut">
               <i class="glyphicon glyphicon-off" ></i>
               <span>退出登录</span>
             </a>
@@ -65,7 +65,9 @@
 </template>
 
 <script>
-import { mapState, mapActions,mapMutations } from 'vuex';
+import { mapState, mapActions,mapMutations, mapGetters } from 'vuex';
+import { getToken, setToken, removeToken } from '@/utils/auth'
+
   export default {
       data(){
           return{
@@ -73,8 +75,13 @@ import { mapState, mapActions,mapMutations } from 'vuex';
           }
       },
     methods:{
-      ...mapActions(['check_login','getPage','getPageCount','get_bing']),
-      ...mapMutations(['logout','change','show_register_box','CLEAR_CRUMBS','changePage','TOGGLE_SEARCH']),
+      ...mapActions(['FedLogOut','getPage','getPageCount','get_bing']),
+      ...mapMutations(['change','show_register_box','CLEAR_CRUMBS','changePage','TOGGLE_SEARCH']),
+      check_login: function() {
+        
+        this.$router.push('/admin');
+          
+      },
       _show_register_box:function() {
         this.change();
         this.show_register_box();
@@ -95,14 +102,17 @@ import { mapState, mapActions,mapMutations } from 'vuex';
 
     },
     computed: {
-      ...mapState(['login_user','show_header_nav','search','if_touch']),
+      ...mapState(['show_header_nav','search','if_touch']),
+      ...mapGetters(['login_user']),
       logout_register:function() {
-        if (this.login_user == '登录') {
+        if (this.$store.getters.login_user == '登录') {
           return false;
         } else {
           return true ;
         }
       }
+    },
+    created() {
     }
   }
 

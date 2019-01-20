@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by bianquan
- * User: ZhuYunlong
+ * CommonUser: ZhuYunlong
  * Email: 920200256@qq.com
  * Date: 2019/1/13
  * Time: 10:10
@@ -10,7 +10,7 @@
 namespace app\adminApi\service;
 
 use app\lib\exception\LoginException;
-use app\common\model\User as UserModel;
+use app\adminApi\model\User as UserModel;
 class User
 {
     public static function login($username,$password) {
@@ -27,6 +27,10 @@ class User
     public static function checkPassword($user,$password) {
         $result = $user['user_pwd'] == md5($password.$user['user_pwd_salt']);
         return $result;
+    }
+
+    public static function generatePassword($password,$passwordSalt) {
+        return md5($password.$passwordSalt);
     }
 
 }

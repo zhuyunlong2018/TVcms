@@ -2,51 +2,69 @@
   <div class="main f-l">
     <div class="article">
       <h3 class="title">
-        {{ show_article.a_title }}
+        {{ article.a_title }}
       </h3>
       <ul class="tag">
             <li>
               <i class="glyphicon glyphicon-tag" ></i>
-               {{show_article.a_tag}}
+               {{article.a_tag}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-pencil" ></i>{{show_article.a_author}}</li>
+              <i class="glyphicon glyphicon-pencil" ></i>{{article.a_author}}</li>
             <li>
-              <i class="glyphicon glyphicon-calendar" ></i>{{show_article.a_time}}
+              <i class="glyphicon glyphicon-calendar" ></i>{{article.a_time}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-comment" ></i>{{show_article.a_comment}}
+              <i class="glyphicon glyphicon-comment" ></i>{{article.a_comment}}
             </li>
             <li>
-              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{show_article.a_praise}}
+              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{article.a_praise}}
             </li>
       </ul>
-      <div class="content" v-html="show_article.a_content" v-highlight></div>
+      <div class="content" v-html="article.a_content" v-highlight></div>
       <p class="praise" >
         <i class="glyphicon glyphicon-thumbs-up" @click="_add_praise" ></i>
       </p>
-      <p class="praise" ><span>累计获得{{show_article.a_praise}}个赞</span></p>
+      <p class="praise" ><span>累计获得{{article.a_praise}}个赞</span></p>
       <comment></comment>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapState,mapActions,mapMutations } from 'vuex';
-  import comment from './comment.vue';
+  import { mapState,mapActions,mapMutations } from 'vuex'
+  import comment from '@/views/components/comment.vue'
+  import { getOne } from '@/api/article'
+  import simplemde from 'simplemde'
   //import markdownEditor from 'vue-simplemde/src/markdown-editor';
   export default {
     data() {
-        return {
-      //    article: "",        //文章内容
-
+      return {
+        article: {
+          a_id: null,
         }
+      }
     },
     components: {
       comment
     },
     methods: {
-      ...mapActions(["getComment","getShowArticle","add_praise"]),
+      ...mapActions(["getComment","add_praise"]),
+      ...mapMutations(['CHANGE_CRUMBS']),
+      getOne() {
+        getOne(this.article.a_id).then(response => {
+          let content = response.data.data.a_content
+          response.data.data.a_content = simplemde.prototype.markdown(content)
+          this.article = response.data.data
+          let obj = {
+            tag: this.article.a_tag,
+            title: this.article.a_title
+          }
+          this.CHANGE_CRUMBS(obj)
+        }).catch(error => {
+            this.show_alert(error.response.data.msg)
+        })
+      },
       _add_praise:function() {
         let id = this.$route.params.id;
         this.add_praise(id);
@@ -64,13 +82,12 @@
       ...mapState(["show_article"])
     },
     created:function() {
-    if(!this.show_article.a_id){
-        this.getShowArticle(this.$route.params.id);
-      }
+      this.article.a_id = this.$route.params.id
     },
     mounted() {
-      this._getComment();
-      this._changeCommentPage();
+      this.getOne()
+      // this._getComment();
+      // this._changeCommentPage();
     }
   }
 </script>
