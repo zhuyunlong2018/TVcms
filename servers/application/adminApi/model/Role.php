@@ -18,4 +18,11 @@ class Role extends BaseModel
         return $this->belongsToMany('SystemMenu','role_menu','menu_id','role_id');
     }
 
+    public static function getList($name,$page,$limit,$order,$sort) {
+        return self::with('menu')
+            ->where(['role_name'=>['like',"%$name%"]])
+            ->order("$sort $order")
+            ->paginate($limit,false,['page'=>$page]);
+    }
+
 }

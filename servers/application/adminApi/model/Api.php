@@ -15,6 +15,19 @@ use app\common\model\BaseModel;
 class Api extends BaseModel
 {
 //    protected $hidden = ['create_time','delete_time','update_time'];
+    public static function getList($type,$order,$sort) {
+        return self::where(['api_type'=>$type])
+            ->order("$sort $order")
+            ->select();
+    }
 
+
+    public static function injection($path,$desc) {
+        return self::insert([
+            'api_path' => $path,
+            'api_name' => $desc,
+
+        ]);
+    }
 
 }

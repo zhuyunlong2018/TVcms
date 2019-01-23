@@ -19,7 +19,7 @@ class Admin extends CommonAdmin
         return $this->belongsToMany('Role', 'admin_role', 'role_id', 'admin_id');
     }
     public function user() {
-        return $this->belongsTo('User');
+        return $this->belongsTo('User')->field('gender,user_level,birthday,user_avatar,user_status',true);
     }
 
 
@@ -28,8 +28,11 @@ class Admin extends CommonAdmin
         return $user;
     }
 
-    public static function getList() {
-        return self::with(['user','role'])->select();
+    public static function getList($name,$page,$limit,$order,$sort) {
+        return self::with(['user','role'])
+            ->where(['admin_name'=>['like',"%$name%"]])
+            ->order("$sort $order")
+            ->paginate($limit,false,['page'=>$page]);
     }
 
     /**

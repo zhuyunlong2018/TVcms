@@ -26,14 +26,14 @@ class BaseController extends Controller
             return json(['msg'=>'success'],200);
         }
         $path = $request->path();
-        if(!in_array($path, config('auth.allowedNoToken'))) {
-            $token = $request->header('X-Api-Token');
-            $adminID = Token::checkToken($token);
-            $auth = Token::checkAuth($adminID,$path);
-            if(!$auth) {
-                throw new TokenException(['msg'=>'访问越权，请查看用户权限']);
-            }
-        }
+//        if(!in_array($path, config('auth.allowedNoToken'))) {
+//            $token = $request->header('X-Api-Token');
+//            $adminID = Token::checkToken($token);
+//            $auth = Token::checkAuth($adminID,$path);
+//            if(!$auth) {
+//                throw new TokenException(['msg'=>'访问越权，请查看用户权限']);
+//            }
+//        }
     }
 
 }
