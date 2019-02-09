@@ -10,7 +10,9 @@
 namespace app\lib;
 
 
+use app\adminApi\model\Api;
 use ReflectionMethod;
+use think\Cache;
 
 class ApiInjection
 {
@@ -22,22 +24,31 @@ class ApiInjection
     public function __construct($class,$action)
     {
         $this->ref = new ReflectionMethod($class, $action);
-        $this->path = $this->getDocComment($this->ref->getDocComment(), '@API');
-        $this->desc = $this->getDocComment($this->ref->getDocComment(), '@DESC');
+        $this->path = $this->getApi( '@API');
+        $this->desc = $this->getApi( '@DESC');
     }
 
     public function injection() {
         //核对缓存、数据库的api表，是否注入
+        Cache::rm('api');
+        $check = Api::get(['api_path'=>$this->path]);
+        if(!empty($this->path) && !empty($this->desc) && empty($check)) {
+            Api::injection($this->path,$this->desc);
+        }
     }
 
+    protected function getApi($tag) {
+        $str = $this->getDocComment($this->ref->getDocComment(), $tag);
+        return strtolower($str);
+    }
 
-    public function getDocComment($str, $tag = '')
+    protected function getDocComment($str, $tag = '')
     {
         if (empty($tag)) {
             return $str;
         }
         $matches = array();
-        preg_match("/".$tag.":(.*)(\\r\\n|\\r|\\n)/U", $str, $matches);
+        preg_match("/".$tag."\\((.*)(\\r\\n|\\r|\\n|\\))/U", $str, $matches);
         if (isset($matches[1])) {
             return trim($matches[1]);
         }

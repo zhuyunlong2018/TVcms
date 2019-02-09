@@ -12,21 +12,30 @@ namespace app\adminApi\controller;
 
 use app\adminApi\service\Admin as AdminService;
 use app\common\validate\PagingParameter;
+use app\lib\exception\AuthException;
+use app\lib\exception\ParameterException;
+use app\lib\exception\RepeatException;
+use app\lib\exception\ResourcesException;
 use app\lib\Response;
+use think\Cache;
 use think\Request;
 use app\adminApi\model\Admin as AdminModel;
 
 class Admin extends BaseController
 {
-    //管理员登录，判断用户是否为管理员。
     /**
-     * @API: adminApi/admin/login
-     * @DESC: 后台登录接口
+     * @API(adminApi/Admin/login)
+     * @DESC(后台登录接口)
      */
     public function login($username,$password) {
         $adminData = AdminService::adminLogin($username,$password);
-        return json($adminData);
+        return new Response(['data'=>$adminData]);
     }
+
+    /**
+     * @API(adminApi/Admin/getList)
+     * @DESC(获取管理员列表)
+     */
     public function getList($name='',$page=1,$limit=10,$order='desc',$sort='create_time') {
         (new PagingParameter())->goCheck();
         $list = AdminModel::getList($name,$page,$limit,$order,$sort);
@@ -34,8 +43,66 @@ class Admin extends BaseController
     }
 
     /**
-     * @API: adminApi/admin/logout
-     * @DESC: 测试用接口
+     * @API(adminApi/Admin/update)
+     * @DESC(更新管理员信息)
+     */
+    public function update($admin_id,$admin_name,$user,$roles) {
+        if(empty($roles) || empty($user)) {
+            throw new ParameterException(['msg'=>'管理员关联用户或关联角色不能为空']);
+        }
+        $admin = AdminModel::get($admin_id);
+        if(empty($admin)) {
+            throw new ResourcesException();
+        }
+        $admin->admin_name = $admin_name;
+        $admin->user_id = $user['user_id'];
+        $admin->save();
+        Cache::rm('admin-user'.$user['user_id']);
+        $result = AdminService::updateAdminRoles($admin_id,$roles);
+        return new Response(['data'=>$result]);
+    }
+
+    /**
+     * @API(adminApi/Admin/create)
+     * @DESC(创建管理员)
+     */
+    public function create($admin_name,$user,$roles) {
+        if(empty($roles) || empty($user)) {
+            throw new ParameterException(['msg'=>'管理员关联用户或关联角色不能为空']);
+        }
+        $admin = AdminModel::get(['admin_name'=>$admin_name]);
+        if(!empty($admin)) {
+            throw new RepeatException();
+        }
+        $admin = AdminModel::create([
+            'admin_name' => $admin_name,
+            'user_id' => $user['user_id']
+        ]);
+        $adminID = $admin->admin_id;
+        AdminService::createAdminRoles($adminID,$roles);
+        return new Response(['data'=>$admin]);
+    }
+    /**
+     * @API(adminApi/Admin/delete)
+     * @DESC(删除管理员)
+     */
+    public function delete($admin_id) {
+        if($admin_id==1) {
+            throw new AuthException(['msg'=>'超级管理员不能删除']);
+        }
+        $admin = AdminModel::get($admin_id);
+        if(empty($admin)) {
+            throw new ResourcesException();
+        }
+        Cache::rm('admin-user'.$admin->user_id);
+        $admin->delete();
+        AdminService::deleteAdminRoles($admin_id);
+        return new Response();
+    }
+
+    /**
+     * @API(adminApi/Admin/logout)
+     * @DESC(测试用接口)
      */
     public function  logout() {
 

@@ -9,6 +9,8 @@
 
 namespace app\adminApi\behavior;
 
+use think\Request;
+
 class CORS
 {
     public function appInit(&$params)

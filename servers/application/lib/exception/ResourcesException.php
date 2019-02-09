@@ -13,6 +13,6 @@ namespace app\lib\exception;
 class ResourcesException extends BaseException
 {
     public $code = 404;
-    public $errorCode = 10000;
+    public $errorCode = 20002;
     public $msg = "resources not found";
 }

@@ -8,10 +8,13 @@
  */
 
 namespace app\adminApi\service;
+use app\adminApi\model\Admin as AdminModel;
+use app\lib\exception\RepeatException;
 use app\lib\exception\TokenException;
 use Firebase\JWT\JWT;
 use RuntimeException;
-use think\Exception;
+use think\Cache;
+use think\Request;
 
 class Token
 {
@@ -51,24 +54,38 @@ class Token
             $decoded = JWT::decode($jwt, config('token.key'), array('HS256'));
             $arr = (array)$decoded;
             if ($arr['exp'] < time()) {
+                Cache::rm($jwt);
                 throw new TokenException(['msg'=>'登录已失效，请重新登录']);
             } else {
-                return true;
+                Cache::set($jwt,$arr['data']);
+                return $arr['data'];
             }
         } catch(RuntimeException $e) {
+            Cache::rm($jwt);
             throw new TokenException(['msg'=>$e->getMessage()]);
         }
     }
 
-    public static function checkAuth($adminID,$path) {
-        //配置不要鉴权的方法白名单
-        return true;
+    public static function checkAuth($userID,$api) {
+        //获取user对应admin的role权限
+        $auth = false;
+        $admin = Admin::getAdmin($userID);
+        foreach ($admin['roles'] as $role) {
+            $roleApi = Role::getRoleApi($role['role_id']);
+            if(in_array($api,$roleApi)) {
+                $auth = true;
+                break;
+            }
+        }
+//        throw new RepeatException(['msg'=>[$roleApi,$api]]);
+        return $auth;
 
-        //通过$adminID获取对于的权限rules
-        $rules = [];
+    }
 
-        return in_array($path, $rules);
-
+    public static function getUser() {
+        $request = Request::instance();
+        $token = $request->header('X-Api-Token');
+        return Cache::get($token);
     }
 
 

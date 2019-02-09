@@ -10,7 +10,9 @@
 namespace app\adminApi\behavior {
 
     use app\lib\ApiInjection;
+    use think\Cache;
     use think\Request;
+    use app\adminApi\model\Api as ApiModel;
 
 
     /**
@@ -28,11 +30,17 @@ namespace app\adminApi\behavior {
             if(empty($controller)) $controller = 'Index';
             if(empty($action)) $action = 'index';
             $class = 'app'.DS.$module.DS.'controller'.DS.$controller;
-            $api = new ApiInjection($class,$action);
-            $apiPath = $api->getApiDoc();
-            $apiDesc = $api->getDescDoc();
-            dump($apiDesc);
-            dump($apiPath);
+            $api = [
+                'api_path' => strtolower($module.'/'.$controller.'/'.$action)
+            ];
+            $data = Cache::get('api');
+            if(!$data) {
+                ApiModel::getApi();
+                $data = Cache::get('api');;
+            }
+            if(!in_array($api,$data)) {
+                (new ApiInjection($class,$action))->injection();
+            }
         }
 
     }

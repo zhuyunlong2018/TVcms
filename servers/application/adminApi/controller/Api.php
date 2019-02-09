@@ -10,15 +10,33 @@
 namespace app\adminApi\controller;
 
 
-use app\common\validate\PagingParameter;
 use app\lib\Response;
 use app\adminApi\model\Api as ApiModel;
+use think\Cache;
 
 class Api extends BaseController
 {
-    public function getList($type=0,$order='desc',$sort='create_time') {
-        $list = ApiModel::getList($type,$order,$sort);
+    /**
+     * @API(adminApi/Api/getList)
+     * @DESC(根据类型获取API列表)
+     */
+    public function getList($type=0) {
+        $list = ApiModel::getList($type,'asc','api_path');
         return new Response(['data'=>$list]);
     }
+
+    /**
+     * @API(adminApi/Api/changeType)
+     * @DESC(根据id修改API的类型)
+     */
+    public function changeType($id,$type) {
+        $api = ApiModel::get($id);
+        Cache::rm('api'.($api->api_type));
+        Cache::rm('api'.$type);
+        $api->api_type = $type;
+        $result = $api->save();
+        return new Response(['data'=>$result]);
+    }
+
 
 }

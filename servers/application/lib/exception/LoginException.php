@@ -14,5 +14,5 @@ class LoginException extends BaseException
 {
     public $code = 401;
     public $msg = '登录失败';
-    public $errorCode = 10001;
+    public $errorCode = 10003;
 }

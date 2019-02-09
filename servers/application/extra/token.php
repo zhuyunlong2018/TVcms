@@ -19,8 +19,8 @@ return [
     //在什么时间之后该jwt才可用
     'nbf' =>  10,
 
-     //过期时间-100min
-    'exp' =>  6000,
+     //过期时间4h
+    'exp' =>  14400,
 
    //leeway in seconds
     'leeway'=> 60

@@ -26,8 +26,19 @@ class Api extends BaseModel
         return self::insert([
             'api_path' => $path,
             'api_name' => $desc,
+            ]);
+    }
 
-        ]);
+    public static function getApi() {
+        return self::cache('api')->field('api_path')->select();
+    }
+
+    public static function getByType($type) {
+        $condition = [];
+        if(!empty($type) || $type === 0) {
+            $condition = ['api_type'=>$type];
+        }
+        return self::cache('api'.$type)->where($condition)->field('api_path')->select();
     }
 
 }
