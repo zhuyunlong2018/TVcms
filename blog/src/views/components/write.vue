@@ -79,7 +79,7 @@
       },
       methods: {
         ...mapActions(["addArticle","updateArticle",'get_all_imgs']),
-        ...mapMutations(['select_tag','close_logout','show_alert','show_all_imgs','add_img_article','set_background']),
+        ...mapMutations(['select_tag','close_logout','SHOW_ALERT','show_all_imgs','add_img_article','set_background']),
         show_tags() {
           this.tags_box = true;
           this.stopProp();
@@ -108,14 +108,14 @@
           let file = e.target.files;
           // console.log(file[0].name);
           if(this.imgs.length>9 || (this.imgs.length+file.length)>9) {
-            this.show_alert('图片超过9九张，请分多次上传')
+            this.SHOW_ALERT('图片超过9九张，请分多次上传')
             return;
           }
           for (let i=0;i<file.length;i++) {
             if(this.imgs.length>0) {
               for(let j=0;j<this.imgs.length;j++) {
                 if(file[i].name == this.imgs[j].name) {
-                  this.show_alert('请不要选择重复图片');
+                  this.SHOW_ALERT('请不要选择重复图片');
                   return;
                 } else {
                   continue;
@@ -124,7 +124,7 @@
             }
             let imgSize = file[i].size/1024;
             if(imgSize>500){
-              this.show_alert('请上传大小不要超过500KB的图片');
+              this.SHOW_ALERT('请上传大小不要超过500KB的图片');
               continue;
           }else{
               let reader = new FileReader();
@@ -144,7 +144,7 @@
       },
       updata_imgs:function() {
         if(!this.imgs.length) {
-          this.show_alert('请选择要上传图片');
+          this.SHOW_ALERT('请选择要上传图片');
           return;
         }
           let _this = this;

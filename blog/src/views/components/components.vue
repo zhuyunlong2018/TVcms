@@ -8,7 +8,7 @@
             {{ alert.msg }}
             </div>
             <div class="content">
-              <button type="button" class="btn btn-info" @click="close_alert" >确认</button>
+              <button type="button" class="btn btn-info" @click="CLOSE_ALERT" >确认</button>
             </div>
         </div>
       </div>
@@ -87,7 +87,7 @@ export default {
           }
       },
   methods: {
-    ...mapMutations(['close_alert','take_img_src','close_show_img','TOGGLE_SEARCH']),
+    ...mapMutations(['CLOSE_ALERT','take_img_src','close_show_img','TOGGLE_SEARCH']),
     ...mapActions(['searchfor']),
     stopProp: function(e) {
         e = e || event;

@@ -142,38 +142,23 @@ const router = new Router({
         }, 50)
       });
     }
-  },
-  // beforeRouteLeave (to, from , next) {
-  //   const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-  //   if (answer) {
-  //     next()
-  //   } else {
-  //     next(false)
-  //   }
-  // }
+  }
 });
 
 
 router.beforeEach((to, from, next) => {
- // console.log(from.fullPath);
   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-    if (store.state.user.token) {  // 通过vuex state获取当前的token是否存在
+    if (store.getters.token) {  // 获取当前的token是否存在
       next();
-    }
-    else {
-      store.commit("change");
+    } else {
+      store.commit("SHOW_LOGIN_BOX");
       next({
         path: from.fullPath,
         query: {redirect: from.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
       })
     }
-  }
-  else {
+  } else {
     next();
   }
 })
-
-
-
-
 export default router;

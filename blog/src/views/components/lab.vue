@@ -64,7 +64,7 @@ export default {
   },
   methods:{
     ...mapActions(["get_all_imgs",'get_production']),
-    ...mapMutations(["show_alert","show_all_imgs","remove_lab_img","clear_lab_img","show_alert_notice"]),
+    ...mapMutations(["SHOW_ALERT","show_all_imgs","remove_lab_img","clear_lab_img","SHOW_MESSAGE"]),
     _production:function(boole) {
       if(this.lab.name && this.lab.url && this.lab.content && this.lab_imgs.length>0) { 
         //console.log(this.lab_imgs);
@@ -90,7 +90,7 @@ export default {
               data: params
             }).then(function (res) {
               if(res.data.result) {
-                _this.show_alert_notice('操作项目成功');
+                _this.SHOW_MESSAGE('操作项目成功');
                 let data = [];
                 _this.clear_lab_img(data);
                 _this.lab.name = '';
@@ -100,7 +100,7 @@ export default {
                 _this.get_production();
               }
               if(res.data.error == 'Permission denied') {
-                  _this.show_alert('权限不足');
+                  _this.SHOW_ALERT('权限不足');
                 }
 
             })
@@ -110,7 +110,7 @@ export default {
               });
 
       } else {
-        this.show_alert('请确保信息完整');
+        this.SHOW_ALERT('请确保信息完整');
       }
     },
     _get_all_imgs:function() {
@@ -143,11 +143,11 @@ export default {
               data: params
             }).then(function (res) {
               if(res.data.result) {
-                _this.show_alert_notice('操作项目成功')
+                _this.SHOW_MESSAGE('操作项目成功')
                 _this.get_production();
               }
               if(res.data.error == 'Permission denied') {
-                  _this.show_alert('权限不足');
+                  _this.SHOW_ALERT('权限不足');
                 }
             })
               .catch(function (err) {

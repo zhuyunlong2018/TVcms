@@ -113,5 +113,9 @@ class Admin
         return $admin;
     }
 
+    public static function removeAdmin($userID) {
+        Cache::rm('admin-user'.$userID);
+    }
+
 
 }

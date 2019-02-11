@@ -1,14 +1,14 @@
 <template>
-  <div class="login-box center-block" v-show="loginbox" @click="change" >
+  <div class="login-box center-block" v-show="loginBox" @click="CLOSE_LOGIN_BOX" >
     <transition name="show-login" >
-      <div class="wrap" :class="{'login-height':!register_login_btn,'register-height':register_login_btn}" v-show="loginbox" @click="stopProp">
-        <i @click="change" class="close-box glyphicon glyphicon-remove-circle" ></i>
+      <div class="wrap" :class="{'login-height':!registerLoginBtn,'register-height':registerLoginBtn}" v-show="loginBox" @click="stopProp">
+        <i @click="CLOSE_LOGIN_BOX" class="close-box glyphicon glyphicon-remove-circle" ></i>
         <h2>欢迎登录bianquan'blog</h2>
         <p>
           <input type="text" ref="input_email" @input="check_email" v-model="loginForm.email" placeholder="邮箱">
           <i class="glyphicon" :class="icon.email" ></i>
         </p>
-        <p v-show="register_login_btn" >
+        <p v-show="registerLoginBtn" >
           <input type="text"  ref="input_name" @input="check_name" v-model="loginForm.userName" placeholder="用户名">
           <i class="glyphicon" :class="icon.name" ></i>
         </p>
@@ -16,24 +16,24 @@
           <input type="password" ref="input_pwd" @input="check_pwd" v-model="loginForm.password" placeholder="密码">
           <i class="glyphicon" :class="icon.pwd"></i>
         </p> 
-        <p v-show="register_login_btn">
+        <p v-show="registerLoginBtn">
           <input type="password" ref="input_cpwd" @input="check_cpwd" v-model="c_userPwd" placeholder="确认密码">
           <i class="glyphicon" :class="icon.cpwd"></i>
         </p> 
-         <p v-show="!register_login_btn">
+         <p v-show="!registerLoginBtn">
            <button type="button" class="btn btn-info"  @click="handleLogin" :disabled="login_btn" >立即登录</button>
           </p> 
-          <p v-show="register_login_btn">
+          <p v-show="registerLoginBtn">
             <button type="button" class="btn btn-success" @click="register" :disabled="register_btn">立即注册</button>
           </p>
-        <p><a href="javascript:;" @click="change_btn">{{ change_notice }}</a></p>
+        <p><a href="javascript:;" @click="changeBtn">{{ loginNotice }}</a></p>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-  import { mapState,mapMutations,mapActions } from "vuex";
+  import { mapState,mapMutations,mapActions,mapGetters } from "vuex";
   import { register } from '@/api/login'
   export default{
       data(){
@@ -56,21 +56,21 @@
             pwd: '',
             cpwd: '',
           }
-
         }
       },
     methods:{
-      ...mapMutations(["change","show_login_box","show_register_box",'show_alert','show_alert_notice']),
+      ...mapMutations(["CLOSE_LOGIN_BOX",'SHOW_LOGIN_BOX','SHOW_REGISTER_BOX','SHOW_ALERT','SHOW_MESSAGE']),
       ...mapActions(["login"]),
-      change_btn: function() {
-          if(!this.register_login_btn) {
-              this.show_register_box();
+      changeBtn() {
+          if(!this.registerLoginBtn) {
+            this.SHOW_REGISTER_BOX()
           } else {
-            this.show_login_box();
+            this.SHOW_LOGIN_BOX()
           }
       },
       handleLogin() {
           this.$store.dispatch('login',this.loginForm).then(() => {
+            this.CLOSE_LOGIN_BOX()
           }).catch(error => {
             
           })
@@ -78,13 +78,13 @@
       register() {
         let data = this.loginForm
         register(data.userName,data.email,data.password).then(response => {
-           this.show_alert_notice('注册成功，请登录')
+           this.SHOW_MESSAGE('注册成功，请登录')
            this.show_login_box();
         }).catch(error => {
-            this.show_alert(error.response.data.msg)
+            this.SHOW_ALERT(error.response.data.msg)
         })
       },
-      check_email:function() {
+      check_email() {
         this.check_result.email = false;
         let email = this.$refs.input_email.value;
         if(email) {
@@ -102,7 +102,7 @@
           //console.log('邮箱不能为空');
         }
       },
-      check_name:function() {
+      check_name() {
         this.check_result.name = false;
         let name = this.$refs.input_name.value;
         if(name) {
@@ -120,7 +120,7 @@
           //console.log('用户名不能为空');
         }
       },
-      check_pwd:function() {
+      check_pwd() {
         this.check_result.pwd = false;
         let pwd = this.$refs.input_pwd.value;
         if(pwd) {
@@ -138,7 +138,7 @@
           //console.log('密码不能为空');
         }
       },
-      check_cpwd:function() {
+      check_cpwd() {
         this.check_result.cpwd = false;
         let cpwd = this.$refs.input_cpwd.value;
         if(cpwd == this.userPwd && cpwd) {
@@ -157,7 +157,7 @@
       },
     },
     computed: {
-      ...mapState(["loginbox","register_login_btn","change_notice"]),
+      ...mapGetters(["loginBox",'registerLoginBtn','loginNotice']),
       register_btn:function() {
         return false
         if(1 || this.check_result.email && this.check_result.name && this.check_result.pwd && this.check_result.cpwd) {

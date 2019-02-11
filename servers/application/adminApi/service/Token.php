@@ -27,7 +27,7 @@ class Token
             'aud' => config('token.aud'), //jwt所面向的用户
             'iat' => config('token.iat'), //签发时间
             'nbf' => $nowTime + config('token.nbf'), //在什么时间之后该jwt才可用
-            'exp' => $nowTime + config('token.exp'), //过期时间-100min
+            'exp' => $nowTime + config('token.exp'), //过期时间
             'data' => [
                 'userID' => $userID,
                 'userEmail' => $userEmail,
@@ -35,6 +35,7 @@ class Token
             ]
         ];
         $token = JWT::encode($tokenMsg, config('token.key'));
+        Cache::set($token,$tokenMsg['data'],config('token.exp'));
         return $token;
     }
 
@@ -54,14 +55,13 @@ class Token
             $decoded = JWT::decode($jwt, config('token.key'), array('HS256'));
             $arr = (array)$decoded;
             if ($arr['exp'] < time()) {
-                Cache::rm($jwt);
+                self::removeToken($jwt);
                 throw new TokenException(['msg'=>'登录已失效，请重新登录']);
             } else {
-                Cache::set($jwt,$arr['data']);
                 return $arr['data'];
             }
         } catch(RuntimeException $e) {
-            Cache::rm($jwt);
+            self::removeToken($jwt);
             throw new TokenException(['msg'=>$e->getMessage()]);
         }
     }
@@ -85,7 +85,21 @@ class Token
     public static function getUser() {
         $request = Request::instance();
         $token = $request->header('X-Api-Token');
-        return Cache::get($token);
+        $user = Cache::get($token);
+        if(!$user) {
+           throw new TokenException();
+        }
+        return $user;
+    }
+
+    public static function removeToken() {
+        $request = Request::instance();
+        $token = $request->header('X-Api-Token');
+        $user = Cache::get($token);
+        if($user) {
+            Cache::rm($token);
+            Admin::removeAdmin($user['userID']);
+        }
     }
 
 

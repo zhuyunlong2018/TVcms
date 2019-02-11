@@ -28,7 +28,7 @@ class BaseController extends Controller
         if($request->isOptions()){
             return json(['msg'=>'success'],200);
         }
-        Cache::clear();
+//        Cache::clear();
         $module = $request->module();
         $controller = $request->controller();
         $action = $request->action();

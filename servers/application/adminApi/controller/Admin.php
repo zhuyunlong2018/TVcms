@@ -11,6 +11,7 @@ namespace app\adminApi\controller;
 
 
 use app\adminApi\service\Admin as AdminService;
+use app\adminApi\service\Token;
 use app\common\validate\PagingParameter;
 use app\lib\exception\AuthException;
 use app\lib\exception\ParameterException;
@@ -57,7 +58,8 @@ class Admin extends BaseController
         $admin->admin_name = $admin_name;
         $admin->user_id = $user['user_id'];
         $admin->save();
-        Cache::rm('admin-user'.$user['user_id']);
+        AdminService::removeAdmin($user['user_id']);
+
         $result = AdminService::updateAdminRoles($admin_id,$roles);
         return new Response(['data'=>$result]);
     }
@@ -94,7 +96,7 @@ class Admin extends BaseController
         if(empty($admin)) {
             throw new ResourcesException();
         }
-        Cache::rm('admin-user'.$admin->user_id);
+        AdminService::removeAdmin($admin->user_id);
         $admin->delete();
         AdminService::deleteAdminRoles($admin_id);
         return new Response();
@@ -102,12 +104,10 @@ class Admin extends BaseController
 
     /**
      * @API(adminApi/Admin/logout)
-     * @DESC(测试用接口)
+     * @DESC(退出登录接口)
      */
     public function  logout() {
-
-        Request::instance()->method();
-//        return json(['heheh']);
+        Token::removeToken();
     }
 
 }

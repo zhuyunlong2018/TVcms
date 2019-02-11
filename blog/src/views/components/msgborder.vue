@@ -3,7 +3,7 @@
     <div class="msgborder">
       <h2 class="title">我xxx到此一游！O(∩_∩)O哈哈~</h2>
       <!--留言-->
-      <comment></comment>
+      <comment :articleID='articleID'></comment>
     </div>
   </div>
 </template>
@@ -13,8 +13,9 @@ import comment from "./comment.vue";
 import { mapState,mapActions,mapMutations } from "vuex";
   export default {
       data() {
-          return{}
-
+          return{
+            articleID: 0
+          }
       },
       components: {
         comment

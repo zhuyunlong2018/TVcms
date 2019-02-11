@@ -6,7 +6,7 @@
     <transition name="show-nav" >
       <nav class="nav-content" v-show="show_header_nav" >
         <ul class="header-nav">
-          <li @click="go_home">
+          <li @click="goHome">
             <router-link to="/articleList">
               <i class="glyphicon glyphicon-home" ></i>
               <span>主页</span>
@@ -41,9 +41,9 @@
             </a>
           </li>
           <li class="login_user">
-            <a href="javascript:;" @click="check_login">
+            <a href="javascript:;" @click="checkLogin">
               <i class="glyphicon glyphicon-user" ></i>
-              <span>{{ login_user }}</span>
+              <span>{{ loginUser }}</span>
             </a>
           </li>
           <li class="logout_user" :class="{'touch-logout': if_touch }" v-show="logout_register" >
@@ -75,16 +75,13 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
           }
       },
     methods:{
-      ...mapActions(['FedLogOut','getPage','getPageCount','get_bing']),
-      ...mapMutations(['change','show_register_box','CLEAR_CRUMBS','changePage','TOGGLE_SEARCH']),
-      check_login: function() {
-        
+      ...mapActions(['FedLogOut','get_bing']),
+      ...mapMutations(['SHOW_REGISTER_BOX','CLEAR_CRUMBS','TOGGLE_SEARCH']),
+      checkLogin() {
         this.$router.push('/admin');
-          
       },
       _show_register_box:function() {
-        this.change();
-        this.show_register_box();
+        this.SHOW_REGISTER_BOX();
       },
       _get_bing:function() {
         if(!this.search.bing){
@@ -92,37 +89,28 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
         }
         this.TOGGLE_SEARCH(true);
       },
-        go_home:function() {
-          this.CLEAR_CRUMBS();
-          this.changePage(0);
-          this.getPage();
-          this.$router.push('/');
-          this.getPageCount();
-        }
+      goHome:function() {
+        // this.CLEAR_CRUMBS();
+        // this.$router.push('/');
+      }
 
     },
     computed: {
       ...mapState(['show_header_nav','search','if_touch']),
-      ...mapGetters(['login_user']),
+      ...mapGetters(['loginUser']),
       logout_register:function() {
-        if (this.$store.getters.login_user == '登录') {
+        if (this.$store.getters.loginUser == '登录') {
           return false;
         } else {
           return true ;
         }
       }
-    },
-    created() {
     }
   }
 
 </script>
 
 <style scoped>
-
-
-
-
 
 /* 导航部分 */
 .nav-content {

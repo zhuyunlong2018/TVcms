@@ -1,15 +1,8 @@
 const state = {
-    loginbox:false,//控制登录页面显示
-    register_login_btn: false,//控制登录页和注册页切换
-    change_notice: "未注册？点击进行注册",//控制登录页和注册页切换提示
     userName: '920200256@qq.com',//登录用户名
     userEmail:'920200256@qq.com',//登录邮箱
     userPwd:'920200256',//登录密码
-    
-    //token,本地若有token值，则注入store，若无则为null
-    //token:(window.localStorage.getItem("bianquan_token"))?window.localStorage.getItem("bianquan_token"):null,
-    //用户身份
-    status:(window.localStorage.getItem("bianquan_status"))?window.localStorage.getItem("bianquan_status"):null,
+  
     logout_box: false,//注销弹框
     alert: {msg:'',show: false},//alert弹框内容
     alert_notice: {msg:'',show: false},//自动关闭alert弹框内容
@@ -29,14 +22,7 @@ const state = {
     options:[],//编辑页标签选项
     id: '',             //博客文章id
     time: '',           //博客文章的时间
-    commentArticleId: null,   //获取要添加评论所属文章的id
-    type: 0,                //0为评论作者1为评论别人的评论
-    oldComment: null,    //被评论的人
-    chosedIndex: -1,        //被选中的评论的index
-    comment: [],            //评论信息
-    commentText:"",         //要发表评论的内容
-    commenter:(window.localStorage.getItem("bianquan_user"))? window.localStorage.getItem("bianquan_user") : '',        //要发表评论作者
-    commenterEmail:(window.localStorage.getItem("bianquan_email"))? window.localStorage.getItem("bianquan_email") : '',        //要发表评论的邮箱
+   
     all_images:{src:[],box:false,write: true} ,   //从后台获取的所有图片地址
     configs: {
       status: false,

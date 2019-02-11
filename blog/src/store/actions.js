@@ -6,7 +6,7 @@ const common = require('./common');
 const _axios= params => {
   return axios({
       method: "post",
-      url: 'http://localhost:80/bianquan/servers/public/index.php/index',
+      url: 'www.bianquan.com/index.php/index',
       // url: state.URL,
       data: params
     })
@@ -15,114 +15,6 @@ const _axios= params => {
 
 
 const actions = {
-
-
-
-
-
-  //  //验证用户是否登录
-  //  check_login({state,commit}) {
-  //   //console.log(state.token);
-  //   let params = {
-  //     'act':'check_login'
-  //   }
-  //   _axios(params).then(function (res) {
-  //     //console.log('成功了');
-  //     //console.log(res.data);
-  //     if (res.data.login) {
-  //      router.push('/admin');
-  //     } else {
-  //       commit('change');
-  //       commit('logout');
-  //       commit('show_login_box');
-  //     }
-  //   })
-  //     .catch(function (err) {
-  //       console.log(err);
-  //       console.log('失败了');
-  //     });
-
-  // },
-
-
-
-
-
-
-   
-
-
- //用户提交登录
-//  login({commit,state}) {
-//    let params = {
-//      'act':'login',
-//      'email':state.userEmail,
-//      'pwd':state.userPwd
-//    }
-//    _axios(params).then(function (res) {
-//      if (res.data.result && res.data.data) {
-//        //本地存储token
-//        let result = res.data.data;
-//        axios.defaults.headers.common['X-token'] = result.jwt;
-//        localStorage.setItem('bianquan_token',result.jwt);
-//        localStorage.setItem('bianquan_user',result.name);
-//        localStorage.setItem('bianquan_email',result.email);
-//        localStorage.setItem('bianquan_status',result.userstatus);
-//        //同步token到store中
-//        commit('token',result);
-//        commit('change');
-//        let data = '登录成功！'
-//        commit('show_alert_notice',data);
-//      } else{
-//        if(res.data.message) {
-//          commit('show_alert',res.data.message);
-//        } else {
-//          commit('show_alert','密码或邮箱错误！');
-//        }
-
-//      }
-//      if(res.data.login) {
-//        commit('change');
-//      }
-//    })
-//      .catch(function (err) {
-//        console.log(err);
-//        console.log('失败了');
-//      });
-
-//  },
-
-
-
-
-// //用户提交注册
-//  register({commit,state}) {
-//    // console.log(state.userPwd);
-//    let params = {
-//          'act':'register',
-//          'email':state.userEmail,
-//          'name':state.userName,
-//          'pwd':state.userPwd,
-//          'time':common.getTime()
-//    }
-//    _axios(params).then(function (res) {
-//      if(!res.data.result){ return; }
-//      if(res.data.data.msg) {
-//        commit('show_alert',res.data.data.msg);
-//      } else {
-//        commit('show_alert','注册失败');
-//      }
-
-//      if (res.data.data.result) {
-//        commit('show_login_box');
-//      }
-//    })
-//      .catch(function (err) {
-//        // console.log(err);
-//        console.log('失败了');
-//      });
-
-//  },
 
  //获取所有文章列表
  getList:function({commit,state}) {
@@ -153,7 +45,7 @@ const actions = {
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -167,7 +59,7 @@ const actions = {
  //添加文章
  addArticle:function({commit,state}){
    if(!(state.title && state.content &&state.article_background)) {
-     commit('show_alert','请确保信息完整');
+     commit('SHOW_ALERT','请确保信息完整');
      return;
    }
    let content = state.content;
@@ -190,7 +82,7 @@ const actions = {
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -213,12 +105,12 @@ const actions = {
        commit('DELARTICLE',obj.index);
      }
      if(res.data.error == 1) {
-        commit('show_alert','权限不足,无法删除文章');
+        commit('SHOW_ALERT','权限不足,无法删除文章');
      }
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -229,24 +121,24 @@ const actions = {
      });
  },
  //获取需要展示文章内容
- getShowArticle:function({commit,state},id) {
-   let params = {
-     'act':'getOne',
-     'id':id
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     //console.log(res.data.data[0]);
-     if(res.data.result) {
-       commit('GETSHOWARTICLE',res.data.data);
-     }
+//  getShowArticle:function({commit,state},id) {
+//    let params = {
+//      'act':'getOne',
+//      'id':id
+//    }
+//    _axios(params).then(function (res) {
+//      //console.log('成功了');
+//      //console.log(res.data.data[0]);
+//      if(res.data.result) {
+//        commit('GETSHOWARTICLE',res.data.data);
+//      }
 
-   })
-   .catch(function (err) {
-     console.log(err);
-     console.log('失败了');
-   });
- },
+//    })
+//    .catch(function (err) {
+//      console.log(err);
+//      console.log('失败了');
+//    });
+//  },
  //获取选中需编辑文章内容
  getOneArticle:function({commit,state},id){
    let params = {
@@ -260,12 +152,12 @@ const actions = {
        router.push('/admin/write');
      }
      if(res.data.error == 1) {
-       commit('show_alert','权限不足，无法编辑');
+       commit('SHOW_ALERT','权限不足，无法编辑');
      }
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -279,7 +171,7 @@ const actions = {
  updateArticle:function({commit,state}){
   // console.log(state.id);
   if(!(state.title && state.content &&state.article_background)) {
-     commit('show_alert','请确保信息完整');
+     commit('SHOW_ALERT','请确保信息完整');
      return;
    }
    let content = state.content;
@@ -298,12 +190,12 @@ const actions = {
        commit('UPDATEARTICLE');
      }
      if(res.data.error == 1) {
-       commit('show_alert','权限不足');
+       commit('SHOW_ALERT','权限不足');
     }
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -314,96 +206,96 @@ const actions = {
      });
  },
  //获取首页文章页数
- getPageCount:function({commit,state}) {
-   let params = {
-     'act':'getPageCount',
-     'tag': state.crumbs.first
-   }
-   _axios(params).then(function (res) {
-     //console.log('获取页面数成功了');
-     //console.log(res);
-     if(res.data.result) {
-       let count = res.data.data;
-     commit('GETPAGECOUNT',count);
-     }
+//  getPageCount:function({commit,state}) {
+//    let params = {
+//      'act':'getPageCount',
+//      'tag': state.crumbs.first
+//    }
+//    _axios(params).then(function (res) {
+//      //console.log('获取页面数成功了');
+//      //console.log(res);
+//      if(res.data.result) {
+//        let count = res.data.data;
+//      commit('GETPAGECOUNT',count);
+//      }
 
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
+//    })
+//      .catch(function (err) {
+//        console.log(err);
+//        console.log('失败了');
+//      });
+//  },
  //获取某一页文章列表数据
- getPage:function({commit,state}) {
-   let params = {
-     'act':'getPage',
-     'page': state.page_index,
-     'tag': state.crumbs.first
-   }
-   _axios(params).then(function (res) {
-     //console.log('获取页面列表成功');
-     //console.log(res.data.data);
-     if(res.data.result) {
-       let pageDate = res.data.data;
-       commit('GETPAGE',pageDate);
-     }
+//  getPage:function({commit,state}) {
+//    let params = {
+//      'act':'getPage',
+//      'page': state.page_index,
+//      'tag': state.crumbs.first
+//    }
+//    _axios(params).then(function (res) {
+//      //console.log('获取页面列表成功');
+//      //console.log(res.data.data);
+//      if(res.data.result) {
+//        let pageDate = res.data.data;
+//        commit('GETPAGE',pageDate);
+//      }
 
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
+//    })
+//      .catch(function (err) {
+//        console.log(err);
+//        console.log('失败了');
+//      });
+//  },
  //获取某一篇文章的评论内容
- getComment: function({commit,state},id) {
-   let params = {
-     'act':'getComment',
-     'id':id
-   }
-   _axios(params).then(function (res) {
-     //console.log('获取评论成功了');
-     commit('CLEARCOMMENT');
-     if(res.data.result) {
-       commit('GETCOMMENT',res.data.data);
-     }
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
+//  getComment: function({commit,state},id) {
+//    let params = {
+//      'act':'getComment',
+//      'id':id
+//    }
+//    _axios(params).then(function (res) {
+//      //console.log('获取评论成功了');
+//      commit('CLEARCOMMENT');
+//      if(res.data.result) {
+//        commit('GETCOMMENT',res.data.data);
+//      }
+//    })
+//      .catch(function (err) {
+//        console.log(err);
+//        console.log('失败了');
+//      });
+//  },
  //对某一篇文章增加评论
- addComment: function({commit,state}) {
-   //console.log(this.commentText);
-   let commentText = state.commentText;
-   let a_id = state.commentArticleId;
-   let params = {
-     'act':'addComment',
-     'commenter':state.commenter,
-     'commenterEmail':state.commenterEmail,
-     'commentText':commentText,
-     'time':common.getTime(),
-     'oldComment':state.oldComment,
-     'id':a_id,
-     'type':state.type,
-     'index':state.chosedIndex
-   }
+//  addComment: function({commit,state}) {
+//    //console.log(this.commentText);
+//    let commentText = state.commentText;
+//    let a_id = state.commentArticleId;
+//    let params = {
+//      'act':'addComment',
+//      'commenter':state.commenter,
+//      'commenterEmail':state.commenterEmail,
+//      'commentText':commentText,
+//      'time':common.getTime(),
+//      'oldComment':state.oldComment,
+//      'id':a_id,
+//      'type':state.type,
+//      'index':state.chosedIndex
+//    }
 
-   _axios(params).then(function (res) {
-     if(res.data.data.msg) {
-       commit('show_alert_notice',res.data.data.msg);
-       return;
-     }
-     if(res.data.result) {
-       commit("ADDCOMMENT");
-     }
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
+//    _axios(params).then(function (res) {
+//      if(res.data.data.msg) {
+//        commit('SHOW_MESSAGE',res.data.data.msg);
+//        return;
+//      }
+//      if(res.data.result) {
+//        commit("ADDCOMMENT");
+//      }
+//    })
+//      .catch(function (err) {
+//        console.log(err);
+//        console.log('失败了');
+//      });
 
- },
+//  },
    //获取所有图片地址
  get_all_imgs:function({commit,state}) {
    let params = {
@@ -418,7 +310,7 @@ const actions = {
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -449,7 +341,7 @@ const actions = {
      if(!res.data.login) {
        router.push('/');
        commit('change');
-       commit('show_alert','登录超时，请重新登录');
+       commit('SHOW_ALERT','登录超时，请重新登录');
        commit('logout');
      }
 
@@ -464,7 +356,7 @@ const actions = {
        //判断是否点赞
        let add_praise = id+'_add_praise';
        if(sessionStorage.getItem(add_praise)) {
-         commit('show_alert','试试点赞其他文章吧！');
+         commit('SHOW_ALERT','试试点赞其他文章吧！');
          return;
        }else {
          sessionStorage.setItem(add_praise,'点赞成功！');
@@ -514,7 +406,7 @@ const actions = {
           if(!res.data.login) {
            router.push('/');
            commit('change');
-           commit('show_alert','登录超时，请重新登录');
+           commit('SHOW_ALERT','登录超时，请重新登录');
            commit('logout');
          }
          })
@@ -543,7 +435,7 @@ const actions = {
              if(!res.data.login) {
                router.push('/');
                commit('change');
-               commit('show_alert','登录超时，请重新登录');
+               commit('SHOW_ALERT','登录超时，请重新登录');
                commit('logout');
              }
 
@@ -566,7 +458,7 @@ const actions = {
             if(!res.data.login) {
              router.push('/');
              commit('change');
-             commit('show_alert','登录超时，请重新登录');
+             commit('SHOW_ALERT','登录超时，请重新登录');
              commit('logout');
            }
 
@@ -609,7 +501,7 @@ const actions = {
               commit("ADD_TAGS",tag);
              }
              if(res.data.error == 1) {
-               commit('show_alert','权限不足');
+               commit('SHOW_ALERT','权限不足');
             }
 
            })
@@ -629,7 +521,7 @@ const actions = {
               commit("DEL_TAGS",obj.index);
              }
              if(res.data.error == 1) {
-               commit('show_alert','权限不足');
+               commit('SHOW_ALERT','权限不足');
             }
 
            })
@@ -656,7 +548,7 @@ const actions = {
               commit("ADD_NEIGHBORS",params);
              }
              if(res.data.error == 1) {
-               commit('show_alert','权限不足');
+               commit('SHOW_ALERT','权限不足');
             }
 
            })
@@ -697,7 +589,7 @@ const actions = {
               commit("DEL_NEIGHBORS",index);
              }
              if(res.data.error == 1) {
-               commit('show_alert','权限不足');
+               commit('SHOW_ALERT','权限不足');
             }
            })
              .catch(function (err) {
@@ -717,13 +609,13 @@ const actions = {
          }
          _axios(params).then(function (res) {
            if(res.data.result) {
-            commit("show_alert_notice",'内容更新成功');
+            commit("SHOW_MESSAGE",'内容更新成功');
             commit('UPDATE_ABOUT');
            } else {
-             commit('show_alert','更新失败');
+             commit('SHOW_ALERT','更新失败');
            }
            if(res.data.error == 1) {
-             commit('show_alert','权限不足');
+             commit('SHOW_ALERT','权限不足');
           }
          })
            .catch(function (err) {
@@ -758,7 +650,7 @@ const actions = {
             commit("DEL_IMG",index);
            }
            if(res.data.error == 1) {
-             commit('show_alert','权限不足,无法删除图片');
+             commit('SHOW_ALERT','权限不足,无法删除图片');
           }
          })
            .catch(function (err) {

@@ -9,12 +9,13 @@
 
 namespace app\blogApi\controller;
 use app\blogApi\service\Article as ArticleService;
+use app\common\controller\BaseController;
 use app\common\validate\PagingParameter;
 use app\blogApi\model\Article as ArticleModel;
 use app\lib\exception\ResourcesException;
 use app\lib\Response;
 
-class Article
+class Article extends BaseController
 {
     public function getList($tagID,$userID,$page,$limit)
     {

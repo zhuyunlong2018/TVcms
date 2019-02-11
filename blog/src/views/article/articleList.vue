@@ -35,7 +35,7 @@
 
 
 <script>
-  import { mapActions,mapState,mapMutations } from 'vuex';
+  import { mapMutations } from 'vuex';
   import { getList } from '@/api/article'
   export default {
     name: 'articleList',
@@ -51,13 +51,13 @@
         };
     },
     methods:{
-      ...mapMutations(['show_alert']),
+      ...mapMutations(['SHOW_ALERT']),
       getList() {
-        getList(this.listInfo.tagID,this.listInfo.userID,this.listInfo.page,this.listInfo.limit).then(response => {
+        getList(this.listInfo).then(response => {
           this.articleList = response.data.data
           
         }).catch(error => {
-            this.show_alert(error.response.data.msg)
+            this.SHOW_ALERT(error.response.data.msg)
         })
       },
       changePage(page) {

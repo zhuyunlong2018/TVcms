@@ -90,14 +90,14 @@ export default {
   },
   methods:{
     ...mapActions(["add_tags","del_tags","add_neighbors","del_neighbors","update_about","get_about"]),
-    ...mapMutations(["show_alert"]),
+    ...mapMutations(["SHOW_ALERT"]),
     _add_tags:function() {
       let tag = this.new_tag;
       if(tag){
         this.add_tags(tag);
         this.new_tag = '';
       } else {
-        this.show_alert('请填写要新增标签');
+        this.SHOW_ALERT('请填写要新增标签');
       }
     },
     _del_tags:function(tag,index) {
@@ -118,7 +118,7 @@ export default {
         this.neighbors.url = '';
         this.neighbors.icon = '';
       } else {
-        this.show_alert('请确保信息完整');
+        this.SHOW_ALERT('请确保信息完整');
       }
 
     },

@@ -10,10 +10,10 @@
 namespace app\blogApi\controller;
 
 
-use think\Controller;
+use app\common\controller\BaseController;
 use app\blogApi\service\User as ServiceUser;
 
-class User extends Controller
+class User extends BaseController
 {
     public function login() {
         $email = input('email');

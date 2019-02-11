@@ -19,33 +19,12 @@ const mutations = {
     state.now_time = common.getTime();
     //console.log(state.now_time);
   },
-  //改变登录页面显示状态
-  change(state){
-      state.loginbox=!state.loginbox;
-  },
-  //注册框切换为登录框
-  show_login_box(state) {
-    state.change_notice = "未注册？点击进行注册";
-    state.register_login_btn = false;
-  },
+
     //判断是否触屏
   if_touched(state) {
     state.if_touch = true;
   },
-  //登录框切换为注册框
-  show_register_box(state) {
-      state.change_notice = "已有账号？点击登录";
-      state.register_login_btn = true;
-    },
-  //登录成功，同步token到store中
-  token(state,data) {
-    state.token = data.token;
-    state.userPwd = '';
-    state.commenter = data.name;
-    state.status = data.userstatus;
-    state.commenterEmail = data.email;
-    state.login_user = '欢迎您！'+ data.name;
-  },
+ 
   //显示注销盒子
   show_logout(state) {
     state.logout_box = !state.logout_box;
@@ -54,52 +33,39 @@ const mutations = {
   close_logout(state) {
     state.logout_box = false;
   },
-    //显示自动关闭提示alert
-    show_alert_notice(state,data) {
-      state.alert_notice.show = true;
-      state.alert_notice.msg = data;
-      setTimeout(() => {
-        state.alert_notice.show = false;
-        state.alert_notice.msg = '';
-      }, 1000);
-    },
-  //注销登录
-  logout(state) {
-    state.token = null;
-    state.login_user = '登录';
-    state.userName = '';
-    state.userEmail = '';
-    state.status = '';
-    state.commenter = '';
-    state.commenterEmail = '';
-    localStorage.removeItem("bianquan_user");
-    localStorage.removeItem("bianquan_token");
-    localStorage.removeItem("bianquan_email");
-    localStorage.removeItem("bianquan_status");
+  //显示自动关闭提示alert
+  SHOW_MESSAGE(state,data) {
+    state.alert_notice.show = true;
+    state.alert_notice.msg = data;
+    setTimeout(() => {
+      state.alert_notice.show = false;
+      state.alert_notice.msg = '';
+    }, 2000);
   },
+ 
   //显示alert弹框
-  show_alert(state,data) {
+  SHOW_ALERT(state,data) {
     state.alert.msg = data;
     state.alert.show = true;
   },
     //隐藏alert弹框
-  close_alert(state) {
-      state.alert.show = false;
-    },
-    //显示图片放大弹框
-    take_img_src(state,params) {
-      state.show_img.src = params;
-      state.show_img.box = true;
-    },
-    //隐藏图片放大弹框
-    close_show_img(state) {
-      state.show_img.src = '';
-      state.show_img.box = false;
-    },//显示图片管理窗口
-    show_all_imgs(state,change) {
-      state.all_images.box = true;
-      state.all_images.write = change;
-    },
+  CLOSE_ALERT(state) {
+    state.alert.show = false;
+  },
+  //显示图片放大弹框
+  take_img_src(state,params) {
+    state.show_img.src = params;
+    state.show_img.box = true;
+  },
+  //隐藏图片放大弹框
+  close_show_img(state) {
+    state.show_img.src = '';
+    state.show_img.box = false;
+  },//显示图片管理窗口
+  show_all_imgs(state,change) {
+    state.all_images.box = true;
+    state.all_images.write = change;
+  },
   //隐藏图片管理窗口
   close_all_imgs(state) {
     state.all_images.box = false;
@@ -272,77 +238,8 @@ const mutations = {
     CLEARCOMMENT(state) {
       state.comment = [];
     },
-  //将获取的某一篇文章的评论填充到相应的store中
-  GETCOMMENT(state,result) {
-    for(let i=0;i<result.length;i++) {
-      if(result[i].c_published == 0 && result[i].c_content=='0') {
-        result[i].c_content = '该评论已被屏蔽';
-      }
-      if (result[i].c_type == 0) {
-        let content = simplemde.prototype.markdown(result[i].c_content?result[i].c_content:'');
-        state.comment.push({
-          id:result[i].c_id,
-          name: result[i].c_user,
-          time: result[i].c_time,
-          content: content,
-          reply: []
-        });
-      }
-    }
-    for(let i=0;i<result.length;i++) {
-      if (result[i].c_type == 1) {
-        let content = result[i].c_content;
-        state.comment[result[i].c_index].reply.push({
-          id:result[i].c_id,
-          responder: result[i].c_user,
-          reviewers: result[i].c_oldComment,
-          time: result[i].c_time,
-          content: content,
-        });
-      }
-    }
-  },
-  //添加某一条评论，将评论数据注入到store中，在页面中展示新增评论
-  ADDCOMMENT(state) {
-    if(state.type == 0) {
-      state.comment.push({
-        name: state.commenter,
-        time: common.getTime(),
-        content: state.commentText,
-        reply: []
-      });
-    }else if(state.type == 1){
-      state.comment[state.chosedIndex].reply.push({
-        responder: state.commenter,
-        reviewers:state.comment[state.chosedIndex].name,
-        time: common.getTime(),
-        content: state.commentText
-      });
-      state.type = 0;
-      state.chosedIndex = -1;
-
-    }
-    state.show_article.comment++;
-    state.webdata.comment++;
-    state.commentText = "";
-    state.type = 0;
-    state.oldComment = null;
-    state.chosedIndex = -1;
-  },
-  //改变要回复的对象，将要回复的人名和序号注入store中
-  changeCommenter: function(state,obj) {
-    state.oldComment = obj.name;
-    state.chosedIndex = obj.index;
-    // console.log(obj.name);
-    // console.log(obj.index);
-    state.type = 1;
-  },
-  //取消在楼层内回复
-  canelComment: function() {
-    state.type = 0;
-    state.chosedIndex = -1;
-    state.oldComment = null;
-  },
+ 
+ 
     //获取后台所有图片地址
   GET_ALL_IMGS:function(state,data) {
     state.all_images.src = data;

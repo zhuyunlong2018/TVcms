@@ -38,8 +38,18 @@ class Index extends BaseController
 //        $admin = Cache::get('role1');
 //        RoleService::getRoleApi(1);
 //
+        $data = [
+            'userID' => 122,
+            'userEmail' =>4444,
+            'userName' => 555
+        ];
+
+        $token= "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3d3cuYmlhbnF1YW4iLCJhdWQiOiJ3d3cudXNlciIsImlhdCI6bnVsbCwibmJmIjoxNTQ5Njk5NTE2LCJleHAiOjE1NDk3MTM5MDYsImRhdGEiOnsidXNlcklEIjoxLCJ1c2VyRW1haWwiOiI5MjAyMDAyNTZAcXEuY29tIiwidXNlck5hbWUiOiJcdThmYjlcdTZjYzkifX0.hj8sVMbWKfvTMEYD8JxJrcz1Bx0vosVL1t-yr42tsww";
+//        Cache::set($token,$data);
+
+        $a = Cache::get($token);
 //        return ($role);
-        return ($admin);
+        return ($a);
 //        Api::injection('index/index/hello','测试用接口数据');
 //        $api = [
 //            'api_name' => '会员管1理1',

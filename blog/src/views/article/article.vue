@@ -26,7 +26,7 @@
         <i class="glyphicon glyphicon-thumbs-up" @click="_add_praise" ></i>
       </p>
       <p class="praise" ><span>累计获得{{article.a_praise}}个赞</span></p>
-      <comment></comment>
+      <comment :articleID='article.a_id'></comment>
     </div>
   </div>
 </template>
@@ -62,32 +62,19 @@
           }
           this.CHANGE_CRUMBS(obj)
         }).catch(error => {
-            this.show_alert(error.response.data.msg)
+            this.SHOW_ALERT(error.response.data.msg)
         })
       },
       _add_praise:function() {
         let id = this.$route.params.id;
         this.add_praise(id);
-      },
-      ...mapMutations(["changeCommentPage","AddImgClickEvent"]),
-      _changeCommentPage:function(){
-        let p_id = this.$route.params.id;
-        this.changeCommentPage(p_id);
-      },
-      _getComment:function(){
-      this.getComment(this.$route.params.id);
       }
-    },
-    computed: {
-      ...mapState(["show_article"])
     },
     created:function() {
       this.article.a_id = this.$route.params.id
     },
     mounted() {
       this.getOne()
-      // this._getComment();
-      // this._changeCommentPage();
     }
   }
 </script>
@@ -201,9 +188,6 @@
     .main .article .tag li i {
       margin-right: 2px;
     }
- 
-
-
   }
 
 </style>

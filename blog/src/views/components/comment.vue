@@ -2,40 +2,41 @@
   <div class="comment">
     <div class="commentBox">
       <h3 id="publish" >发表评论</h3>
-      <b v-show="type">你回复&nbsp;{{oldComment}}</b>
-      <input v-if="!token" type="text" v-model="commenter" placeholder="昵称:">
-      <input v-if="!token" type="email" v-model="commenterEmail" ref="input_mail" @change="_check_mail" name="user_email" placeholder="邮箱(用于通知回复信息):" />
+      <b v-show="target.show">你回复&nbsp;{{target.name}}</b>
+      <input v-if="!token" type="text" v-model="queryData.user.name" placeholder="昵称:">
+      <input v-if="!token" type="email" v-model="queryData.user.email" ref="input_mail" @change="checkMail" name="user_email" placeholder="邮箱(用于通知回复信息):" />
       <span class="check_mail" v-if="!token" v-show="!check_mail" >*邮箱格式不正确</span>
-      <markdown-editor v-model="commentText" ref="markdwonEditor" :configs="configs" :highlight="true"></markdown-editor>
+      <markdown-editor v-model="queryData.content" ref="markdwonEditor" :configs="configs" :highlight="true"></markdown-editor>
       <p class="notice" v-show="disabled">*请填写完整信息！</p>
-      <button class="btn" @click="addComment" :disabled="disabled" >发表</button>
+      <button class="btn" @click="addComment" >发表</button>
       <button class="btn" @click="canelComment">取消</button>
     </div>
     <div class="commentBox">
       <h3>评论</h3>
-      <p v-if="comment.length==0">暂无评论，欢迎添加评论！</p>
+      <p v-if="list===null">暂无评论，欢迎添加评论！</p>
       <div v-else>
-        <div class="comment" v-for="(item,index) in comment" :key="item.index" v-bind:index="index" >
-          <b>#{{index+1}}&nbsp;&nbsp;{{item.name}}<span>{{item.time}}</span></b>
-          <div class="commemt-text" @click="_changeCommenter(item.name,index)" v-html="item.content" >
+        <div class="comment" v-for="(item,index) in list" :key="item.id" v-bind:index="index" >
+          <b>#{{index+1}}&nbsp;&nbsp;{{item.user_name}}<span>{{item.create_time}}</span></b>
+          <div class="commemt-text" @click="changeCommenter(item,item)" v-html="item.content" >
           </div>
           <div v-if="item.reply.length > 0">
-            <div class="reply" v-for="(reply,num) in item.reply" :key="reply.num" >
-              <b>#{{index+1}}.{{num+1}}&nbsp;&nbsp;{{reply.responder}}<span>回复</span> &nbsp;&nbsp;{{reply.reviewers}}<span>{{reply.time}}</span></b>
-              <div class="commemt-text" @click="_changeCommenter(reply.responder,index)">{{reply.content}}
+            <div class="reply" v-for="(reply,num) in item.reply" :key="reply.id" >
+              <b>#{{index+1}}.{{num+1}}&nbsp;&nbsp;{{reply.user_name}}<span>回复</span> &nbsp;&nbsp;{{reply.target.user_name}}<span>{{reply.create_time}}</span></b>
+              <div class="commemt-text" @click="changeCommenter(item,reply)">{{reply.content}}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  import { mapState,mapMutations,mapActions } from 'vuex';
+  import { mapGetters } from 'vuex';
+  import { add, getList } from '@/api/comment'
   export default {
+    props: ['articleID'],
     data() {
       return {
         check_mail: false,
@@ -47,22 +48,67 @@
           renderingConfig: {
               singleLineBreaks: true
           }
+        },
+        list: null,
+        queryData: {
+          articleID: 0,
+          user: {
+            id: null,
+            name: null,
+            email: null
+          },
+          content: null,
+          oldComment: {
+            fatherID: 0,
+            targetID: 0
+          }
+        },
+        target: {
+          show: false,
+          name: null
         }
       }
     },
     methods: {
-      ...mapMutations(["changeCommenter","canelComment"]),
-      ...mapActions(["addComment"]),
-      _changeCommenter:function(name,index) {
-          let publish = document.getElementById("publish");
-          //console.log(publish.offsetTop);
-          window.scrollTo(0,publish.offsetTop);
-          let obj = {};
-          obj.name = name;
-          obj.index = index;
-          this.changeCommenter(obj);
+      changeCommenter(father,target) {
+        let publish = document.getElementById("publish");
+        window.scrollTo(0,publish.offsetTop);
+        this.target = {
+          show: true,
+          name: target.user_name
+        }
+        this.queryData.oldComment = {
+          fatherID: father.id,
+          targetID: target.id
+        }
       },
-      _check_mail:function() {
+      resetQueryData() {
+        this.queryData =  {
+          articleID: 0,
+          user: {
+            id: null,
+            name: null,
+            email: null
+          },
+          content: null,
+          oldComment: {
+            fatherID: 0,
+            targetID: 0
+          }
+        }
+        this.canelComment()
+      },
+      canelComment() {
+        this.target = {
+        show: false,
+        name: null
+        }
+        this.queryData.oldComment = {
+          fatherID: 0,
+          targetID: 0
+        }
+      },
+      checkMail:function() {
         this.check_mail = false;
         let email = this.$refs.input_mail.value;
         if(email) {
@@ -77,9 +123,44 @@
           console.log('邮箱不能为空');
         }
       },
+      addComment() {
+        this.queryData.articleID = this.articleID
+        add(this.queryData).then(response => {
+          let data = response.data.data
+          let fatherID = data.father_id
+          let targetID = data.target_id
+          if(fatherID === 0) {
+            this.list.push(data)
+          } else {
+            let fatherIndex,targetIndex
+            for (const v of this.list) {
+              if(fatherID == v.id) {
+                fatherIndex = this.list.indexOf(v)
+              }
+            }
+            if(targetID == fatherID) {
+              data.target = this.list[fatherIndex]
+            } else {
+              for(const k of this.list[fatherIndex].reply) {
+                if(targetID == k.id) {
+                  data.target = k
+                }
+              }
+            }
+            this.list[fatherIndex].reply.push(data)
+            this.resetQueryData()
+          }
+        })
+      },
+      getList() {
+        let query = {id: this.articleID}
+        getList(query).then(response => {
+          this.list = response.data.data
+        })
+      }
     },
     computed: {
-      ...mapState(["show_article","type","oldComment","chosedIndex","comment","commentTime",'token']),
+      ...mapGetters(['token']),
       //评论内容不为空时，激活评论发表按钮
       disabled() {
         if(this.token) {
@@ -95,36 +176,12 @@
             return true;
           }
         }
-
-      },
-      commenter: {
-        get () {
-          return this.$store.state.commenter
-        },
-        set (value) {
-          this.$store.commit('updatecommenter', value)
-        }
-      },
-      commenterEmail: {
-        get () {
-          return this.$store.state.commenterEmail
-        },
-        set (value) {
-          this.$store.commit('updatecommenterEmail', value)
-        }
-      },
-      commentText: {
-        get () {
-          return this.$store.state.commentText
-        },
-        set (value) {
-          this.$store.commit('updatecommentText', value)
-        }
       }
     },
-    mounted() {
+    created() {
+      this.getList()
+      console.log(this.articleID)
     }
-
   }
 
 

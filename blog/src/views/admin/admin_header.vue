@@ -2,7 +2,7 @@
   <div class="admin-header" click="stopProp" >
     <p class="user" @click="show_logout" >
       <i class="glyphicon glyphicon-user"></i>
-      <span>{{ login_user }}</span>
+      <span>{{ loginUser }}</span>
       <i class="glyphicon glyphicon-menu-down"></i>
     </p>
   </div>
@@ -12,7 +12,7 @@
 
 
 <script>
-import { mapState,mapMutations } from 'vuex';
+import { mapState,mapMutations,mapGetters } from 'vuex';
 
   export default {
     data() {
@@ -28,7 +28,7 @@ import { mapState,mapMutations } from 'vuex';
       }
     },
     computed: {
-      ...mapState(['login_user'])
+      ...mapGetters(['loginUser'])
       
     }
   }

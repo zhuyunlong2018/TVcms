@@ -2,8 +2,10 @@
 node_modules/
 dist/
 servers/runtime/
+servers/public/static/*
 npm-debug.log
 yarn-error.log
+admin/node_modules/
 blog/node_modules/
 blog/static/
 # Editor directories and files
