@@ -16,6 +16,7 @@ service.interceptors.request.use(
     if (store.getters.token) {
       config.headers['X-Api-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
+    store.state.show_loading = true
     return config
   },
   error => {
@@ -28,15 +29,20 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   response => {
+    store.state.show_loading = false
     return response
   },
   error => {
     // console.log('err' + error) // for debug
-    store.commit('SHOW_ALERT',error.response.data.msg)
-    if(error.response.data.error_code === 10001) {
-      store.dispatch('FedLogOut')
-      console.log(error.response)
+    if(typeof error.response.data.msg == 'undefined') {
+      store.commit('SHOW_ALERT','未知错误')
+    } else {
+      store.commit('SHOW_ALERT',error.response.data.msg)
     }
+    if(error.response.data.error_code === 10001) {
+      store.dispatch('logOut')
+    }
+    store.state.show_loading = false
     return Promise.reject(error)
   }
 )

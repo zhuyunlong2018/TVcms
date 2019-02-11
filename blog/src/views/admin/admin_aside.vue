@@ -1,6 +1,6 @@
 <template>
 
-  <div class="admin-aside" :class="_toggle_sidebar" @click="close_logout" >
+  <div class="admin-aside" :class="_toggle_sidebar" @click="CLOSE_LOGOUT_BOX" >
       <ul class="sidebar-menu">
         <li class="header" >欢迎使用边泉博客管理平台</li>
         <li>
@@ -50,12 +50,6 @@
             <span>其他设置</span>
           </router-link>
         </li>
-        <li>
-          <router-link to="/admin/lab" >
-            <i class="glyphicon glyphicon-folder-open"></i>
-            <span>实验室</span>
-          </router-link>
-        </li>
         <li class="header">浏览博客</li>
         <li><router-link to="/articleList"><i class="glyphicon glyphicon-home" ></i> <span>返回首页</span></router-link></li>
       </ul>
@@ -64,7 +58,7 @@
 
 <script>
 
-import { mapState,mapMutations } from 'vuex';
+import { mapState,mapMutations,mapGetters } from 'vuex';
 
   export default {
     data() {
@@ -78,7 +72,7 @@ import { mapState,mapMutations } from 'vuex';
       };
     },
     methods: {
-      ...mapMutations(['close_logout','toggle_sidebar']),
+      ...mapMutations(['CLOSE_LOGOUT_BOX','toggle_sidebar']),
       slide_article:function() {
         this.treeview_menu.article = !this.treeview_menu.article;
         if(this.icon.article == 'glyphicon-menu-left') {
@@ -93,7 +87,8 @@ import { mapState,mapMutations } from 'vuex';
       }
     },
     computed: {
-      ...mapState(['logout_box','show_sidebar']),
+      ...mapState(['show_sidebar']),
+      ...mapGetters(['logoutBox']),
       _toggle_sidebar:function() {
         if(this.show_sidebar) {
           return 'show-sidebar';

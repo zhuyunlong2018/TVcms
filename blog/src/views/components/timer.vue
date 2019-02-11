@@ -11,7 +11,7 @@
                 <a>{{month.month}}</a>
               </dt>
               <dd class="timeline-article">
-                <p @click="show_detail(list.id)" v-for="(list,index_) in month.list" :key="index_" > {{list.a_time}} {{list.a_title}}</p>
+                <p @click="showDetail(list.a_id)" v-for="(list,index_) in month.list" :key="index_" > {{list.a_time}} {{list.a_title}}</p>
               </dd>
             </dl>
           </div>
@@ -22,27 +22,69 @@
 
 
 <script>
-import { mapState, mapActions,mapMutations } from 'vuex';
+import { getAll } from '@/api/article'
 
 export default {
   data(){
     return {
-
+      timer: null
     }
   },
   methods: {
-    ...mapActions(['get_all_article','getShowArticle']),
-    show_detail:function(id) {
-      this.getShowArticle(id);
-      let routeData = this.$router.resolve({name:'article',params:{id:id}});
+    showDetail:function(id) {
+      let routeData = this.$router.resolve( {path: 'articleList/article/'+id} );
       window.open(routeData.href,'_blank');
+    },
+    getAll() {
+      getAll().then(response => {
+        let data = response.data.data
+        let timer = [];//用于存储整个时间轴数组[{year:2018,month:[{month:2018-1,list:[]}]}]
+        for(let i=0;i<data.length;i++) {
+          let year = data[i].a_time.substr(0,4);
+          let month = data[i].a_time.substr(0,7);
+          let obj = {};//用于存储年份的对象{year:2018,month:[]}
+          obj.year = year;
+          obj.month = [];
+          let _obj = {};//用于存储月份的对象{month:2018-01,list:[]}
+          _obj.month = month;
+          _obj.list = [];
+          _obj.list.push(data[i]);
+          obj.month.push(_obj);
+          if(timer.length>0) {//判断时间轴数组是否为空
+            let check = false;
+            for(let j=0;j<timer.length;j++) {
+              if(year == timer[j].year){//判断本次循环年份是否存在于时间轴数组里
+                check = true;
+                let _month = timer[j].month;
+                if(_month.length>0) { //判断年月份数组是否为空
+                  let _check = false;
+                  for(let k=0;k<_month.length;k++) {
+                    if(month == _month[k].month) {//判断本次循环月份是否存在于数组中
+                      _check = true;
+                      _month[k].list.push(data[i]);//将本记录插入月份数组列表中
+                    }
+                  }
+                  if(!_check) {//本次数据不属于当前数组存在的月份
+                    _month.push(_obj);
+                  }
+                } else {
+                  _month.push(_obj);
+                }
+              }
+            } 
+            if(!check) {//本次数据不属于当前数组存在的年份
+              timer.push(obj);
+            }
+          }else {
+              timer.push(obj);
+            }
+        }
+        this.timer = timer
+      })
     }
   },
-  computed: {
-    ...mapState(['timer'])
-  },
   created:function(){
-    this.get_all_article();
+    this.getAll()
   }
 }
 </script>

@@ -55,13 +55,6 @@ const state = {
       bing: ''//bing图片地址
     },
     if_touch:false,//判断屏幕是否被触摸
-    lab_imgs: [],//实验室项目图片
-    production: [],//所有项目列表
-    show_production: {//页面展示的项目数据
-      name: '',
-      content: [],
-      imgs: []
-    },
      URL: 'http://localhost:80/bianquan/servers/public/index.php/index'
   }
   

@@ -2,11 +2,11 @@
     <div class="admin">
       <admin-header></admin-header>
       <all-images></all-images>
-      <div class="admin-main" @click="close_logout" >
+      <div class="admin-main" @click="CLOSE_LOGOUT_BOX" >
             <transition name="logoutbox" >
-                <p class="logout" @click="stopProp" v-show="logout_box" >
+                <p class="logout" @click="stopProp" v-show="logoutBox" >
                     <i class="glyphicon glyphicon-off" ></i>
-                    <span @click="_logout" >退出登录</span>
+                    <span @click="logout" >退出登录</span>
                 </p>
             </transition>
             <router-view></router-view>
@@ -24,49 +24,51 @@
   import adminHeader from './admin_header.vue';
   import adminAside from './admin_aside.vue';
   import allImages from '@/views/components/all_images.vue';
-  import { mapActions,mapState,mapMutations } from 'vuex';
+  import { mapActions,mapState,mapMutations,mapGetters } from 'vuex';
 
-    export default {
-        data () {
-            return {
-                isCollapsed: false
-            }
-        },
-      components: {
-              adminHeader,
-              adminAside,
-               allImages
-            },
-        methods: {
-            ...mapMutations(['close_logout','logout','close_logout','toggle_sidebar']),
-            _show_sidebar:function() {
+  export default {
+    data () {
+      return {
+        isCollapsed: false
+      }
+    },
+    components: {
+      adminHeader,
+      adminAside,
+      allImages
+    },
+    methods: {
+      ...mapMutations(['CLOSE_LOGOUT_BOX','toggle_sidebar']),
+      ...mapActions(['logOut']),
+      _show_sidebar:function() {
 
-            },
-            _logout:function() {
-                this.$router.push('/');
-                this.close_logout();
-                this.logout();
-            },
-             _show_sidebar:function() {
-                 this.toggle_sidebar();
-            },
-            stopProp: function(e) {
-            e = e || event;
-            e.stopPropagation();
-            }
-        },
-        computed: {
-            ...mapState(['logout_box','show_sidebar']),
-            _change_color: function() {
-                if(this.show_sidebar) {
-                return 'white glyphicon-circle-arrow-left';
-                } else {
-                return 'black glyphicon-circle-arrow-right';
-                }
-            }
+      },
+      logout:function() {
+          this.$router.push('/');
+          this.CLOSE_LOGOUT_BOX();
+          this.logOut();
+      },
+        _show_sidebar:function() {
+            this.toggle_sidebar();
+      },
+      stopProp: function(e) {
+      e = e || event;
+      e.stopPropagation();
+      }
+    },
+    computed: {
+      ...mapState(['show_sidebar']),
+      ...mapGetters(['logoutBox']),
+      _change_color: function() {
+        if(this.show_sidebar) {
+        return 'white glyphicon-circle-arrow-left';
+        } else {
+        return 'black glyphicon-circle-arrow-right';
         }
-            
+      }
     }
+          
+  }
 </script>
 
 

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/adminApi/user/userList',
+    url: '/adminApi/user/getList',
     method: 'get',
     params: query
   })

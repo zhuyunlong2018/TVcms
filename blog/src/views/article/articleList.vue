@@ -54,8 +54,7 @@
       ...mapMutations(['SHOW_ALERT']),
       getList() {
         getList(this.listInfo).then(response => {
-          this.articleList = response.data.data
-          
+          this.articleList = response.data.data.data
         }).catch(error => {
             this.SHOW_ALERT(error.response.data.msg)
         })

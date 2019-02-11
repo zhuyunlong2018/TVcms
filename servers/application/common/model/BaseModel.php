@@ -18,8 +18,7 @@ class BaseModel extends Model
     // 使用whereOr会将设置了软删除的记录也查询出来
     // 可以对比下SQL语句，看看whereOr的SQL
     use SoftDelete;
-    protected $autoWriteTimestamp = 'datetime';
-    protected $hidden = ['create_time','delete_time','update_time','pivot'];
+    protected $hidden = ['delete_time','update_time','pivot'];
 
 
 }

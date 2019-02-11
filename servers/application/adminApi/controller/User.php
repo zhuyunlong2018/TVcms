@@ -11,6 +11,7 @@ namespace app\adminApi\controller;
 
 
 use app\adminApi\model\User as UserModel;
+use app\adminApi\service\User as UserService;
 use app\adminApi\model\Admin as AdminModel;
 use app\common\validate\PagingParameter;
 use app\lib\exception\ParameterException;
@@ -21,11 +22,17 @@ use app\lib\Response;
 class User extends BaseController
 {
 
-    public function login() {
-        dump(3);
+    public function login($email,$password) {
+        $userData = UserService::loginByEmail($email,$password);
+        return new Response(['data'=>$userData]);
     }
 
-    public function userList() {
+    public function register($name,$email,$password) {
+        $result = UserService::register($name,$email,$password);
+        return new Response(['msg'=>'注册成功','data'=>$result]);
+    }
+
+    public function getList() {
         (new PagingParameter())->goCheck();
         $condition = [];
         $userName = input('username');

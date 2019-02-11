@@ -11,7 +11,6 @@ namespace app\blogApi\model;
 
 
 use app\common\model\BaseModel;
-use think\Model;
 
 class Comment extends BaseModel
 {

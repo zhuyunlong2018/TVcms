@@ -10,9 +10,9 @@
 namespace app\adminApi\model;
 
 
-use app\common\model\CommonImages;
+use app\common\model\BaseModel;
 
-class Images extends CommonImages
+class Images extends BaseModel
 {
 
 }

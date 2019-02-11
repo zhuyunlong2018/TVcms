@@ -21,19 +21,9 @@ import { mapState,mapActions,mapMutations } from "vuex";
         comment
       },
     methods: {
-          ...mapActions(["getComment"]),
-          ...mapMutations(["changeCommentPage"]),
-          _changeCommentPage:function() {
-            let p_id = 0;
-            this.changeCommentPage(p_id);
-          },
-          _getMsg: function(){
-            this.getComment(0);
-          }
+      
       },
     mounted() {
-      this._getMsg();
-      this._changeCommentPage()
     }
   }
 

@@ -5,7 +5,6 @@ import aboutPage from '@/views/about.vue';
 import adminPage from '@/views/admin/admin.vue';
 import articleList from '@/views/article/articleList.vue';
 import article from '@/views/article/article.vue';
-import project from '@/views/components/project.vue';
 import msgborder from '@/views/components/msgborder';
 import outline from '@/views/components/outline.vue';
 import write from '@/views/components/write.vue';
@@ -16,7 +15,6 @@ import imgsList from '@/views/components/imgs_list.vue';
 import otherSeting from '@/views/components/other_seting.vue';
 import user from '@/views/components/user.vue';
 import timer from '@/views/components/timer.vue';
-import lab from '@/views/components/lab.vue';
 import store from '@/store';
 
 
@@ -34,27 +32,21 @@ const routes = [
           path:'/',
           name:'home',
           redirect:'/articleList'
-      },
+        },
         {
           path:'about',
           name:'about',
           component:aboutPage
-      },
+        },
         {
           path:'articleList',
           name:'articleList',
           component:articleList,
         },
         {
-            path:'articleList/article/:id',
-            name:'article',
+          path:'articleList/article/:id',
+          name:'article',
           component:article
-          },
-
-        {
-          path:'project',
-          name:'project',
-          component:project
         },
         {
           path:'timer',
@@ -117,11 +109,6 @@ const routes = [
         {
           path: '/admin/user',
           component: user,
-          meta: { requireAuth: true }
-        },
-        {
-          path: '/admin/lab',
-          component: lab,
           meta: { requireAuth: true }
         }
       ]

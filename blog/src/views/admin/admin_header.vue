@@ -1,15 +1,12 @@
 <template>
   <div class="admin-header" click="stopProp" >
-    <p class="user" @click="show_logout" >
+    <p class="user" @click="SHOW_LOGOUT_BOX" >
       <i class="glyphicon glyphicon-user"></i>
-      <span>{{ loginUser }}</span>
+      <span>{{ user.user_name }}</span>
       <i class="glyphicon glyphicon-menu-down"></i>
     </p>
   </div>
 </template>
-
-
-
 
 <script>
 import { mapState,mapMutations,mapGetters } from 'vuex';
@@ -20,7 +17,7 @@ import { mapState,mapMutations,mapGetters } from 'vuex';
       };
     },
     methods: {
-      ...mapMutations(['show_logout']),
+      ...mapMutations(['SHOW_LOGOUT_BOX']),
       stopProp: function(e) {
         console.log("header");
             e = e || event;
@@ -28,8 +25,7 @@ import { mapState,mapMutations,mapGetters } from 'vuex';
       }
     },
     computed: {
-      ...mapGetters(['loginUser'])
-      
+      ...mapGetters(['user'])
     }
   }
 </script>

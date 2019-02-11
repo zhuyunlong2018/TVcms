@@ -10,10 +10,10 @@
 namespace app\adminApi\model;
 
 
-use app\common\model\CommonAdmin;
+use app\common\model\BaseModel;
 use think\Cache;
 
-class Admin extends CommonAdmin
+class Admin extends BaseModel
 {
 
     public function roles() {

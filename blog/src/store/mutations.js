@@ -89,17 +89,8 @@ const mutations = {
   },//将图片设置为文章封面
   set_background:function(state,url) {
     state.article_background = url;
-  },//将图片加入项目中
-  add_lab_imgs:function(state,url) {
-    state.lab_imgs.push(url);
-  },//移除项目中的图片
-  remove_lab_img:function(state,index) {
-    state.lab_imgs.splice(index,1);
   },
-  //清空项目中的图片
-  clear_lab_img:function(state,data) {
-    state.lab_imgs = data;
-  },
+  
  //设置about页面v-model绑定
   updateabout (state, about_markdown) {
       state.about_markdown = about_markdown;
@@ -396,31 +387,7 @@ const mutations = {
     TOGGLE_SEARCH:function(state,toggle) {
       state.search.box = toggle;
     },
-    GET_PRODUCTION:function(state,data) {
-      state.production = data;
-      let search_first = true;
-      let published_index;
-      for(let i=0;i<data.length;i++) {
-       let img = data[i].pr_img.split(',');
-       let content = data[i].pr_content.split(',');
-       state.production[i].pr_img = img;
-       state.production[i].pr_content = content;
-       if(data[i].pr_published == 1 && search_first) {
-         published_index = i;
-         search_first = false;
-       }
-      }
-      state.show_production.name = state.production[published_index].pr_name;
-      state.show_production.src = state.production[published_index].pr_src;
-      state.show_production.content = state.production[published_index].pr_content;
-      state.show_production.imgs = state.production[published_index].pr_img;
-    },
-    change_production:function(state,index) {
-      state.show_production.name = state.production[index].pr_name;
-      state.show_production.content = state.production[index].pr_content;
-      state.show_production.imgs = state.production[index].pr_img;
-      state.show_production.src = state.production[index].pr_src;
-    }
+    
   }
   
   export default mutations

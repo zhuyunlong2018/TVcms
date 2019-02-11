@@ -34,6 +34,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { getStorage } from '@/utils/storage'
   import { add, getList } from '@/api/comment'
   export default {
     props: ['articleID'],
@@ -46,16 +47,16 @@
           status:false,
           spellChecker: false,
           renderingConfig: {
-              singleLineBreaks: true
+            singleLineBreaks: true
           }
         },
         list: null,
         queryData: {
           articleID: 0,
           user: {
-            id: null,
-            name: null,
-            email: null
+            id: getStorage('user').user_id,
+            name: getStorage('user').user_name,
+            email: getStorage('user').user_email
           },
           content: null,
           oldComment: {
@@ -83,19 +84,7 @@
         }
       },
       resetQueryData() {
-        this.queryData =  {
-          articleID: 0,
-          user: {
-            id: null,
-            name: null,
-            email: null
-          },
-          content: null,
-          oldComment: {
-            fatherID: 0,
-            targetID: 0
-          }
-        }
+        this.queryData.content = ''
         this.canelComment()
       },
       canelComment() {
@@ -125,11 +114,13 @@
       },
       addComment() {
         this.queryData.articleID = this.articleID
+        // console.log(this.queryData)
         add(this.queryData).then(response => {
           let data = response.data.data
           let fatherID = data.father_id
           let targetID = data.target_id
           if(fatherID === 0) {
+            data.reply = []
             this.list.push(data)
           } else {
             let fatherIndex,targetIndex
@@ -148,8 +139,8 @@
               }
             }
             this.list[fatherIndex].reply.push(data)
-            this.resetQueryData()
           }
+          this.resetQueryData()
         })
       },
       getList() {
@@ -180,7 +171,7 @@
     },
     created() {
       this.getList()
-      console.log(this.articleID)
+      
     }
   }
 

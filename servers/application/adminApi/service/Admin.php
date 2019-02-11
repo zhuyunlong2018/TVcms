@@ -18,7 +18,7 @@ class Admin
 {
 
     public static function adminLogin($username,$password) {
-        $user = User::login($username,$password);
+        $user = User::loginByName($username,$password);
         $admin = self::checkAdmin($user);
         $token = Token::generateToken($user['user_id'],$user['user_email'],$user['user_name']);
         $adminData = [

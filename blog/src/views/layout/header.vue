@@ -18,12 +18,6 @@
             </router-link>
           </li>
           <li >
-            <router-link to="/project">
-              <i class="glyphicon glyphicon-folder-open" ></i>
-              <span>实验室</span>
-            </router-link>
-          </li>
-          <li >
             <router-link to="/timer">
               <i class="glyphicon glyphicon-calendar" ></i>
               <span>时间轴</span>
@@ -43,11 +37,11 @@
           <li class="login_user">
             <a href="javascript:;" @click="checkLogin">
               <i class="glyphicon glyphicon-user" ></i>
-              <span>{{ loginUser }}</span>
+              <span>{{ user.user_name }}</span>
             </a>
           </li>
           <li class="logout_user" :class="{'touch-logout': if_touch }" v-show="logout_register" >
-            <a href="javascript:;" @click="FedLogOut">
+            <a href="javascript:;" @click="logOut">
               <i class="glyphicon glyphicon-off" ></i>
               <span>退出登录</span>
             </a>
@@ -75,7 +69,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
           }
       },
     methods:{
-      ...mapActions(['FedLogOut','get_bing']),
+      ...mapActions(['logOut','get_bing']),
       ...mapMutations(['SHOW_REGISTER_BOX','CLEAR_CRUMBS','TOGGLE_SEARCH']),
       checkLogin() {
         this.$router.push('/admin');
@@ -97,9 +91,9 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
     },
     computed: {
       ...mapState(['show_header_nav','search','if_touch']),
-      ...mapGetters(['loginUser']),
+      ...mapGetters(['user']),
       logout_register:function() {
-        if (this.$store.getters.loginUser == '登录') {
+        if (this.$store.getters.user.user_name == '登录') {
           return false;
         } else {
           return true ;

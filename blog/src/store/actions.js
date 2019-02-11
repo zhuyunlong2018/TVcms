@@ -689,22 +689,7 @@ const actions = {
              console.log('失败了');
            });
          },
-        //获取作品内容
-        get_production:function({commit,state}) {
-         let params = {
-           'act':'get_production'
-         }
-         _axios(params).then(function (res) {
-           //console.log('成功了');
-           if(res.data.result) {
-             commit("GET_PRODUCTION",res.data.data);
-           }
-         })
-           .catch(function (err) {
-             console.log(err);
-             console.log('失败了');
-           });
-         },
+       
          //搜索文章
          searchfor:function({commit,state},key) {
            let params = {

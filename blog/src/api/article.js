@@ -15,3 +15,11 @@ export function getOne(ID) {
     params: { ID }
   })
 }
+
+export function getAll(query=null) {
+  return request({
+    url: '/blogApi/article/getAllPublished',
+    method: 'get',
+    params: query
+  })
+}

@@ -20,7 +20,8 @@ class Article extends BaseController
     public function getList($tagID,$userID,$page,$limit)
     {
         (new PagingParameter())->goCheck();
-        return ArticleService::getList($tagID,$userID,$page,$limit);
+        $list = ArticleService::getList($tagID,$userID,$page,$limit);
+        return new Response(['data'=>$list]);
     }
 
     public function getOne($ID) {
@@ -30,6 +31,14 @@ class Article extends BaseController
         } else {
             throw new ResourcesException(['msg'=>找不到对应文章]);
         }
+    }
+
+    public function getAllPublished() {
+        $articles = ArticleModel::all(['published'=>1,'status'=>1]);
+        if(empty($articles)) {
+            throw new ResourcesException();
+        }
+        return new Response(['data'=>$articles]);
     }
 
 }

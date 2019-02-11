@@ -10,10 +10,17 @@
 namespace app\blogApi\model;
 
 
-use app\common\model\CommonArticle;
+use app\common\model\BaseModel;
 
-class Article extends CommonArticle
+class Article extends BaseModel
 {
+    protected $hidden = ['delete_time'];
+
+    public static function getListByPage($condition,$order,$page, $limit){
+        $pagingData = self::where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
+        return $pagingData ;
+    }
+
     public static function getOne($condition) {
         return self::where($condition)->find();
     }
