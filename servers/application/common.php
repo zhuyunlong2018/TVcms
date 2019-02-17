@@ -11,22 +11,16 @@
 
 // 应用公共文件
 
-//发送邮件函数
-function send_mail($mailTo,$mailSubject,$mailBody) {
-  vendor('sendMail.smtp');
-    //这里面的一个true是表示使用身份验证,否则不使用身份验证.
-    $smtp = new smtp(config('email.smtpServer'),
-                    config('email.smtpServerPort'),
-                    true,
-                    config('email.smtUuser'),
-                    config('email.smtpPass'));
-    //是否显示发送的调试信息
-    $smtp->debug = FALSE;
-    //发送邮件
-    $result = $smtp->sendmail($mailTo, config('email.smtpUserMail'), $mailSubject,
-                            $mailBody,config('email.mailType'));
 
-}
+use think\Request;
+
+define('PUBLIC_PATH',ROOT_PATH.'public');
+define('BASE_DATA_PATH',PUBLIC_PATH.'/data');
+define('BASE_UPLOAD_PATH',PUBLIC_PATH.'/uploads');
+define('ALLOW_IMG_EXT','jpg,png,gif,bmp,jpeg');#上传图片后缀
+//获取URL访问的ROOT地址 网站的相对路径
+define('BASE_SITE_ROOT', str_replace('/index.php', '', Request::instance()->root()));
+define('BASE_SITE_URL', Request::instance()->domain() . Request::instance()->root());
 
 /**
  * @param string $url post请求地址

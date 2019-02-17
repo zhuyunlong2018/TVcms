@@ -8,6 +8,7 @@ yarn-error.log
 admin/node_modules/
 blog/node_modules/
 blog/static/
+doc/_book/
 # Editor directories and files
 .idea
 *.suo

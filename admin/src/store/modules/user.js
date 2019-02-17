@@ -1,46 +1,23 @@
 import { loginByUsername, logout } from '@/api/login'
 
 import { getToken, setToken, removeToken } from '@/utils/auth'
-
+import { getStorage, setStorage, removeStorage } from '@/utils/storage'
 const user = {
   state: {
-    user: '',
-    status: '',
-    code: '',
+    user: getStorage('user'),
     token: getToken(),
-    name: '',
-    avatar: '',
-    introduction: '',
-    roles: [],
-    setting: {
-      articlePlatform: []
-    }
+    name: ''
   },
 
   mutations: {
-    SET_CODE: (state, code) => {
-      state.code = code
+    SET_USER: (state, user) => {
+      state.user = user
     },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_INTRODUCTION: (state, introduction) => {
-      state.introduction = introduction
-    },
-    SET_SETTING: (state, setting) => {
-      state.setting = setting
-    },
-    SET_STATUS: (state, status) => {
-      state.status = status
-    },
     SET_NAME: (state, name) => {
       state.name = name
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
     }
   },
 
@@ -52,15 +29,10 @@ const user = {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data.data
           setToken(data.token)
+          setStorage('user', data.user)
+          commit('SET_USER', data.user)
           commit('SET_TOKEN', data.token)
           commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
           resolve()
         }).catch(error => {
           reject(error)
@@ -72,8 +44,9 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          commit('SET_USER', '')
           removeToken()
+          removeStorage('user')
           resolve()
         }).catch(error => {
           reject(error)
@@ -86,6 +59,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeStorage('user')
         resolve()
       })
     }

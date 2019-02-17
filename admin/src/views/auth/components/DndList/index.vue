@@ -107,7 +107,6 @@ export default {
           this.list2.unshift(ele)
         }
       })
-      
     },
     pushEle(ele) {
       this.data.menu = this.menu_id
@@ -115,7 +114,6 @@ export default {
       this.linkApi().then(response => {
         this.list1.push(ele)
       })
-      
     },
     changeApi(evt) {
       const api_id = evt.draggedContext.element.api_id

@@ -11,7 +11,7 @@
                 <a>{{month.month}}</a>
               </dt>
               <dd class="timeline-article">
-                <p @click="showDetail(list.a_id)" v-for="(list,index_) in month.list" :key="index_" > {{list.a_time}} {{list.a_title}}</p>
+                <p @click="showDetail(list.a_id)" v-for="(list,index_) in month.list" :key="index_" > {{list.create_time}} {{list.a_title}}</p>
               </dd>
             </dl>
           </div>
@@ -40,8 +40,8 @@ export default {
         let data = response.data.data
         let timer = [];//用于存储整个时间轴数组[{year:2018,month:[{month:2018-1,list:[]}]}]
         for(let i=0;i<data.length;i++) {
-          let year = data[i].a_time.substr(0,4);
-          let month = data[i].a_time.substr(0,7);
+          let year = data[i].create_time.substr(0,4);
+          let month = data[i].create_time.substr(0,7);
           let obj = {};//用于存储年份的对象{year:2018,month:[]}
           obj.year = year;
           obj.month = [];

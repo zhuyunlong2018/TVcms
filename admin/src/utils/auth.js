@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'X-Admin-Token'
+const TokenKey = 'TV-CMS-Token'
 
 export function getToken() {
   return Cookies.get(TokenKey)

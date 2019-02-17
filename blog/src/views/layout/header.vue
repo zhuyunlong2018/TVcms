@@ -4,13 +4,14 @@
     <p class="browserupgrade">您的浏览器版本已经落后了, 请到 <a href="http://browsehappy.com/">这里</a> 更新, 以获取最佳的体验</p>
     <![endif]-->
     <transition name="show-nav" >
-      <nav class="nav-content" v-show="show_header_nav" >
+      <nav class="nav-content" v-show="showHeaderNav" >
         <ul class="header-nav">
           <li @click="goHome">
             <router-link to="/articleList">
               <i class="glyphicon glyphicon-home" ></i>
               <span>主页</span>
-            </router-link></li>
+            </router-link>
+          </li>
           <li >
             <router-link to="/msgborder">
               <i class="glyphicon glyphicon-comment" ></i>
@@ -28,7 +29,7 @@
               <i class="glyphicon glyphicon-info-sign" ></i>
               <span>关于</span>
             </router-link></li>
-          <li @click='_get_bing' class="search">
+          <li @click='getBing' class="search">
             <a href="javascript:;">
               <i class="glyphicon glyphicon-search" ></i>
               <span>搜索</span>
@@ -47,7 +48,7 @@
             </a>
           </li>
           <li class="register" v-show="!logout_register" >
-            <a href="javascript:;" @click="_show_register_box">
+            <a href="javascript:;" @click="showRegisterBox">
               <i class="glyphicon glyphicon-plus-sign" ></i>
               <span>注册</span>
             </a>
@@ -65,32 +66,38 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
   export default {
       data(){
           return{
-
           }
       },
     methods:{
-      ...mapActions(['logOut','get_bing']),
-      ...mapMutations(['SHOW_REGISTER_BOX','CLEAR_CRUMBS','TOGGLE_SEARCH']),
+      ...mapActions(['logOut','get_bing','getArticleList']),
+      ...mapMutations(['SHOW_REGISTER_BOX','CLEAR_CRUMBS','TOGGLE_SEARCH','SET_ARTICLE_LIST_INFO']),
       checkLogin() {
         this.$router.push('/admin');
       },
-      _show_register_box:function() {
+      showRegisterBox:function() {
         this.SHOW_REGISTER_BOX();
       },
-      _get_bing:function() {
+      getBing:function() {
         if(!this.search.bing){
           this.get_bing();
         }
         this.TOGGLE_SEARCH(true);
       },
       goHome:function() {
-        // this.CLEAR_CRUMBS();
-        // this.$router.push('/');
+        if(this.crumbs.tagID) {
+          let listObj = {
+            page: 1,
+            tagID: ''
+          }
+          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
+          this.getArticleList()
+        }
+        this.CLEAR_CRUMBS();
       }
 
     },
     computed: {
-      ...mapState(['show_header_nav','search','if_touch']),
+      ...mapState(['showHeaderNav','search','if_touch','crumbs']),
       ...mapGetters(['user']),
       logout_register:function() {
         if (this.$store.getters.user.user_name == '登录') {

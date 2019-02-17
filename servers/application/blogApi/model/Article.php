@@ -16,12 +16,24 @@ class Article extends BaseModel
 {
     protected $hidden = ['delete_time'];
 
+    public function user() {
+        return $this->belongsTo('user','user_id','user_id');
+    }
+    public function tag() {
+        return $this->belongsTo('tags','tag_id','tag_id');
+    }
     public static function getListByPage($condition,$order,$page, $limit){
-        $pagingData = self::where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
+        $pagingData = self::with(['tag','user'=>function($query) {
+            $query->field('user_id,user_name');
+            }])
+            ->where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
         return $pagingData ;
     }
 
     public static function getOne($condition) {
-        return self::where($condition)->find();
+        return self::with(['tag','user'=>function($query) {
+            $query->field('user_id,user_name');
+        }])
+            ->where($condition)->find();
     }
 }

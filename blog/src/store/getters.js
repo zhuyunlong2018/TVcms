@@ -4,6 +4,8 @@ const getters = {
   loginBox: state => state.loginBox.loginBox,
   registerLoginBtn: state => state.loginBox.registerLoginBtn,
   loginNotice: state => state.loginBox.loginNotice,
-  logoutBox: state => state.loginBox.logoutBox
+  logoutBox: state => state.loginBox.logoutBox,
+  articleList: state => state.article.articleList,
+  articleListInfo: state => state.article.listInfo
 }
 export default getters

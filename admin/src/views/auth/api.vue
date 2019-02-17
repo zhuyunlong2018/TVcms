@@ -40,7 +40,7 @@ export default {
         this.changed = [val,val,val,val]
       } else {
         this.changed[type] = val
-      } 
+      }
     }
   }
 }

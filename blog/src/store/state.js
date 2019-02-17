@@ -1,19 +1,13 @@
 const state = {
-    userName: '920200256@qq.com',//登录用户名
-    userEmail:'920200256@qq.com',//登录邮箱
-    userPwd:'920200256',//登录密码
   
     logout_box: false,//注销弹框
     alert: {msg:'',show: false},//alert弹框内容
     alert_notice: {msg:'',show: false},//自动关闭alert弹框内容
     show_img: {src:'',box: false},//图片放大弹框内容
-    show_header_nav: true,//首页顶部导航栏展示与隐藏
+    showHeaderNav: true,//首页顶部导航栏展示与隐藏
     show_sidebar: false,//控制管理页侧边导航栏的显示与隐藏
     c_button:true,//控制编辑页面按钮更新或发送的切换
     items: [],//后台所有文章列表数据
-    page_items: [],//某一页文章列表数据
-    page_count: [],//首页页面数
-    page_index: 0,//控制首页展示第几页面
     show_article: {},//获取展示页面的数据
     title: '',//编辑页文章标题
     article_background: '',//编辑页文章封面
@@ -37,16 +31,14 @@ const state = {
       tags: 0,
       viewers: 0
     },
-    all_comment : [],
-    all_user: [],
     all_neighbors: [],
     about_markdown: '', //about页面数据
-    about_html: '',
     now_time:'',//当前时间
     how_long: '',//网站运行时长
     crumbs: { //主页面包屑标签
-      first: '',
-      second: ''
+      tagName: '',
+      tagID: '',
+      title: ''
     },
     show_loading: false,
     timer: [],//时间轴所有文章列表

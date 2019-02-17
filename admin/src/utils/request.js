@@ -31,8 +31,12 @@ service.interceptors.response.use(
     return response
   }, error => {
     console.log('err' + error)// for debug
+    let msg = '未知错误'
+    if (typeof error.response.data.msg !== 'undefined') {
+      msg = error.response.data.msg
+    }
     Message({
-      message: error.response.data.msg,
+      message: msg,
       type: 'error',
       duration: 5 * 1000
     })

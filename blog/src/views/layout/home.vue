@@ -10,17 +10,17 @@
        <!-- 面包屑导航 -->
       <div class="crumbs">
         <ul class="top-nav">
-        <li @click="go_home" >
+        <li @click="goHome" >
           <i class="glyphicon glyphicon-home" ></i>
           <span>首页</span>
         </li>
-        <li v-show="_crumbs" @click="_get_article_by_tag" >
+        <li v-show="_crumbs" @click="getListByTag" >
           <i class="glyphicon glyphicon-menu-right" ></i>
           <span>{{_crumbs}}</span>
         </li>
-        <li v-show="crumbs.second" >
+        <li v-show="crumbs.title" >
           <i class="glyphicon glyphicon-menu-right" ></i>
-          <span>{{crumbs.second}}</span>
+          <span>{{crumbs.title}}</span>
         </li>
       </ul>
       </div>
@@ -33,7 +33,7 @@
       </main>
 
     <div class="return-top t-c"><a href="javascript:scroll(0,0)"> <i class="glyphicon glyphicon-circle-arrow-up" ></i> </a></div>
-    <div class="show-nav-btn" @click="_show_nav"  >
+    <div class="show-nav-btn" @click="showNav"  >
         <i class="glyphicon" :class="change_color" ></i>
     </div>
     <nav-footer></nav-footer>
@@ -55,105 +55,114 @@
 
 
   export default {
-      name: 'home',
-      methods:{
-        ...mapActions(['getPage','getPageCount']),
-        ...mapMutations(["refresh",'show_nav','CHANGE_CRUMBS','CLEAR_CRUMBS','changePage','if_touched']),
-        touch:function(e) {
-          let w = document.documentElement.clientWidth || document.body.clientWidth;
-          this.if_touched();
-          if(w< 501) {
-            this.show_nav(false);
+    name: 'home',
+    methods:{
+      ...mapActions(['getArticleList']),
+      ...mapMutations(['SHOW_NAV','CHANGE_CRUMBS','CLEAR_CRUMBS','IF_TOUCHED','SET_ARTICLE_LIST_INFO']),
+      touch:function(e) {
+        let w = document.documentElement.clientWidth || document.body.clientWidth;
+        this.IF_TOUCHED();
+        if(w< 501) {
+          this.SHOW_NAV(false);
+        }
+      },
+      scrollBar:function(e) {
+        if (e.deltaY>0 ){
+          this.SHOW_NAV(false);
+        } else {
+          this.SHOW_NAV(true);
+        }
+      },
+      showNav:function() {
+        if(this.showHeaderNav) {
+          this.SHOW_NAV(false);
+        } else {
+          this.SHOW_NAV(true);
+        }
+      },
+      getListByTag() {
+        let tagName = this.crumbs.tagName
+        let tagID = this.crumbs.tagID
+        if(tagID && tagName) {
+          let listObj = {
+            page: 1,
+            tagID
           }
-        },
-        scrollBar:function(e) {
-          if (e.deltaY>0 ){
-            this.show_nav(false);
-          } else {
-            this.show_nav(true);
+          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
+          this.getArticleList()
+          let obj = {
+            tagName,
+            tagID,
+            title: ''
           }
-        },
-        _show_nav:function() {
-          if(this.show_header_nav) {
-            this.show_nav(false);
-          } else {
-            this.show_nav(true);
-          }
-        },
-        _get_article_by_tag:function() {
-          if(this._crumbs == this.show_article.a_tag) {
-            //console.log(this._crumbs);
-            let obj = {};
-            obj.tag = this._crumbs;
-            obj.title = '';
-            this.CHANGE_CRUMBS(obj);
-            this.changePage(0);
-            this.$router.push('/');
-            
-          }
-
-        },
-        go_home:function() {
-          this.CLEAR_CRUMBS();
+          this.CHANGE_CRUMBS(obj)
           this.$router.push('/');
         }
+        
+      },
+      goHome:function() {
+        if(this.$route.name == 'articleList') {
+          let listObj = {
+            page: 1,
+            tagID: ''
+          }
+          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
+          this.getArticleList()
+        }   
+        this.CLEAR_CRUMBS();
+        this.$router.push('/');
+      }
     },
     computed: {
-      ...mapState(['show_header_nav','crumbs','show_article']),
+      ...mapState(['showHeaderNav','crumbs','show_article']),
       change_color: function() {
-        if(this.show_header_nav) {
+        if(this.showHeaderNav) {
           return 'white glyphicon-option-horizontal';
         } else {
           return 'black glyphicon-option-vertical';
         }
       },
       _crumbs:function() {
-        let first
+        let tagName
         switch(this.$route.name) {
           case 'articleList':
-            if(this.crumbs.first) {
-              first = this.crumbs.first
+            if(this.crumbs.tagName) {
+              tagName = this.crumbs.tagName
             } else {
-              first = '所有文章'
+              tagName = '所有文章'
             }
-            return first
+            return tagName
             break
           case 'article':
-            first = this.crumbs.first
-            return first
+            tagName = this.crumbs.tagName
+            return tagName
             break
           case 'msgborder':
-            first = '留言板'
-            break;
-          case 'project':
-            first = '实验室'
+            tagName = '留言板'
             break;
           case 'timer':
-            first = '时间轴'
+            tagName = '时间轴'
             break;
           case 'about':
-            first = '关于'
+            tagName = '关于'
             break;
           default:
         }
         this.CLEAR_CRUMBS()
-        return first
+        return tagName
       }
     },
-     
-      created:function(){
-        this.refresh();
+    created:function(){
 
     },
     mounted(){
     },
-
     components: {
-          NavHeader,
-          NavFooter,
-          ArticleList,
-          AsideBar,
-          LogIn
+      NavHeader,
+      NavFooter,
+      ArticleList,
+      AsideBar,
+      LogIn
     }
   }
 

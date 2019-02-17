@@ -19,6 +19,7 @@ use ReflectionMethod;
 use think\Cache;
 use think\Controller;
 use app\adminApi\service\Role as RoleService;
+use think\Request;
 
 class Index extends BaseController
 {
@@ -47,9 +48,9 @@ class Index extends BaseController
         $token= "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3d3cuYmlhbnF1YW4iLCJhdWQiOiJ3d3cudXNlciIsImlhdCI6bnVsbCwibmJmIjoxNTQ5Njk5NTE2LCJleHAiOjE1NDk3MTM5MDYsImRhdGEiOnsidXNlcklEIjoxLCJ1c2VyRW1haWwiOiI5MjAyMDAyNTZAcXEuY29tIiwidXNlck5hbWUiOiJcdThmYjlcdTZjYzkifX0.hj8sVMbWKfvTMEYD8JxJrcz1Bx0vosVL1t-yr42tsww";
 //        Cache::set($token,$data);
 
-        $a = Cache::get($token);
+//        $a = Cache::get($token);
 //        return ($role);
-        return ($a);
+//        return ($a);
 //        Api::injection('index/index/hello','测试用接口数据');
 //        $api = [
 //            'api_name' => '会员管1理1',
@@ -76,6 +77,14 @@ class Index extends BaseController
 //        $ref = new ReflectionClass('app\adminApi\controller\Admin');
 //        echo $ref->getName();
 //        echo $ref->getFileName();
+
+
+//       echo config('app_debug');
+//
+//       echo Request::instance()->root();
+
+       dump(BASE_SITE_ROOT);
+       dump(BASE_SITE_URL);
     }
 
 

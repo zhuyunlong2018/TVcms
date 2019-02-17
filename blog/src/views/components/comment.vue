@@ -8,7 +8,7 @@
       <span class="check_mail" v-if="!token" v-show="!check_mail" >*邮箱格式不正确</span>
       <markdown-editor v-model="queryData.content" ref="markdwonEditor" :configs="configs" :highlight="true"></markdown-editor>
       <p class="notice" v-show="disabled">*请填写完整信息！</p>
-      <button class="btn" @click="addComment" >发表</button>
+      <button class="btn" :disabled="disabled" @click="addComment" >发表</button>
       <button class="btn" @click="canelComment">取消</button>
     </div>
     <div class="commentBox">
@@ -54,9 +54,9 @@
         queryData: {
           articleID: 0,
           user: {
-            id: getStorage('user').user_id,
-            name: getStorage('user').user_name,
-            email: getStorage('user').user_email
+            id: '',
+            name: '',
+            email: ''
           },
           content: null,
           oldComment: {
@@ -114,7 +114,6 @@
       },
       addComment() {
         this.queryData.articleID = this.articleID
-        // console.log(this.queryData)
         add(this.queryData).then(response => {
           let data = response.data.data
           let fatherID = data.father_id
@@ -154,14 +153,15 @@
       ...mapGetters(['token']),
       //评论内容不为空时，激活评论发表按钮
       disabled() {
+        const data = this.queryData
         if(this.token) {
-          if(this.commenter && this.commenterEmail && this.commentText) {
+          if(data.user.name && data.user.email && data.content) {
           return false;
           } else {
           return true;
           }
         } else {
-            if(this.commenter && this.commenterEmail && this.commentText && this.check_mail) {
+            if(data.user.name && data.user.email && data.content && this.check_mail) {
             return false;
           } else {
             return true;
@@ -170,8 +170,15 @@
       }
     },
     created() {
+      const user = getStorage('user')
+      if(user) {
+        this.queryData.user = {
+          id: user.user_id,
+          name: user.user_name,
+          email: user.user_email
+        }
+      }
       this.getList()
-      
     }
   }
 

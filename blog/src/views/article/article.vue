@@ -7,21 +7,21 @@
       <ul class="tag">
             <li>
               <i class="glyphicon glyphicon-tag" ></i>
-               {{article.a_tag}}
+               {{article.tag.tag_name}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-pencil" ></i>{{article.a_author}}</li>
+              <i class="glyphicon glyphicon-pencil" ></i>{{article.user.user_name}}</li>
             <li>
-              <i class="glyphicon glyphicon-calendar" ></i>{{article.a_time}}
+              <i class="glyphicon glyphicon-calendar" ></i>{{article.create_time}}
             </li>
             <li>
-              <i class="glyphicon glyphicon-comment" ></i>{{article.a_comment}}
+              <i class="glyphicon glyphicon-comment" ></i>{{article.comment_num}}
             </li>
             <li>
-              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{article.a_praise}}
+              <i class="glyphicon glyphicon glyphicon-heart" ></i>{{article.praise_num}}
             </li>
       </ul>
-      <div class="content" v-html="article.a_content" v-highlight></div>
+      <div class="content" v-html="article.a_content"></div>
       <p class="praise" >
         <i class="glyphicon glyphicon-thumbs-up" @click="_add_praise" ></i>
       </p>
@@ -32,16 +32,29 @@
 </template>
 
 <script>
-  import { mapState,mapActions,mapMutations } from 'vuex'
+  import { mapActions, mapMutations } from 'vuex'
   import comment from '@/views/components/comment.vue'
   import { getOne } from '@/api/article'
   import simplemde from 'simplemde'
-  //import markdownEditor from 'vue-simplemde/src/markdown-editor';
   export default {
     data() {
       return {
         article: {
-          a_id: null,
+          a_content: '',
+          a_id: '',
+          a_img: '',
+          a_title: '',
+          comment_num: '',
+          create_time: '',
+          praise_num: '',
+          published: '',
+          status: '',
+          tag: {},
+          tag_id: '',
+          update_time: '',
+          user: {},
+          user_id: '',
+          viewer_num: ''
         }
       }
     },
@@ -51,13 +64,14 @@
     methods: {
       ...mapActions(["getComment","add_praise"]),
       ...mapMutations(['CHANGE_CRUMBS']),
-      getOne() {
-        getOne(this.article.a_id).then(response => {
+      getOne(ID) {
+        getOne(ID).then(response => {
           let content = response.data.data.a_content
           response.data.data.a_content = simplemde.prototype.markdown(content)
           this.article = response.data.data
           let obj = {
-            tag: this.article.a_tag,
+            tagName: this.article.tag.tag_name,
+            tagID: this.article.tag.tag_id,
             title: this.article.a_title
           }
           this.CHANGE_CRUMBS(obj)
@@ -71,10 +85,8 @@
       }
     },
     created:function() {
-      this.article.a_id = this.$route.params.id
-    },
-    mounted() {
-      this.getOne()
+      let ID = this.$route.params.id
+      this.getOne(ID)
     }
   }
 </script>

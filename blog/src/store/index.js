@@ -5,6 +5,7 @@ import mutations from './mutations'
 import actions from './actions'
 import user from './modules/user'
 import loginBox from './modules/loginBox'
+import article from './modules/article'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -12,7 +13,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules:{
     user,
-    loginBox
+    loginBox,
+    article
   },
   state,
   actions,

@@ -30,12 +30,10 @@ class ExceptionHandler extends Handle
             //如果是自定义异常，则控制http状态码，不需要记录日志
             //因为这些通常是因为客户端传递参数错误或者是用户请求造成的异常
             //不应当记录日志
-
             $this->code = $e->code;
             $this->msg = $e->msg;
             $this->errorCode = $e->errorCode;
-        }
-        else{
+        } else{
             // 如果是服务器未处理的异常，将http状态码设置为500，并记录日志
             if(config('app_debug')){
                 // 调试状态下需要显示TP默认的异常页面，因为TP的默认页面
@@ -45,7 +43,6 @@ class ExceptionHandler extends Handle
 
             $this->code = 500;
             $this->msg = $e->getMessage();
-//            $this->msg = 'sorry，we make a mistake. (^o^)Y';
             $this->errorCode = 999;
             $this->recordErrorLog($e);
         }
@@ -69,7 +66,7 @@ class ExceptionHandler extends Handle
             'path'  =>  LOG_PATH,
             'level' => ['error']
         ]);
-//        Log::record($e->getTraceAsString());
+//        Log::record($e->getTraceAsString(),'error');
         Log::record($e->getMessage(),'error');
     }
 }

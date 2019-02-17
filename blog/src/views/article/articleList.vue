@@ -1,6 +1,6 @@
 <template>
     <div class="main f-l">
-      <article class="clearfix" v-for="(item,index) in articleList.data" :key="item.a_id">
+      <article class="clearfix" v-for="item in articleList.data" :key="item.a_id">
         <div class="pic f-l t-c" >
           <a href="javascript:;"><img :src="item.a_img" alt="">
           </a>
@@ -11,11 +11,11 @@
           </a>
           <p class="summary" v-html="item.a_content" v-highlight ></p>
           <ul class="tag">
-            <li  @click="getListByTag(item.tag_id)"><i class="glyphicon glyphicon-tag" ></i>{{item.a_tag}}</li>
-            <li><i class="glyphicon glyphicon-pencil" ></i>{{item.a_author}}</li>
-            <li><i class="glyphicon glyphicon-calendar" ></i>{{item.a_time}}</li>
-            <li><i class="glyphicon glyphicon-comment" ></i>{{item.a_comment}}</li>
-            <li><i class="glyphicon glyphicon glyphicon-heart" ></i>{{item.a_praise}}</li>
+            <li  @click="getListByTag(item.tag_id,item.tag.tag_name)"><i class="glyphicon glyphicon-tag" ></i>{{item.tag.tag_name}}</li>
+            <li><i class="glyphicon glyphicon-pencil" ></i>{{item.user.user_name}}</li>
+            <li><i class="glyphicon glyphicon-calendar" ></i>{{item.create_time}}</li>
+            <li><i class="glyphicon glyphicon-comment" ></i>{{item.comment_num}}</li>
+            <li><i class="glyphicon glyphicon glyphicon-heart" ></i>{{item.praise_num}}</li>
           </ul>
         </div>
       </article>
@@ -35,41 +35,39 @@
 
 
 <script>
-  import { mapMutations } from 'vuex';
+  import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
   import { getList } from '@/api/article'
   export default {
     name: 'articleList',
     data(){
-        return{
-          articleList: [],
-          listInfo: {
-            page: 1,
-            limit: 10,
-            userID: '',
-            tagID: ''
-          }
-        };
+        return{}
     },
     methods:{
-      ...mapMutations(['SHOW_ALERT']),
-      getList() {
-        getList(this.listInfo).then(response => {
-          this.articleList = response.data.data.data
-        }).catch(error => {
-            this.SHOW_ALERT(error.response.data.msg)
-        })
-      },
+      ...mapActions(['getArticleList']),
+      ...mapMutations(['SET_ARTICLE_LIST_INFO','CHANGE_CRUMBS']),
       changePage(page) {
         if(page<=0 || page>this.articleList.last_page) {
           return
         }
-        this.listInfo.page = page
-        this.getList()
+        let obj = {
+          page
+        }
+        this.$store.commit('SET_ARTICLE_LIST_INFO',obj)
+        this.getArticleList()
       },
-      getListByTag(tagID) {
-        this.listInfo.page =1
-        this.listInfo.tagID = tagID
-        this.getList()
+      getListByTag(tagID,tagName) {
+        let listObj = {
+          page: 1,
+          tagID
+        }
+        this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
+        this.getArticleList()
+        let obj = {
+          tagName,
+          tagID,
+          title: ''
+        }
+        this.CHANGE_CRUMBS(obj)
       },
       showArticle(id) {
         this.$router.push({name:'article',params:{id}});
@@ -105,14 +103,13 @@
         }
     },
     computed: {
-      
+      ...mapState(['crumbs']),
+      ...mapGetters(['articleList','articleListInfo'])
     },
     created:function(){
-      this.getList()
+      this.getArticleList()
     },
-
     components: {
-
     }
   }
 

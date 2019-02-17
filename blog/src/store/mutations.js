@@ -21,7 +21,7 @@ const mutations = {
   },
 
     //判断是否触屏
-  if_touched(state) {
+  IF_TOUCHED(state) {
     state.if_touch = true;
   },
  
@@ -71,8 +71,8 @@ const mutations = {
     state.all_images.box = false;
   },
   //显示/隐藏主页导航栏
-  show_nav(state,params) {
-    state.show_header_nav = params;
+  SHOW_NAV(state,params) {
+    state.showHeaderNav = params;
   },
     //显示/隐藏管理页侧边导航栏
   toggle_sidebar(state) {
@@ -131,24 +131,7 @@ const mutations = {
   updatecommentText (state, commentText) {
     state.commentText= commentText
   },
-  //页面刷新后，vuex数据丢失，判断localstorage中是否存储，若有存储则将数据注入store中
-  refresh (state) {
-    //console.log(state.show_article);
-    // if(window.localStorage.getItem("show_article")) {
-    //   state.show_article = JSON.parse(window.localStorage.getItem("show_article")) ;
-    //  // console.log(state.show_article);
-    // }
-    if(window.localStorage.getItem("page_index")) {
-      state.page_index = window.localStorage.getItem("page_index") ;
-      // console.log(state.show_article);
-    }
-  },
-  //将获取的所有文章列表数据填充到items里
-  GETLIST(state,res) {
-    state.items = res;
-//    console.log(res);
-//   console.log(state.items.length);
-  },
+
   //将删除的文章数据移除items列表
   DELARTICLE(state,index) {
     //console.log(index);
@@ -175,56 +158,21 @@ const mutations = {
     state.tag='生活随笔';
     state.c_button=true;//切换按钮为发送状态
   },
-  //获取页面的数量，并生成递增数组
-  // GETPAGECOUNT(state,count) {
-  //   state.page_count = [];
-  //   for(let i=0;i<count;i++){
-  //     state.page_count.push(i+1);
-  //   }
-  //   // console.log(count);
-  // },
-  //点击文章列表第n页，将n注入到store中的page_index中
-  // changePage(state,index) {
-  //   state.page_index = index;
-  //   //console.log(state.page_index);
-  //   window.localStorage.setItem("page_index", state.page_index);
-  // },
-  //获取第n页文章列表数据
-  // GETPAGE(state,pageDate) {
-  //   state.page_items = pageDate;
-  //   for(let i=0;i<pageDate.length;i++) {
-  //     let _content = simplemde.prototype.markdown(pageDate[i].a_content);
-  //     state.page_items[i].a_content = _content;
-  //   }
-  // },
-  //获取所点击的文章展示数据
-  SHOWARTICLE(state,index) {
-    state.show_article = state.page_items[index];
-    // console.log(state.show_article);
-    //将获取的文章内容存入localstorage中
-    //window.localStorage.setItem("show_article", JSON.stringify(state.show_article));
-    router.push({name:'article',params:{id:state.show_article.a_id}});
-  },//清除面包屑导航
+
+
   CLEAR_CRUMBS:function(state) {
-    state.crumbs.first = '';
-    state.crumbs.second = '';
+    state.crumbs.tagName = '';
+    state.crumbs.tagID = '';
+    state.crumbs.title = '';
   },//添加面包屑导航文章标题和标签
-  CHANGE_CRUMBS:function(state,obj) {
+  CHANGE_CRUMBS:function(state, obj) {
     console.log(obj)
-    if(obj.tag) {
-      state.crumbs.first = obj.tag;
-    }
-    state.crumbs.second = obj.title;
-    //console.log(state.crumbs);
+      state.crumbs.tagName = obj.tagName;
+      state.crumbs.tagID = obj.tagID;
+    state.crumbs.title = obj.title;
+    console.log(state.crumbs);
   },
-  // GETSHOWARTICLE(state,data) {
-  //   state.show_article = data;
-  //  // console.log(data.content);
-  //  //转码
-  //   let _content = simplemde.prototype.markdown(data.a_content);
-  //   state.show_article.a_content = _content;
-  //  // console.log(state.show_article.content);
-  // },
+ 
     //清空文章评论列表
     CLEARCOMMENT(state) {
       state.comment = [];
@@ -335,52 +283,7 @@ const mutations = {
       //console.log(state.all_images.src[index]);
       state.all_images.src.splice(index,1);
     },//获取所有发布的文章
-    GET_ALL_ARTICLE:function(state,data) {
-      let timer = [];//用于存储整个时间轴数组[{year:2018,month:[{month:2018-1,list:[]}]}]
-      
-      for(let i=0;i<data.length;i++) {
-        let year = data[i].a_time.substr(0,4);
-        let month = data[i].a_time.substr(0,7);
-        let obj = {};//用于存储年份的对象{year:2018,month:[]}
-        obj.year = year;
-        obj.month = [];
-        let _obj = {};//用于存储月份的对象{month:2018-01,list:[]}
-        _obj.month = month;
-        _obj.list = [];
-        _obj.list.push(data[i]);
-        obj.month.push(_obj);
-        if(timer.length>0) {//判断时间轴数组是否为空
-          let check = false;
-          for(let j=0;j<timer.length;j++) {
-            if(year == timer[j].year){//判断本次循环年份是否存在于时间轴数组里
-              check = true;
-              let _month = timer[j].month;
-              if(_month.length>0) { //判断年月份数组是否为空
-                let _check = false;
-                for(let k=0;k<_month.length;k++) {
-                  if(month == _month[k].month) {//判断本次循环月份是否存在于数组中
-                    _check = true;
-                    _month[k].list.push(data[i]);//将本记录插入月份数组列表中
-                  }
-                }
-                if(!_check) {//本次数据不属于当前数组存在的月份
-                  _month.push(_obj);
-                }
-              } else {
-                _month.push(_obj);
-              }
-            }
-          } 
-          if(!check) {//本次数据不属于当前数组存在的年份
-            timer.push(obj);
-          }
-        }else {
-           timer.push(obj);
-          }
-      }
-      state.timer = timer
-      //console.log(timer);
-    },
+   
     GET_BING:function(state,data) {
       state.search.bing = data;
     },

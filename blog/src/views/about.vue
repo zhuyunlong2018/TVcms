@@ -1,7 +1,7 @@
 <template>
   <div class="main f-l">
     <div class="about">
-      <div class="content" v-html="about_html" v-highlight >
+      <div class="content" v-html="about"  >
       </div>
     </div>
   </div>
@@ -9,18 +9,25 @@
 
 
 <script>
-import { mapState,mapActions } from 'vuex';
+import { get } from '@/api/about'
+import simplemde from 'simplemde'
 export default {
-  methods: {
-    ...mapActions(['get_about'])
-  },
-  created(){
-    if(!this.about_html) {
-    this.get_about();
+  data() {
+    return {
+      about: ''
     }
   },
+  methods: {
+    get() {
+      get(1).then(response => {
+        this.about = simplemde.prototype.markdown(response.data.data.about_content);
+      })
+    }
+  },
+  created(){
+    this.get()
+  },
   computed: {
-    ...mapState(['about_html'])
   }
 }
 </script>

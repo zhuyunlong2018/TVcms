@@ -24,9 +24,7 @@ class Admin
         $adminData = [
             'name'=>$admin['admin_name'],
             'token'=>$token,
-            'roles' => $admin['roles'],
-            'avatar' => $user['user_avatar'],
-            'introduction' => $user['introduction']
+            'user' => $user
         ];
         return $adminData;
     }

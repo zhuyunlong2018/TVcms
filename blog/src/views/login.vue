@@ -9,7 +9,7 @@
           <i class="glyphicon" :class="icon.email" ></i>
         </p>
         <p v-show="registerLoginBtn" >
-          <input type="text"  ref="input_name" @input="check_name" v-model="loginForm.userName" placeholder="用户名">
+          <input type="text"  ref="input_name" @input="check_name" v-model="loginForm.name" placeholder="用户名">
           <i class="glyphicon" :class="icon.name" ></i>
         </p>
         <p>
@@ -39,15 +39,15 @@
       data(){
         return {
           loginForm: {
-            email: '920200256@qq.com',
-            password: '920200256',
-            userName: ''
+            email: '',
+            password: '',
+            name: ''
           },
           c_userPwd: '',
           check_result: {
-            email: true,
+            email: false,
             name: false,
-            pwd: true,
+            pwd: false,
             cpwd: false
           },
           icon: {
@@ -69,19 +69,16 @@
           }
       },
       handleLogin() {
-          this.$store.dispatch('login',this.loginForm).then(() => {
+          login(this.loginForm).then(() => {
             this.CLOSE_LOGIN_BOX()
           }).catch(error => {
             
           })
       },
       register() {
-        let data = this.loginForm
-        register(data.userName,data.email,data.password).then(response => {
+        register(this.loginForm).then(response => {
            this.SHOW_MESSAGE('注册成功，请登录')
            this.show_login_box();
-        }).catch(error => {
-            this.SHOW_ALERT(error.response.data.msg)
         })
       },
       check_email() {
@@ -114,7 +111,6 @@
             this.icon.name = 'glyphicon-ok';
             //console.log('用户名正确');
           }
-         
         } else {
           this.icon.name = 'glyphicon-remove';
           //console.log('用户名不能为空');
@@ -131,6 +127,10 @@
           } else {
             this.check_result.pwd = true;
             this.icon.pwd = 'glyphicon-ok';
+            if(pwd == this.c_userPwd) {
+              this.icon.cpwd = 'glyphicon-ok';
+              this.check_result.cpwd = true;
+            }
             //console.log('密码正确');
           }
         } else {
@@ -141,8 +141,8 @@
       check_cpwd() {
         this.check_result.cpwd = false;
         let cpwd = this.$refs.input_cpwd.value;
-        if(cpwd == this.userPwd && cpwd) {
-          this.icon.cpwd = 'glyphicon-ok';
+        if(cpwd == this.loginForm.password && cpwd) {
+            this.icon.cpwd = 'glyphicon-ok';
             this.check_result.cpwd = true;
             //console.log('密码验证正确');
           } else {
@@ -159,8 +159,7 @@
     computed: {
       ...mapGetters(["loginBox",'registerLoginBtn','loginNotice']),
       register_btn:function() {
-        return false
-        if(1 || this.check_result.email && this.check_result.name && this.check_result.pwd && this.check_result.cpwd) {
+        if(this.check_result.email && this.check_result.name && this.check_result.pwd && this.check_result.cpwd) {
           return false;
         } else {
           return "disabled";
@@ -172,8 +171,13 @@
         } else {
            return "disabled";
         }
-      } , 
-
+      }
+    },
+    mounted() {
+      this.check_email()
+      this.check_name()
+      this.check_pwd()
+      this.check_cpwd()
     }
   }
 </script>
