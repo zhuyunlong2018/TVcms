@@ -4,6 +4,36 @@ const common = require('./common');
 
 
 const mutations = {
+
+  //获取网站统计数据
+  GET_WEB_DATA(state,data) {
+    state.webdata.article = data.article_num;
+    state.webdata.comment = data.comment_num;
+    state.webdata.praise = data.praise_num;
+    state.webdata.tags = data.tags_num;
+    state.webdata.user = data.user_num;
+    state.webdata.viewers = data.viewers_num;
+  },
+
+  //点赞
+  ADD_PRAISE(state,id) {
+    if(id) {
+      state.show_article.a_praise++;
+    }
+    state.webdata.praise++;
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   get_how_long:function(state) {
     let timestamp = Date.parse(new Date());
     timestamp = timestamp/1000;
@@ -187,23 +217,8 @@ const mutations = {
   PUBLISH:function(state,data) {
     state.items[data.index].published = data.publish;
   },
-    //点赞
-  ADD_PRAISE:function(state,id) {
-    if(id) {
-      state.show_article.a_praise++;
-    }
-    state.webdata.praise++;
-    
-  },
-    //获取网站统计数据
-    GET_WEBDATA:function(state,data) {
-      state.webdata.article = data.total_article;
-      state.webdata.comment = data.total_comment;
-      state.webdata.praise = data.total_praise;
-      state.webdata.tags = data.total_tags;
-      state.webdata.user = data.total_user;
-      state.webdata.viewers = data.total_viewers;
-    },
+
+
     //获取所有的评论
     GET_ALL_COMMENT:function(state,data) {
       let articleId = [];

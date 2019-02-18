@@ -98,7 +98,6 @@
           this.CHANGE_CRUMBS(obj)
           this.$router.push('/');
         }
-        
       },
       goHome:function() {
         if(this.$route.name == 'articleList') {
@@ -151,11 +150,6 @@
         this.CLEAR_CRUMBS()
         return tagName
       }
-    },
-    created:function(){
-
-    },
-    mounted(){
     },
     components: {
       NavHeader,

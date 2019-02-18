@@ -75,7 +75,7 @@ class Article extends Controller
 			$data1['a_praise'] = 0;
 			if($status) $data1['a_published'] = 1;
 		 $result = model('Article')->add($data1);
-		 model('Webdata')->updateOne('total_article');
+		 model('WebData')->updateOne('total_article');
 		 if($result) {
 		 	return $result;
 		 }

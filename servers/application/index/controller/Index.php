@@ -60,10 +60,10 @@ class Index extends Controller
 				break;
 		//网站统计操作
 			case 'get_webdata'://获取网站统计数据
-			 	$data['data'] = action('Webdata/get_webdata');
+			 	$data['data'] = action('WebData/get_webdata');
 			 	break;
 			case 'add_praise'://网站点赞
-				$data['data'] = action('Webdata/add_praise');
+				$data['data'] = action('WebData/add_praise');
 				break;
 		//友情链接操作
 			case 'get_neighbors'://获取所有友情链接

@@ -10,9 +10,9 @@
 namespace app\adminApi\model;
 
 
-use app\common\model\CommonWebData;
+use app\common\model\BaseModel;
 
-class WebData extends CommonWebData
+class WebData extends BaseModel
 {
 
 }

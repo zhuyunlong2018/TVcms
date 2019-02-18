@@ -40,7 +40,7 @@ class Comment extends Controller
 		$data1['c_index'] = input('index');
 		$data1['c_published'] = 1;
 		 $result = model('Comment')->addComment($data1);
-		 model('Webdata')->updateOne('total_comment');
+		 model('WebData')->updateOne('total_comment');
 		 if($id) {
 		 	model('Article')->updateOne($id,'a_comment');
 		 }

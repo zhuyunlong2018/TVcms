@@ -1,5 +1,8 @@
 import axios from 'axios'
 import router from '../routes.js'
+import { getStorage, setStorage, rermoveStorage } from '@/utils/storage'
+import { get as getWebData, addPraise } from '@/api/webData'
+
 
 const common = require('./common');
 
@@ -7,55 +10,44 @@ const _axios= params => {
   return axios({
       method: "post",
       url: 'www.bianquan.com/index.php/index',
-      // url: state.URL,
       data: params
     })
 }
 
-
-
 const actions = {
 
- //获取所有文章列表
- getList:function({commit,state}) {
-   //console.log(commit);
-   //console.log(params);
-   let list=[];
-   let params = {
-     'act':'get'
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     //console.log(res.data);
-     if(res.data.result) {
-       let result = res.data.data;
-       for(let i=0;i<result.length;i++) {
-         list.push({
-           id: result[i].a_id,
-           title: result[i].a_title,
-           author: result[i].a_author,
-         // content: result[i].content,
-           time: result[i].a_time,
-           tag: result[i].a_tag,
-           published: result[i].a_published
-         })
-       }
-       commit('GETLIST',list);
-     }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
+//获取网站基本统计数据
+  getWebData({commit}) {
+    getWebData().then(response => {
+      commit("GET_WEB_DATA",response.data.data);
+    })
+  },
 
-    // console.log(result);
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
+  //点赞
+  addPraise({commit},id) {
+    //判断是否点赞
+    let add_praise = id+'_add_praise';
+    if(getStorage(add_praise)) {
+      commit('SHOW_ALERT','试试点赞其他文章吧！');
+      return;
+    }else {
+      setStorage(add_praise,'点赞成功！');
+    }
+    const data = {
+      id
+    }
+    addPraise(data).then(response => {
+      commit("ADD_PRAISE",id);
+    })
+  },
+
+
+
+
+
+
+
+
  //添加文章
  addArticle:function({commit,state}){
    if(!(state.title && state.content &&state.article_background)) {
@@ -120,25 +112,7 @@ const actions = {
        console.log('失败了');
      });
  },
- //获取需要展示文章内容
-//  getShowArticle:function({commit,state},id) {
-//    let params = {
-//      'act':'getOne',
-//      'id':id
-//    }
-//    _axios(params).then(function (res) {
-//      //console.log('成功了');
-//      //console.log(res.data.data[0]);
-//      if(res.data.result) {
-//        commit('GETSHOWARTICLE',res.data.data);
-//      }
-
-//    })
-//    .catch(function (err) {
-//      console.log(err);
-//      console.log('失败了');
-//    });
-//  },
+ 
  //获取选中需编辑文章内容
  getOneArticle:function({commit,state},id){
    let params = {
@@ -260,143 +234,8 @@ const actions = {
        console.log('失败了');
      });
  },
-//点赞
-add_praise: function({commit,state},id) {
-//判断是否点赞
-let add_praise = id+'_add_praise';
-if(sessionStorage.getItem(add_praise)) {
-  commit('SHOW_ALERT','试试点赞其他文章吧！');
-  return;
-}else {
-  sessionStorage.setItem(add_praise,'点赞成功！');
-}
-let params = {
-  'act':'add_praise',
-  'id':id
-}
-_axios(params).then(function (res) {
-  if(res.data.result) {
-    commit("ADD_PRAISE",id);
-  }
-})
-  .catch(function (err) {
-    console.log(err);
-    console.log('失败了');
-  });
 
-},
-//获取网站基本统计数据
-get_webdata: function({commit,state}) {
-let params = {
-  'act':'get_webdata'
-}
-_axios(params).then(function (res) {
-  //console.log('成功了');
-  //console.log(res.data);
-  if(res.data.result) {
-    commit("GET_WEBDATA",res.data.data[0]);
-  }
 
-})
-  .catch(function (err) {
-    console.log(err);
-    console.log('失败了');
-  });
-
-},//获取所有评论内容
-get_all_comment: function({commit,state}) {
-  let params = {
-    'act':'get_all_comment'
-  }
-  _axios(params).then(function (res) {
-    if(res.data.result) {
-    commit("GET_ALL_COMMENT",res.data.data);
-    }
-  if(!res.data.login) {
-    router.push('/');
-    commit('change');
-    commit('SHOW_ALERT','登录超时，请重新登录');
-    commit('logout');
-  }
-  })
-    .catch(function (err) {
-      console.log(err);
-      console.log('失败了');
-    });
-
-  },
-  //屏蔽或解封评论
-  comment_publish: function({commit,state},data) {
-    let params = {
-      'act':'toggle_comment',
-      'id':data.id,
-      'publish':data.publish
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-        let _data = {};
-        _data.id = res.data.data.c_id;
-        _data.index = data.index;
-        _data._index = data._index;
-        _data.publish = res.data.publish;
-      commit("CLOSE_COMMENT",_data);
-      }
-      if(!res.data.login) {
-        router.push('/');
-        commit('change');
-        commit('SHOW_ALERT','登录超时，请重新登录');
-        commit('logout');
-      }
-
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-
-    },
-  //显示所有用户列表
-  show_all_user: function({commit,state}) {
-    let params = {
-      'act':'show_all_user'
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-      commit("SHOW_ALL_USER",res.data.data);
-      }
-    if(!res.data.login) {
-      router.push('/');
-      commit('change');
-      commit('SHOW_ALERT','登录超时，请重新登录');
-      commit('logout');
-    }
-
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-
-    },
-  //获取所有标签
-  getTags: function({commit,state}) {
-    let params = {
-      'act':'get_tags'
-    }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-      //console.log(res.data.data);
-      if(res.data.result) {
-      commit("GET_TAGS",res.data.data);
-      }
-
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-
-    },
   //新增标签
   add_tags: function({commit,state},tag) {
     let params = {
@@ -547,23 +386,6 @@ get_all_comment: function({commit,state}) {
       if(res.data.error == 1) {
         commit('SHOW_ALERT','权限不足,无法删除图片');
     }
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-    },
-  //获取所有上架文章的列表
-  get_all_article:function({commit,state}) {
-    let params = {
-      'act':'get_all_article'
-    }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-      //console.log(res.data.data);
-      if(res.data.result) {
-      commit("GET_ALL_ARTICLE",res.data.data);
-      }
     })
       .catch(function (err) {
         console.log(err);

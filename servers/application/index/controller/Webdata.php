@@ -12,7 +12,7 @@ class Webdata extends Controller
 	public function add_praise() {
 		$id = input('id');
 		// $ip = request()->ip();
-		 $result = model('Webdata')->updateOne('total_praise');
+		 $result = model('WebData')->updateOne('total_praise');
 		 if($id) {
 			model('Article')->updateOne($id,'a_praise');
 		}
@@ -22,7 +22,7 @@ class Webdata extends Controller
 	}
 	/*获取网站统计数据*/
 	public function get_webdata() {
-		 $result = model('Webdata')->get_webdata();
+		 $result = model('WebData')->get_webdata();
 		 if($result) {
 		 	return $result;
 		 }

@@ -23,9 +23,9 @@
       </ul>
       <div class="content" v-html="article.a_content"></div>
       <p class="praise" >
-        <i class="glyphicon glyphicon-thumbs-up" @click="_add_praise" ></i>
+        <i class="glyphicon glyphicon-thumbs-up" @click="addPraise(article.a_id)" ></i>
       </p>
-      <p class="praise" ><span>累计获得{{article.a_praise}}个赞</span></p>
+      <p class="praise" ><span>累计获得{{article.praise_num}}个赞</span></p>
       <comment :articleID='article.a_id'></comment>
     </div>
   </div>
@@ -62,7 +62,7 @@
       comment
     },
     methods: {
-      ...mapActions(["getComment","add_praise"]),
+      ...mapActions(["getComment","addPraise"]),
       ...mapMutations(['CHANGE_CRUMBS']),
       getOne(ID) {
         getOne(ID).then(response => {
@@ -78,10 +78,6 @@
         }).catch(error => {
             this.SHOW_ALERT(error.response.data.msg)
         })
-      },
-      _add_praise:function() {
-        let id = this.$route.params.id;
-        this.add_praise(id);
       }
     },
     created:function() {

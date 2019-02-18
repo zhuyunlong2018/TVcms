@@ -9,7 +9,8 @@
 
 namespace app\blogApi\controller;
 
-
+use app\adminApi\model\WebData as WebDataModel;
+use app\blogApi\model\Article;
 use app\common\controller\BaseController;
 use app\blogApi\model\Comment as CommentModel;
 use app\lib\Response;
@@ -31,6 +32,17 @@ class Comment extends BaseController
             'father_id' => $oldComment['fatherID'],
             'target_id' => $oldComment['targetID']
         ]);
+
+        //添加统计数据
+        if($articleID !=0) {
+            $article = Article::get($articleID);
+            $article->setInc('comment_num');
+        }
+        $data = WebDataModel::get(1);
+        $data->setInc('comment_num');
+
+        //邮件通知回复人
+
         return new Response(['data'=>$result]);
     }
 

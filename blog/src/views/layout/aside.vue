@@ -13,7 +13,7 @@
           <li @mouseover="show_text" @click="$router.push('/msgborder')" class="message">
             <i class="glyphicon glyphicon-comment"></i>
           </li>
-          <li @mouseover="show_text" @click="_add_praise" class="praise">
+          <li @mouseover="show_text" @click="addPraise(0)" class="praise">
             <i class="glyphicon glyphicon-thumbs-up"></i>
           </li>
         </ul>
@@ -24,13 +24,13 @@
       <h3>云标签</h3>
       <div class="content tag-content">
         <svg :width="width" :height="height" @mousemove="listener($event)">
-          <a @click="_get_article_by_tag(tag.text)" v-for="(tag,index) in tags" :key="index">
+          <a @click="getArticleByTag(tag)" v-for="tag in tags" :key="tag.id">
             <text
               :x="tag.x"
               :y="tag.y"
               :font-size="20 * (600/(600-tag.z))"
               :fill-opacity="((400+tag.z)/600)"
-            >{{tag.text}}</text>
+            >{{tag.name}}</text>
           </a>
         </svg>
       </div>
@@ -80,7 +80,7 @@
       <h3>友情链接</h3>
       <div class="content">
         <ul>
-          <li v-for="(item,index) in all_neighbors" :key="index">
+          <li v-for="item in neighbors" :key="item.nb_id">
             <a :href="item.nb_url" target="view_window">{{item.nb_name}}</a>
             <span>
               <i class="glyphicon glyphicon-pushpin"></i>
@@ -94,7 +94,8 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
-
+import { getList } from '@/api/tags'
+import { getList as getNeighborsList } from '@/api/neighbors'
 export default {
   data() {
     return {
@@ -104,15 +105,36 @@ export default {
       RADIUS: 150, //球的半径
       speedX: Math.PI / 360, //球一帧绕x轴旋转的角度
       speedY: Math.PI / 360, //球-帧绕y轴旋转的角度
-      tags: []
+      tags: [],
+      neighbors: []
     };
   },
   methods: {
-    ...mapActions(["add_praise", "getPageCount", "getPage"]),
-    ...mapMutations(["CHANGE_CRUMBS", "changePage"]),
-    _add_praise: function() {
-      let id = 0;
-      this.add_praise(id);
+    ...mapActions(["addPraise", "getArticleList",'getWebData']),
+    ...mapMutations(["CHANGE_CRUMBS",'SET_ARTICLE_LIST_INFO']),
+    getTagsList() {
+        getList('').then(response => {
+            let tags = response.data.data
+            let handler_tags = [];
+            for (let i = 0; i < tags.length; i++) {
+            let tag = {};
+            let k = -1 + (2 * (i + 1) - 1) / tags.length;
+            let a = Math.acos(k);
+            let b = a * Math.sqrt(tags.length * Math.PI); //计算标签相对于球心的角度
+            tag.name = tags[i].tag_name;
+            tag.id = tags[i].tag_id;
+            tag.x = this.CX + this.RADIUS * Math.sin(a) * Math.cos(b); //根据标签角度求出标签的x,y,z坐标
+            tag.y = this.CY + this.RADIUS * Math.sin(a) * Math.sin(b);
+            tag.z = this.RADIUS * Math.cos(a);
+            handler_tags.push(tag);
+            }
+            this.tags = handler_tags;
+        })
+    },
+    getNeighborsList() {
+        getNeighborsList(1).then(response => {
+            this.neighbors = response.data.data
+        })
     },
     show_text: function(e) {
       let element = e.target.className;
@@ -168,15 +190,20 @@ export default {
           ? Math.min(this.RADIUS * 0.00002, y * 0.0001)
           : Math.max(-this.RADIUS * 0.00002, y * 0.0001);
     },
-    _get_article_by_tag: function(tag) {
-      let obj = {};
-      obj.tag = tag;
-      obj.title = "";
-      this.CHANGE_CRUMBS(obj);
-      this.changePage(0);
-      this.getPageCount();
-      this.getPage(0);
-      this.$router.push("/");
+    getArticleByTag: function(tag) {
+        let listObj = {
+            page: 1,
+            tagID: tag.id
+        }
+        this.SET_ARTICLE_LIST_INFO(listObj)
+        this.getArticleList()
+        let obj = {
+            tagName: tag.name,
+            tagID: tag.id,
+            title: ''
+        }
+        this.CHANGE_CRUMBS(obj)
+        this.$router.push('/')
     }
   },
   mounted() {
@@ -186,36 +213,15 @@ export default {
     }, 17);
   },
   created() {
-    clearInterval(make_cloud);
-    let make_cloud = setInterval(() => {
-      if (this.options.length !== 0) {
-        let tags = [];
-        let options = this.options;
-        options = options.concat(this.options);
-        options = options.concat(this.options);
-        for (let i = 0; i < options.length; i++) {
-          let tag = {};
-          let k = -1 + (2 * (i + 1) - 1) / options.length;
-          let a = Math.acos(k);
-          let b = a * Math.sqrt(options.length * Math.PI); //计算标签相对于球心的角度
-          tag.text = options[i].tag;
-          tag.x = this.CX + this.RADIUS * Math.sin(a) * Math.cos(b); //根据标签角度求出标签的x,y,z坐标
-          tag.y = this.CY + this.RADIUS * Math.sin(a) * Math.sin(b);
-          tag.z = this.RADIUS * Math.cos(a);
-          tags.push(tag);
-        }
-        this.tags = tags;
-        clearInterval(make_cloud);
-      }
-    }, 2000);
+    this.getTagsList()
+    this.getNeighborsList()
+    this.getWebData()
   },
   computed: {
     ...mapState([
       "webdata",
       "now_time",
-      "how_long",
-      "all_neighbors",
-      "options"
+      "how_long"
     ]),
     CX() {
       //球心x坐标

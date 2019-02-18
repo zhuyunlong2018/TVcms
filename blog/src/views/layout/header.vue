@@ -89,7 +89,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
             page: 1,
             tagID: ''
           }
-          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
+          this.SET_ARTICLE_LIST_INFO(listObj)
           this.getArticleList()
         }
         this.CLEAR_CRUMBS();

@@ -15,13 +15,8 @@ export default {
     components
   },
   methods: {
-    ...mapActions(['get_webdata','get_tags','get_neighbors']),
+    ...mapActions(['get_webdata']),
     ...mapMutations(['get_how_long'])
-  },
-  created:function(){
-    this.get_webdata();
-    this.get_tags();
-    this.get_neighbors();
   },
   mounted:function() {
     this.get_how_long();
