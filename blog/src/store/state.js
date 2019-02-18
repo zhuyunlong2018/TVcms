@@ -24,12 +24,12 @@ const state = {
       spellChecker: false
     },
     webdata: {  //网页统计数据
-      praise: 0,
-      article: 0,
-      user: 0,
-      comment: 0,
-      tags: 0,
-      viewers: 0
+      praise_num: 0,
+      article_num: 0,
+      user_num: 0,
+      comment_num: 0,
+      tags_num: 0,
+      viewers_num: 0
     },
     all_neighbors: [],
     about_markdown: '', //about页面数据

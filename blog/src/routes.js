@@ -9,9 +9,6 @@ import msgborder from '@/views/components/msgborder';
 import outline from '@/views/components/outline.vue';
 import write from '@/views/components/write.vue';
 import editor from '@/views/components/editor.vue';
-import editorComment from '@/views/components/editor_comment.vue';
-import memberList from '@/views/components/menber_list.vue';
-import imgsList from '@/views/components/imgs_list.vue';
 import otherSeting from '@/views/components/other_seting.vue';
 import user from '@/views/components/user.vue';
 import timer from '@/views/components/timer.vue';
@@ -84,21 +81,6 @@ const routes = [
         {
           path: '/admin/editor',
           component: editor,
-          meta: { requireAuth: true }
-        },
-        {
-          path: '/admin/editorComment',
-          component: editorComment,
-          meta: { requireAuth: true }
-        },
-        {
-          path: '/admin/memberList',
-          component: memberList,
-          meta: { requireAuth: true }
-        },
-        {
-          path: '/admin/imgsList',
-          component: imgsList,
           meta: { requireAuth: true }
         },
         {

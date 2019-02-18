@@ -27,23 +27,6 @@
             </ul>
           </transition>
         </li>
-        <li class="treeview">
-          <router-link to="/admin/editorComment" >
-            <i class="glyphicon glyphicon-comment"></i> <span>评论管理</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/admin/memberList" >
-            <i class="glyphicon glyphicon-credit-card"></i>
-            <span>会员管理</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/admin/imgsList" >
-            <i class="glyphicon glyphicon-picture"></i>
-            <span>图片管理</span>
-          </router-link>
-        </li>
         <li>
           <router-link to="/admin/otherSeting" >
             <i class="glyphicon glyphicon-cog"></i>

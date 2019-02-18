@@ -1,5 +1,4 @@
 import simplemde from 'simplemde'
-import router from '../routes.js'
 const common = require('./common');
 
 
@@ -7,12 +6,7 @@ const mutations = {
 
   //获取网站统计数据
   GET_WEB_DATA(state,data) {
-    state.webdata.article = data.article_num;
-    state.webdata.comment = data.comment_num;
-    state.webdata.praise = data.praise_num;
-    state.webdata.tags = data.tags_num;
-    state.webdata.user = data.user_num;
-    state.webdata.viewers = data.viewers_num;
+    state.webdata = data
   },
 
   //点赞

@@ -69,7 +69,7 @@
           }
       },
       handleLogin() {
-          login(this.loginForm).then(() => {
+          this.login(this.loginForm).then(() => {
             this.CLOSE_LOGIN_BOX()
           }).catch(error => {
             

@@ -8,7 +8,7 @@
               <i class="glyphicon glyphicon-file" ></i>
             </div>
             <div class="text">
-              <span class="num" >{{ webdata.article }}</span>
+              <span class="num" >{{ webdata.article_num }}</span>
               <span class="des" >文章总数</span>
             </div>
           </div>
@@ -21,7 +21,7 @@
               <i class="glyphicon glyphicon-comment" ></i>
             </div>
             <div class="text">
-              <span class="num" >{{ webdata.comment }}</span>
+              <span class="num" >{{ webdata.comment_num }}</span>
               <span class="des" >评论总数</span>
             </div>
           </div>
@@ -34,7 +34,7 @@
               <i class="glyphicon glyphicon-heart" ></i>
             </div>
             <div class="text">
-              <span class="num" >{{ webdata.praise }}</span>
+              <span class="num" >{{ webdata.praise_num }}</span>
               <span class="des" >点赞总数</span>
             </div>
           </div>
@@ -52,7 +52,7 @@
                 PHP+MySQL+VUE全家桶
             </li>
             <li><span> 当前时间</span>
-            <i class="glyphicon glyphicon-time" ></i>{{now_time}}</li>
+            <i class="glyphicon glyphicon-time" ></i>{{time}}</li>
             <li> <span>本站已运行</span>
             <i class="glyphicon glyphicon-calendar" ></i>{{how_long}}天</li>
           </ul>
@@ -61,11 +61,27 @@
 </template>
 
 <script>
+  import { getTime } from '@/utils'
   import { mapState } from 'vuex';
   export default {
-      computed: {
-        ...mapState(["webdata","now_time","how_long"])
+    data() {
+      return {
+        time: '',
+        setInterval: null
       }
+    },
+    created() {
+      clearInterval(this.setInterval)
+      this.setInterval = setInterval(() => {
+          this.time = getTime()
+      },1000)
+    },
+    destroyed(){
+      clearInterval(this.setInterval)
+    },
+    computed: {
+      ...mapState(["webdata","now_time","how_long"])
+    }
   }
 </script>
 

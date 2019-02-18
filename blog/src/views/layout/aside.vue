@@ -59,7 +59,7 @@
         <div class="box box3">
           <div class="name">
             <h4>present time</h4>
-            <h5>{{now_time}}</h5>
+            <h5>{{time}}</h5>
           </div>
           <p>
             <i class="glyphicon glyphicon-time"></i>
@@ -96,6 +96,7 @@
 import { mapActions, mapState, mapMutations } from "vuex";
 import { getList } from '@/api/tags'
 import { getList as getNeighborsList } from '@/api/neighbors'
+import { getTime } from '@/utils'
 export default {
   data() {
     return {
@@ -106,7 +107,9 @@ export default {
       speedX: Math.PI / 360, //球一帧绕x轴旋转的角度
       speedY: Math.PI / 360, //球-帧绕y轴旋转的角度
       tags: [],
-      neighbors: []
+      neighbors: [],
+      time: '',
+      setInterval: null
     };
   },
   methods: {
@@ -146,10 +149,10 @@ export default {
           this.msg_text = "给我发送邮件";
           break;
         case "glyphicon glyphicon-comment":
-          this.msg_text = "累计获得" + this.webdata.comment + "条评论";
+          this.msg_text = "累计获得" + this.webdata.comment_num + "条评论";
           break;
         case "glyphicon glyphicon-thumbs-up":
-          this.msg_text = "累计获赞" + this.webdata.praise + "个";
+          this.msg_text = "累计获赞" + this.webdata.praise_num + "个";
           break;
       }
     },
@@ -216,11 +219,17 @@ export default {
     this.getTagsList()
     this.getNeighborsList()
     this.getWebData()
+    clearInterval(this.setInterval)
+    this.setInterval = setInterval(() => {
+        this.time = getTime()
+    },1000)
+  },
+  destroyed(){
+    clearInterval(this.setInterval)
   },
   computed: {
     ...mapState([
       "webdata",
-      "now_time",
       "how_long"
     ]),
     CX() {
