@@ -3,6 +3,8 @@ node_modules/
 dist/
 servers/runtime/
 servers/public/static/*
+servers/application/database.php
+servers/application/config.php
 npm-debug.log
 yarn-error.log
 admin/node_modules/
