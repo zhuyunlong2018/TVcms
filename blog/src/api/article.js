@@ -23,3 +23,12 @@ export function getAll(query=null) {
     params: query
   })
 }
+
+export function getTitleList(query=null) {
+  return request({
+    url: '/blogApi/article/getTitleList',
+    method: 'get',
+    params: query
+  })
+}
+

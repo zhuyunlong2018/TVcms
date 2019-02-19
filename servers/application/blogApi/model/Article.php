@@ -36,4 +36,8 @@ class Article extends BaseModel
         }])
             ->where($condition)->find();
     }
+
+    public static function getTitleList($condition,$field) {
+        return self::where($condition)->field($field)->order('a_id desc')->select();
+    }
 }

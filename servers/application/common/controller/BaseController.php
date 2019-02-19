@@ -70,8 +70,8 @@ class BaseController extends Controller
     protected function getApiByType($type) {
         $api = Cache::get('api'.$type);
         if(!$api) {
-            Api::getByType($type);
-            $api = Cache::get('api'.$type);
+            $api = Api::getByType($type);
+//            $api = Cache::get('api'.$type);
         }
         return $api;
     }

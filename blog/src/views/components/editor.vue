@@ -12,20 +12,19 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(item,index) in items" :key="item.id" >
-						<td width="5%">{{item.id}}</td>
-						<td >{{item.title}}</td>
-						<td width="15%">{{item.time}}</td>
+					<tr v-for="article in list" :key="article.a_id" >
+						<td width="5%">{{article.a_id}}</td>
+						<td >{{article.a_title}}</td>
+						<td width="15%">{{article.create_time}}</td>
 						<td  width="10%">
               <label  class="el-switch">
-                <input  @click="_publish(index)" type="checkbox" name="switch" :checked="item.published==1?'checked':null " :disabled="status=='admin'?null:'disabled'" >
+                <input  @click="_publish(article.a_id)" type="checkbox" name="switch" :checked="article.published==1?'checked':null " >
                 <span class="el-switch-style"></span>
               </label>
 			      </td>
 						<td width="15%">
-              <i class="edit glyphicon glyphicon-edit" @click="_getOneArticle(index)" ></i>
-              <i class="delete glyphicon glyphicon-trash" @click="_confirm_del(index)" ></i>
-              
+              <i class="edit glyphicon glyphicon-edit" @click="_getOneArticle(article.a_id)" ></i>
+              <i class="delete glyphicon glyphicon-trash" @click="_confirm_del(article.a_id)" ></i>
             </td>
 					</tr>
 				</tbody>
@@ -48,18 +47,24 @@
 </template>
 
 <script>
-  import { mapState,mapActions } from 'vuex';
-
+import { mapState,mapActions } from 'vuex';
+import { getTitleList } from '@/api/article'
 
 export default {
   data() {
     return {
       confirm_del: false,
       index: null,
-      published:null
+      published: null,
+      list: []
     }
   },
   methods:{
+    getList() {
+      getTitleList().then(response => {
+          this.list = response.data.data
+      })
+    },
     _confirm_del: function(index) {
       this.confirm_del = true;
       this.index = index;
@@ -92,7 +97,7 @@ export default {
         let id = this.items[e].id;
         this.getOneArticle(id);
     },
-    ...mapActions(["getList","delArticle","getOneArticle","publish"]),
+    ...mapActions(["delArticle","getOneArticle","publish"]),
 
   },
   computed:{

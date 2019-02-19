@@ -8,6 +8,7 @@
  */
 
 namespace app\blogApi\controller;
+use app\adminApi\service\Token;
 use app\blogApi\service\Article as ArticleService;
 use app\common\controller\BaseController;
 use app\common\validate\PagingParameter;
@@ -39,6 +40,17 @@ class Article extends BaseController
             throw new ResourcesException();
         }
         return new Response(['data'=>$articles]);
+    }
+
+    public function getTitleList() {
+        $user = Token::getUser();
+        $condition = [
+            'user_id' => $user['userID'],
+            'status' => 1
+        ];
+        $field = 'a_id,a_title,published,create_time';
+        $list = ArticleModel::getTitleList($condition,$field);
+        return new Response(['data'=>$list]);
     }
 
 }

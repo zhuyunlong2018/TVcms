@@ -15,7 +15,6 @@ class Article
 {
     public static function getList($tagID,$userID,$page,$limit) {
         $condition = [
-
         ];
         $order = ['a_id'=>'desc'];
         if(!empty($userID)) {
@@ -27,6 +26,7 @@ class Article
         $list = ArticleModel::getListByPage($condition,$order,$page,$limit);
         return new Response(['msg'=>'获取数据成功','data'=>$list]);
     }
+
 
 
 }
