@@ -113,34 +113,6 @@ const actions = {
      });
  },
  
- //获取选中需编辑文章内容
- getOneArticle:function({commit,state},id){
-   let params = {
-     'act':'getOne',
-     'id':id
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     if(res.data.result) {
-       commit('GETONEARTICLE',res.data.data);
-       router.push('/admin/write');
-     }
-     if(res.data.error == 1) {
-       commit('SHOW_ALERT','权限不足，无法编辑');
-     }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
-
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
  //更新选中的文章内容
  updateArticle:function({commit,state}){
   // console.log(state.id);
@@ -204,37 +176,7 @@ const actions = {
      });
 
  },
-   //发布或下架选中文章
- publish: function({commit,state},data) {
-   let index = data.index;
-   let params = {
-     'act':'publish',
-     'id':data.id,
-     'publish':data.publish
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     //console.log(res.data);
-     if(res.data.result == 'success') {
-       let data = {};
-       data.publish = res.data.publish;
-       data.index = index;
-       commit('PUBLISH',data);
-     }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
-
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
-
+ 
 
   //新增标签
   add_tags: function({commit,state},tag) {
@@ -306,25 +248,7 @@ const actions = {
       });
 
     },
-  //获取所有友情链接
-  get_neighbors: function({commit,state}) {
-    let params = {
-      'act':'get_neighbors'
-    }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-    // console.log(res.data.data);
-      if(res.data.result) {
-      commit("GET_NEIGHBORS",res.data.data);
-      }
-
-    })
-      .catch(function (err) {
-        // console.log(err);
-        console.log('失败了');
-      });
-
-    },
+ 
 
   //删除友情链接
     del_neighbors:function({commit,state},index) {

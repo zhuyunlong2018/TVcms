@@ -13,6 +13,7 @@ use app\blogApi\service\Article as ArticleService;
 use app\common\controller\BaseController;
 use app\common\validate\PagingParameter;
 use app\blogApi\model\Article as ArticleModel;
+use app\lib\exception\AuthException;
 use app\lib\exception\ResourcesException;
 use app\lib\Response;
 
@@ -51,6 +52,37 @@ class Article extends BaseController
         $field = 'a_id,a_title,published,create_time';
         $list = ArticleModel::getTitleList($condition,$field);
         return new Response(['data'=>$list]);
+    }
+
+    public function changePublish($id) {
+        $article = ArticleModel::get($id);
+        if(empty($article)) {
+            throw new ResourcesException();
+        }
+        $user = Token::getUser();
+        if($article->user_id != $user['userID']) {
+            throw new AuthException();
+        }
+        if($article->published) {
+            $article->published = 0;
+        } else {
+            $article->published = 1;
+        }
+        $article->save();
+        return new Response(['data'=>$article->published]);
+    }
+
+    public function delArticle($id) {
+        $article = ArticleModel::get($id);
+        if(empty($article)) {
+            throw new ResourcesException();
+        }
+        $user = Token::getUser();
+        if($article->user_id != $user['userID']) {
+            throw new AuthException();
+        }
+        $article->delete();
+        return new Response();
     }
 
 }

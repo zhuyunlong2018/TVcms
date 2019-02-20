@@ -32,3 +32,18 @@ export function getTitleList(query=null) {
   })
 }
 
+export function changePublish(data) {
+  return request({
+    url: '/blogApi/article/changePublish',
+    method: 'post',
+    data
+  })
+}
+
+export function delArticle(data) {
+  return request({
+    url: '/blogApi/article/delArticle',
+    method: 'post',
+    data
+  })
+}

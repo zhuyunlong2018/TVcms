@@ -65,31 +65,37 @@ const routes = [
       children: [
         {
           path: '/admin',
+          name: 'admin',
           redirect: '/admin/outline',
           meta: { requireAuth: true }
         },
         {
         path: '/admin/outline',
+        name: 'outline',
         component: outline,
           meta: { requireAuth: true }
       },
         {
           path: '/admin/write',
+          name: 'write',
           component: write,
           meta: { requireAuth: true }
         },
         {
           path: '/admin/editor',
+          name: 'editor',
           component: editor,
           meta: { requireAuth: true }
         },
         {
           path: '/admin/otherSeting',
+          name: 'otherSeting',
           component: otherSeting,
           meta: { requireAuth: true }
         },
         {
           path: '/admin/user',
+          name: 'user',
           component: user,
           meta: { requireAuth: true }
         }

@@ -24,53 +24,22 @@ class Redis
      * redis实例
      */
     protected static $redis;
-    public function __construct()
+    public function __construct($dbIndex=0)
     {
-        self::init();
+        self::init($dbIndex);
     }
 
     /**
      * 获取redis实例
      * @return object
      */
-    public static function init() {
+    public static function init($dbIndex=0) {
         if (is_null(self::$redis)) {
             self::$redis = Cache::store('redis')->handler();
         }
+        self::$redis->select($dbIndex);
         return self::$redis;
     }
 
-    /*
-     * 字符串，获取值
-     */
-    public static function get($key) {
-        return self::init()->get($key);
-    }
 
-    /*
-     * 字符串，设置值
-     */
-    public static function set($key,$value) {
-        return self::init()->set($key,$value);
-    }
-
-    /*
-     * 字符串，空值时设置值
-     */
-    public static function setnx($key,$value) {
-        return self::init()->set($key,$value);
-    }
-
-    /*
-     * 特定集合增加一个元素
-     */
-    public static function sadd($key,$value) {
-        return self::init()->sadd($key,$value);
-    }
-    /*
-     * 特定集合删除一个元素
-     */
-    public static function srem($key,$value) {
-        return self::init()->srem($key,$value);
-    }
 }

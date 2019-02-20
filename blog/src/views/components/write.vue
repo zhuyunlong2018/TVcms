@@ -3,18 +3,18 @@
     <div class="write">
         <div class="center clearfix">
           <div class="title-top">
-          <input class="form-control title" type="text" name="title" v-model="title" placeholder="标题">
+          <input class="form-control title" type="text" name="title" v-model="article.a_title" placeholder="标题">
           <div class="c-dropdown">
-            <span class="c-button c-button-dropdown" @click="show_tags" >{{tag}}</span>
+            <span class="c-button c-button-dropdown" @click="showTags" >{{article.tag.tag_name}}</span>
             <transition name="show-tags" >
               <ul class="c-dropdown__list" v-show="tags_box" >
-                <li class="c-dropdown__item" v-for="option in options" :key="option.tag" :value="option.tag" @click="_select_tag(option.tag)" >{{ option.tag }}</li>
+                <li class="c-dropdown__item" v-for="tag in tags" :key="tag.tag_id" :value="tag.tag_id" @click="selectTag(tag)" >{{ tag.tag_name }}</li>
               </ul>
             </transition>
           </div>
         </div>
           <div class="markdown f-l editor">
-            <markdown-editor v-model="content" ref="markdwonEditor" :configs="configs" :highlight="true" preview-class="markdown-body" ></markdown-editor>
+            <markdown-editor v-model="article.a_content" ref="markdwonEditor" :configs="configs" :highlight="true" preview-class="markdown-body" ></markdown-editor>
           </div>
           <div class="file f-r">
             <div class="imgBox"  >
@@ -47,8 +47,8 @@
 
           </div>
         </div>
-        <button type="button" class="btn btn-success" v-show="c_button" @click="addArticle">发布文章</button>
-        <button type="button" class="btn btn-danger" v-show="!(c_button)"  @click="updateArticle">更新文章</button>
+        <button type="button" class="btn btn-success" v-if="create" @click="addArticle">发布文章</button>
+        <button type="button" class="btn btn-danger" v-if="!(create)"  @click="updateArticle">更新文章</button>
 
     </div>
 
@@ -59,132 +59,152 @@
 
   //import markdownEditor from 'vue-simplemde/src/markdown-editor';
   import { mapState,mapActions,mapMutations } from 'vuex';
+  import { getOne } from '@/api/article'
+  import { getList } from '@/api/tags'
   export default {
-      data(){
-          return {
-            tags_box: false,//控制标签选项盒子显示或隐藏
-            imgs: [],//图片上传预览框中的图片地址
-            images: [],//传递到后台的图片地址
-            images_name: [],//传递到后台的图片名称
-            imgs_url: [],//后台返回到页面展示的图片地址
-              configs: {
-                status: false,
-                spellChecker: false,
-                placeholder:"内容",
-              }
-          }
-      },
-      components: {
-       
-      },
-      methods: {
-        ...mapActions(["addArticle","updateArticle",'get_all_imgs']),
-        ...mapMutations(['select_tag','close_logout','SHOW_ALERT','show_all_imgs','add_img_article','set_background']),
-        show_tags() {
-          this.tags_box = true;
-          this.stopProp();
-        },
-        _select_tag(tag){
-          this.select_tag(tag);
-          this.tags_box = false;
-        },
-        close_box() {
-          this.tags_box = false;
-        },
-        stopProp: function(e) {
-          e = e || event;
-          e.stopPropagation();
-        },
-        _add_img_article:function(index) {
-          let url = this.imgs_url[index];
-          this.add_img_article(url);
-        },
-        _set_background:function(index) {
-          let url = this.imgs_url[index];
-          this.set_background(url);
-        },
-        fileImage: function(e) {
-          let _this = this;
-          let file = e.target.files;
-          // console.log(file[0].name);
-          if(this.imgs.length>9 || (this.imgs.length+file.length)>9) {
-            this.SHOW_ALERT('图片超过9九张，请分多次上传')
-            return;
-          }
-          for (let i=0;i<file.length;i++) {
-            if(this.imgs.length>0) {
-              for(let j=0;j<this.imgs.length;j++) {
-                if(file[i].name == this.imgs[j].name) {
-                  this.SHOW_ALERT('请不要选择重复图片');
-                  return;
-                } else {
-                  continue;
-                }
-              }
+    data(){
+        return {
+          article: {
+            a_content: '',
+            a_id: 0,
+            a_img: "",
+            a_title: "",
+            outline: '',
+            tag: {tag_id: 1, tag_name: "生活随笔", create_time: "1970-01-01 08:00:00"},
+            tag_id: 1
+          },
+          create: true,
+          tags: [],
+          tags_box: false,//控制标签选项盒子显示或隐藏
+          imgs: [],//图片上传预览框中的图片地址
+          images: [],//传递到后台的图片地址
+          images_name: [],//传递到后台的图片名称
+          imgs_url: [],//后台返回到页面展示的图片地址
+            configs: {
+              status: false,
+              spellChecker: false,
+              placeholder:"内容",
             }
-            let imgSize = file[i].size/1024;
-            if(imgSize>500){
-              this.SHOW_ALERT('请上传大小不要超过500KB的图片');
-              continue;
-          }else{
-              let reader = new FileReader();
-              reader.readAsDataURL(file[i]); // 读出 base64
-              reader.onloadend = function () {
-                // 图片的 base64 格式, 可以直接当成 img 的 src 属性值   
-                let dataURL = reader.result;
-                let obj = {};
-                obj.url = dataURL;
-                obj.name = file[i].name;
-                 _this.imgs.push(obj);//将base64图片数据存入预览用的数组
-                 _this.images.push(dataURL);//将base64图片数据存入发送服务端用的数组
-                _this.images_name.push(file[i].name);
-              }
-            }
-          }
+        }
+    },
+    methods: {
+      ...mapActions(["addArticle","updateArticle",'get_all_imgs']),
+      ...mapMutations(['SHOW_ALERT','show_all_imgs','add_img_article','set_background']),
+      getOne(id) {
+        getOne(id).then(response => {
+          this.article = response.data.data
+        })
       },
-      updata_imgs:function() {
-        if(!this.imgs.length) {
-          this.SHOW_ALERT('请选择要上传图片');
+      getTags() {
+        getList('').then(response => {
+          this.tags = response.data.data
+        })
+      },
+      showTags() {
+        this.tags_box = true
+        this.stopProp()
+      },
+      selectTag(tag){
+        this.article.tag = tag
+        this.tags_box = false
+      },
+      stopProp(e) {
+        e = e || event;
+        e.stopPropagation();
+      },
+
+
+      close_box() {
+        this.tags_box = false;
+      },
+      _add_img_article:function(index) {
+        let url = this.imgs_url[index];
+        this.add_img_article(url);
+      },
+      _set_background:function(index) {
+        let url = this.imgs_url[index];
+        this.set_background(url);
+      },
+      fileImage: function(e) {
+        let _this = this;
+        let file = e.target.files;
+        // console.log(file[0].name);
+        if(this.imgs.length>9 || (this.imgs.length+file.length)>9) {
+          this.SHOW_ALERT('图片超过9九张，请分多次上传')
           return;
         }
-          let _this = this;
-          let old_imgs = this.imgs_url;
-          let olds = old_imgs.length;
-          let params = {
-                    'act': 'updata_imgs',
-                    'imgs': this.images,
-                    'imgs_name': this.images_name
-                  };
-          this.$http({
-              method: "post",
-              url: this.URL,
-              data: params
-            }).then(function (res) {
-              if(res.data.result && res.data.data.result == 'success') {
-                  _this.imgs = [];
-                  _this.images = [];
-                  _this.images_name = [];
-                  // console.log(_this.imgs_url.length);
-                  let news = res.data.data.images.length;
-                  if(olds>0) {
-                    for(let i=0;i<olds;i++) {
-                      for(let j=0;j<news;j++) {
-                        //console.log(old_imgs[i]);
-                        if(old_imgs[i] == res.data.data.images[j]) {
-                          res.data.data.images.splice(j,1);
-                        }
+        for (let i=0;i<file.length;i++) {
+          if(this.imgs.length>0) {
+            for(let j=0;j<this.imgs.length;j++) {
+              if(file[i].name == this.imgs[j].name) {
+                this.SHOW_ALERT('请不要选择重复图片');
+                return;
+              } else {
+                continue;
+              }
+            }
+          }
+          let imgSize = file[i].size/1024;
+          if(imgSize>500){
+            this.SHOW_ALERT('请上传大小不要超过500KB的图片');
+            continue;
+        }else{
+            let reader = new FileReader();
+            reader.readAsDataURL(file[i]); // 读出 base64
+            reader.onloadend = function () {
+              // 图片的 base64 格式, 可以直接当成 img 的 src 属性值   
+              let dataURL = reader.result;
+              let obj = {};
+              obj.url = dataURL;
+              obj.name = file[i].name;
+                _this.imgs.push(obj);//将base64图片数据存入预览用的数组
+                _this.images.push(dataURL);//将base64图片数据存入发送服务端用的数组
+              _this.images_name.push(file[i].name);
+            }
+          }
+        }
+    },
+    updata_imgs:function() {
+      if(!this.imgs.length) {
+        this.SHOW_ALERT('请选择要上传图片');
+        return;
+      }
+        let _this = this;
+        let old_imgs = this.imgs_url;
+        let olds = old_imgs.length;
+        let params = {
+                  'act': 'updata_imgs',
+                  'imgs': this.images,
+                  'imgs_name': this.images_name
+                };
+        this.$http({
+            method: "post",
+            url: this.URL,
+            data: params
+          }).then(function (res) {
+            if(res.data.result && res.data.data.result == 'success') {
+                _this.imgs = [];
+                _this.images = [];
+                _this.images_name = [];
+                // console.log(_this.imgs_url.length);
+                let news = res.data.data.images.length;
+                if(olds>0) {
+                  for(let i=0;i<olds;i++) {
+                    for(let j=0;j<news;j++) {
+                      //console.log(old_imgs[i]);
+                      if(old_imgs[i] == res.data.data.images[j]) {
+                        res.data.data.images.splice(j,1);
                       }
                     }
                   }
-                  _this.imgs_url.push.apply(_this.imgs_url,res.data.data.images);
-                  //console.log(_this.imgs_url);
-              }
-
-            })
-              .catch(function (err) {
-                console.log(err);
-                console.log('失败了');
-              });
+                }
+                _this.imgs_url.push.apply(_this.imgs_url,res.data.data.images);
+                //console.log(_this.imgs_url);
+            }
+          }).catch(function (err) {
+              console.log(err);
+              console.log('失败了');
+            });
       },
       remove:function(index) {
         this.imgs.splice(index,1);
@@ -198,26 +218,16 @@
       }
     },
     computed: {
-      ...mapState(["c_button","options","tag","all_images","article_background","URL"]),
-      title: {
-        get () {
-          return this.$store.state.title
-        },
-        set (value) {
-          this.$store.commit('updatetitle', value)
-        }
-      },
-      content:{
-        get () {
-          return this.$store.state.content
-        },
-        set (value) {
-          this.$store.commit('updatecontent', value)
-        }
-      }
+      ...mapState(["all_images","article_background","URL"]),
+    
     },
     mounted() {
-      //console.log(this.$refs);
+      this.getTags()
+      const id = this.$route.params.id
+      if(id) {
+        this.create = false
+        this.getOne(id)
+      }
     }
   }
 </script>

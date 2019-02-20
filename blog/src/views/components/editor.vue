@@ -18,13 +18,13 @@
 						<td width="15%">{{article.create_time}}</td>
 						<td  width="10%">
               <label  class="el-switch">
-                <input  @click="_publish(article.a_id)" type="checkbox" name="switch" :checked="article.published==1?'checked':null " >
+                <input  @click="publish(article.a_id)" type="checkbox" name="switch" :checked="article.published==1?'checked':null " >
                 <span class="el-switch-style"></span>
               </label>
 			      </td>
 						<td width="15%">
-              <i class="edit glyphicon glyphicon-edit" @click="_getOneArticle(article.a_id)" ></i>
-              <i class="delete glyphicon glyphicon-trash" @click="_confirm_del(article.a_id)" ></i>
+              <i class="edit glyphicon glyphicon-edit" @click="getOneArticle(article.a_id)" ></i>
+              <i class="delete glyphicon glyphicon-trash" @click="confirmDel(article.a_id)" ></i>
             </td>
 					</tr>
 				</tbody>
@@ -36,7 +36,7 @@
               确认要删除该文章？
             </div>
             <div class="content">
-              <button type="button" class="btn btn-warning" @click="_delArticle()" >确认</button>
+              <button type="button" class="btn btn-warning" @click="delArticle()" >确认</button>
               <button type="button" class="btn btn-info" @click="confirm_del=false" >取消</button>
             </div>
           </div> 
@@ -47,14 +47,13 @@
 </template>
 
 <script>
-import { mapState,mapActions } from 'vuex';
-import { getTitleList } from '@/api/article'
+import { getTitleList, changePublish, delArticle } from '@/api/article'
 
 export default {
   data() {
     return {
       confirm_del: false,
-      index: null,
+      id: null,
       published: null,
       list: []
     }
@@ -65,43 +64,44 @@ export default {
           this.list = response.data.data
       })
     },
-    _confirm_del: function(index) {
+    confirmDel(id) {
       this.confirm_del = true;
-      this.index = index;
+      this.id = id;
     },
-    _publish: function(index) {
-      let data = {};
-      data.index = index;
-      data.id = this.items[index].id;
-      data.publish = this.items[index].published==0?1:0;
-      //console.log(data.publish);
-      this.publish(data);
+    publish(id) {
+      const data = { id }
+      changePublish(data).then(response => {
+        for(const v of this.list) {
+          if(v.a_id == id) {
+            this.list.published = response.data.data.published
+            break;
+          }
+        }
+      })
     },
     stopProp: function(e) {
       e = e || event;
       e.stopPropagation();
     },
     //删除该文章
-    _delArticle: function() {
+    delArticle() {
       this.confirm_del = false;
-      let index = this.index;
-      let id = this.items[index].id;
-      let obj = {};
-      obj.id = id;
-      obj.index = index;
-      this.delArticle(obj);
+      const data = { id: this.id };
+      delArticle(data).then(response => {
+        for(const v of this.list) {
+          if(v.a_id == this.id) {
+            const index = this.list.indexOf(v)
+            this.list.splice(index,1)
+            break;
+          }
+        }
+      })
 
     },
     //获取要编辑文章的内容
-    _getOneArticle: function(e) {
-        let id = this.items[e].id;
-        this.getOneArticle(id);
+    getOneArticle(id) {
+        this.$router.push({name:'write',params:{id}});
     },
-    ...mapActions(["delArticle","getOneArticle","publish"]),
-
-  },
-  computed:{
-    ...mapState(["items","status"])
   },
   created:function() {
    this.getList();
@@ -109,8 +109,6 @@ export default {
   },
   mounted:function() {
 
-     // this.$store.dispatch('getList');
-    //console.log(this.$store);
   }
 }
 </script>

@@ -81,8 +81,8 @@
       }
     },
     created:function() {
-      let ID = this.$route.params.id
-      this.getOne(ID)
+      const id = this.$route.params.id
+      this.getOne(id)
     }
   }
 </script>
