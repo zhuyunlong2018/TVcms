@@ -31,7 +31,7 @@ class Article extends BaseController
         if($article) {
             return new Response(['data'=>$article]);
         } else {
-            throw new ResourcesException(['msg'=>找不到对应文章]);
+            throw new ResourcesException(['msg'=>'找不到对应文章']);
         }
     }
 

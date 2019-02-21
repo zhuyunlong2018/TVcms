@@ -4,16 +4,16 @@
       <h3>关注边泉</h3>
       <div class="content">
         <ul class="icon">
-          <li @mouseover="show_text" class="collect">
+          <li @mouseover="showText" class="collect">
             <i class="glyphicon glyphicon-star-empty"></i>
           </li>
-          <li @mouseover="show_text" class="email">
+          <li @mouseover="showText" class="email">
             <i class="glyphicon glyphicon-envelope"></i>
           </li>
-          <li @mouseover="show_text" @click="$router.push('/msgborder')" class="message">
+          <li @mouseover="showText" @click="$router.push('/msgborder')" class="message">
             <i class="glyphicon glyphicon-comment"></i>
           </li>
-          <li @mouseover="show_text" @click="addPraise(0)" class="praise">
+          <li @mouseover="showText" @click="addArticlePraise(0)" class="praise">
             <i class="glyphicon glyphicon-thumbs-up"></i>
           </li>
         </ul>
@@ -139,7 +139,14 @@ export default {
             this.neighbors = response.data.data
         })
     },
-    show_text: function(e) {
+    addArticlePraise(id) {
+        this.addPraise(id).then(() => {
+          this.webdata.praise_num++
+          const e = {target:{className:'glyphicon glyphicon-thumbs-up'}}
+          this.showText(e)
+        })
+    },
+    showText(e) {
       let element = e.target.className;
       switch (element) {
         case "glyphicon glyphicon-star-empty":

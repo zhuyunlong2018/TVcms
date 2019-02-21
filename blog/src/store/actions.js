@@ -2,8 +2,7 @@ import axios from 'axios'
 import router from '../routes.js'
 import { getStorage, setStorage, rermoveStorage } from '@/utils/storage'
 import { get as getWebData, addPraise } from '@/api/webData'
-import { resolve } from 'upath';
-import { rejects } from 'assert';
+
 
 
 const common = require('./common');
@@ -43,7 +42,6 @@ const actions = {
         })
       }
     })
-    
   },
 
 
@@ -52,110 +50,6 @@ const actions = {
 
 
 
-
- //添加文章
- addArticle:function({commit,state}){
-   if(!(state.title && state.content &&state.article_background)) {
-     commit('SHOW_ALERT','请确保信息完整');
-     return;
-   }
-   let content = state.content;
-   let params = {
-     'act':'add',
-     'name':state.commenter,
-     'title':state.title,
-     'content':content,
-     'tag':state.tag,
-     'time':common.getTime(),
-     'article_background':state.article_background
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     //console.log(res);
-     if(res.data.result) {
-       router.push('/admin/editor');
-       commit('UPDATEARTICLE');
-     }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
-
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
- //删除选中文章
- delArticle:function({commit,state},obj){
-   //console.log(obj);
-   let params = {
-     'act':'del',
-     'id':obj.id
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     if(res.data.result) {
-       commit('DELARTICLE',obj.index);
-     }
-     if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足,无法删除文章');
-     }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
-
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
- 
- //更新选中的文章内容
- updateArticle:function({commit,state}){
-  // console.log(state.id);
-  if(!(state.title && state.content &&state.article_background)) {
-     commit('SHOW_ALERT','请确保信息完整');
-     return;
-   }
-   let content = state.content;
-   let params = {
-     'act':'update',
-     'title':state.title,
-     'content':content,
-     'tag':state.tag,
-     'id':state.id,
-     'article_background':state.article_background
-   }
-   _axios(params).then(function (res) {
-     //console.log('成功了');
-     if(res.data.result) {
-       router.push('/admin/editor');
-       commit('UPDATEARTICLE');
-     }
-     if(res.data.error == 1) {
-       commit('SHOW_ALERT','权限不足');
-    }
-     if(!res.data.login) {
-       router.push('/');
-       commit('change');
-       commit('SHOW_ALERT','登录超时，请重新登录');
-       commit('logout');
-     }
-
-   })
-     .catch(function (err) {
-       console.log(err);
-       console.log('失败了');
-     });
- },
    //获取所有图片地址
  get_all_imgs:function({commit,state}) {
    let params = {

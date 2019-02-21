@@ -175,7 +175,7 @@ export default {
       let url = this.imgs_url[index];
       this.set_background(url);
     },
-    fileImage: function(e) {
+    fileImage(e) {
       let _this = this;
       let file = e.target.files;
       // console.log(file[0].name);
@@ -270,7 +270,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["all_images", "article_background", "URL"]),
+    ...mapState(["all_images", "URL"]),
     ...mapGetters(["user"])
   },
   mounted() {
