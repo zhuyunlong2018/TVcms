@@ -9,7 +9,7 @@
           <a @click="showArticle(item.a_id)" href="javascript:scroll(0,0)">
             <h3 class="title">{{item.a_title}}</h3>
           </a>
-          <p class="summary" v-html="item.a_content" v-highlight ></p>
+          <p class="summary" v-html="item.outline" v-highlight ></p>
           <ul class="tag">
             <li  @click="getListByTag(item.tag_id,item.tag.tag_name)"><i class="glyphicon glyphicon-tag" ></i>{{item.tag.tag_name}}</li>
             <li><i class="glyphicon glyphicon-pencil" ></i>{{item.user.user_name}}</li>

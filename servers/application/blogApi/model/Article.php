@@ -23,11 +23,12 @@ class Article extends BaseModel
         return $this->belongsTo('tags','tag_id','tag_id');
     }
     public static function getListByPage($condition,$order,$page, $limit){
-        $pagingData = self::with(['tag','user'=>function($query) {
-            $query->field('user_id,user_name');
-            }])
-            ->where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
-        return $pagingData ;
+        return self::with(['tag','user'=>function($query) {
+                    $query->field('user_id,user_name');
+                }])
+                ->field('a_content',true)
+                ->where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
+
     }
 
     public static function getOne($condition) {

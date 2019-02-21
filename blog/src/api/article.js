@@ -42,7 +42,23 @@ export function changePublish(data) {
 
 export function delArticle(data) {
   return request({
-    url: '/blogApi/article/delArticle',
+    url: '/blogApi/article/del',
+    method: 'post',
+    data
+  })
+}
+
+export function addArticle(data) {
+  return request({
+    url: '/blogApi/article/add',
+    method: 'post',
+    data
+  })
+}
+
+export function updateArticle(data) {
+  return request({
+    url: '/blogApi/article/update',
     method: 'post',
     data
   })

@@ -72,7 +72,7 @@ class Article extends BaseController
         return new Response(['data'=>$article->published]);
     }
 
-    public function delArticle($id) {
+    public function del($id) {
         $article = ArticleModel::get($id);
         if(empty($article)) {
             throw new ResourcesException();
@@ -82,6 +82,40 @@ class Article extends BaseController
             throw new AuthException();
         }
         $article->delete();
+        return new Response();
+    }
+
+    public function add($a_title,$outline,$a_content,$a_img,$tag_id) {
+        $user = Token::getUser();
+        $article = ArticleModel::create([
+            'a_title' =>$a_title,
+            'a_content' =>$a_content,
+            'outline' => $outline,
+            'a_img' => $a_img,
+            'tag_id' => $tag_id,
+            'user_id' =>$user['userID']
+        ]);
+        if(!$article) {
+            throw new ResourcesException();
+        }
+        return new Response();
+    }
+
+    public function update($a_id,$a_title,$outline,$a_content,$a_img,$tag_id) {
+        $article = ArticleModel::get($a_id);
+        if(empty($article)) {
+            throw new ResourcesException();
+        }
+        $user = Token::getUser();
+        if($article->user_id != $user['userID']) {
+            throw new AuthException();
+        }
+        $article->a_title = $a_title;
+        $article->a_content = $a_content;
+        $article->outline = $outline;
+        $article->a_img = $a_img;
+        $article->tag_id = $tag_id;
+        $article->save();
         return new Response();
     }
 

@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function info(query) {
+export function getData(query) {
   return request({
-    url: '/mock/home',
+    url: '/adminApi/web_data/getData',
     method: 'get',
     params: query
   })

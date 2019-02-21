@@ -39,8 +39,8 @@
       data(){
         return {
           loginForm: {
-            email: '',
-            password: '',
+            email: '920200256@qq.com',
+            password: '123456',
             name: ''
           },
           c_userPwd: '',

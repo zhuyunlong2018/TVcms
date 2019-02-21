@@ -1,7 +1,7 @@
 <template>
   <div class="user-center">
     <div class="background"></div>
-    <div class="icon"><img src="../../../static/imgs/1.jpg" alt=""></div>
+    <div class="icon"><img src="" alt=""></div>
     <div class="content">
       <p class="name"  >
       <span>{{commenter}}</span>
@@ -40,7 +40,7 @@
     -o-filter: blur(15px);
     -ms-filter: blur(15px);
     filter: blur(15px);
-    background: url('../../../static/imgs/1.jpg') no-repeat fixed ;
+    /* background: url('../../../static/imgs/1.jpg') no-repeat fixed ; */
     background-size: cover;
   }
   .icon {

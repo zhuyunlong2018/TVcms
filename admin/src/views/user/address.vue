@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import { listAddress } from '@/api/user'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -67,15 +66,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      listAddress(this.listQuery).then(response => {
-        this.list = response.data.data.items
-        this.total = response.data.data.total
-        this.listLoading = false
-      }).catch(() => {
-        this.list = []
-        this.total = 0
-        this.listLoading = false
-      })
+
     },
     handleFilter() {
       this.listQuery.page = 1

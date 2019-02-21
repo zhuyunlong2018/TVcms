@@ -1,11 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
-
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
           <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+            <svg-icon icon-class="peoples" class-name="card-panel-icon"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">用户数量</div>
@@ -16,33 +15,48 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('messages')">
           <div class="card-panel-icon-wrapper icon-message">
-            <svg-icon icon-class="message" class-name="card-panel-icon" />
+            <svg-icon icon-class="message" class-name="card-panel-icon"/>
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">商品数量</div>
-            <count-to :start-val="0" :end-val="goodsTotal" :duration="3000" class="card-panel-num"/>
+            <div class="card-panel-text">文章数量</div>
+            <count-to
+              :start-val="0"
+              :end-val="articleTotal"
+              :duration="3000"
+              class="card-panel-num"
+            />
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon icon-class="message" class-name="card-panel-icon" />
+            <svg-icon icon-class="message" class-name="card-panel-icon"/>
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">货品数量</div>
-            <count-to :start-val="0" :end-val="productTotal" :duration="3200" class="card-panel-num"/>
+            <div class="card-panel-text">评论数量</div>
+            <count-to
+              :start-val="0"
+              :end-val="commentTotal"
+              :duration="3200"
+              class="card-panel-num"
+            />
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('shoppings')">
           <div class="card-panel-icon-wrapper icon-shoppingCard">
-            <svg-icon icon-class="money" class-name="card-panel-icon" />
+            <svg-icon icon-class="money" class-name="card-panel-icon"/>
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">订单数量</div>
-            <count-to :start-val="0" :end-val="orderTotal" :duration="3600" class="card-panel-num"/>
+            <div class="card-panel-text">点赞数量</div>
+            <count-to
+              :start-val="0"
+              :end-val="praiseTotal"
+              :duration="3600"
+              class="card-panel-num"
+            />
           </div>
         </div>
       </el-col>
@@ -51,8 +65,8 @@
 </template>
 
 <script>
-import { info } from '@/api/dashboard'
-import CountTo from 'vue-count-to'
+import { getData } from "@/api/dashboard";
+import CountTo from "vue-count-to";
 
 export default {
   components: {
@@ -61,25 +75,29 @@ export default {
   data() {
     return {
       userTotal: 0,
-      goodsTotal: 0,
-      productTotal: 0,
-      orderTotal: 0
-    }
-  },
-  created() {
-    info(this.listQuery).then(response => {
-      this.userTotal = response.data.userTotal
-      this.goodsTotal = response.data.goodsTotal
-      this.productTotal = response.data.productTotal
-      this.orderTotal = response.data.orderTotal
-    })
+      articleTotal: 0,
+      commentTotal: 0,
+      praiseTotal: 0
+    };
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit("handleSetLineChartData", type);
+    },
+    getData() {
+      getData("").then(response => {
+        const data = response.data.data;
+        this.userTotal = data.user_num;
+        this.articleTotal = data.article_num;
+        this.commentTotal = data.comment_num;
+        this.praiseTotal = data.praise_num;
+      });
     }
+  },
+  created() {
+    this.getData();
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -96,7 +114,7 @@ export default {
 .panel-group {
   margin-top: 18px;
 
-  .card-panel-col{
+  .card-panel-col {
     margin-bottom: 32px;
   }
   .card-panel {
@@ -107,14 +125,14 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;
       }
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
       .icon-message {
         background: #36a3f7;
@@ -123,7 +141,7 @@ export default {
         background: #f4516c;
       }
       .icon-shoppingCard {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
     .icon-people {
@@ -136,7 +154,7 @@ export default {
       color: #f4516c;
     }
     .icon-shoppingCard {
-      color: #34bfa3
+      color: #34bfa3;
     }
     .card-panel-icon-wrapper {
       float: left;

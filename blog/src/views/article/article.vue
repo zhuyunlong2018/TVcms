@@ -23,7 +23,7 @@
       </ul>
       <div class="content" v-html="article.a_content"></div>
       <p class="praise" >
-        <i class="glyphicon glyphicon-thumbs-up" @click="addPraise(article.a_id)" ></i>
+        <i class="glyphicon glyphicon-thumbs-up" @click="addArticlePraise(article.a_id)" ></i>
       </p>
       <p class="praise" ><span>累计获得{{article.praise_num}}个赞</span></p>
       <comment :articleID='article.a_id'></comment>
@@ -77,6 +77,11 @@
           this.CHANGE_CRUMBS(obj)
         }).catch(error => {
             this.SHOW_ALERT(error.response.data.msg)
+        })
+      },
+      addArticlePraise(id) {
+        this.addPraise(id).then(() => {
+          this.article.praise_num++
         })
       }
     },

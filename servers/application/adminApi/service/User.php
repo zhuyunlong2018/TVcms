@@ -9,6 +9,7 @@
 
 namespace app\adminApi\service;
 
+use app\adminApi\model\WebData;
 use app\lib\exception\LoginException;
 use app\adminApi\model\User as UserModel;
 
@@ -55,10 +56,10 @@ class User
         if ($checkEmail) throw new LoginException(['msg'=>'邮箱已被注册']);
         $checkName = UserModel::getByName($name);
         if ($checkName) throw new LoginException(['msg'=>'用户名已被使用']);
-        $tokenKey = getRandChar(32);
         $passwordSalt = getRandChar(32);
         $password = self::generatePassword($password,$passwordSalt);
-        $result = UserModel::registerByEmail($name,$email,$password,$passwordSalt,$tokenKey);
+        $result = UserModel::registerByEmail($name,$email,$password,$passwordSalt);
+        WebData::get(1)->setInc('user_num');
         return $result;
     }
 

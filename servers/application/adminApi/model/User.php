@@ -32,13 +32,12 @@ class User extends BaseModel
         $user = self::where('user_email', '=', $email)->find();
         return $user;
     }
-    public static function registerByEmail($name,$email,$password,$passwordSalt,$tokenKey) {
+    public static function registerByEmail($name,$email,$password,$passwordSalt) {
         return self::create([
             'user_name'=>$name,
             'user_email'=>$email,
             'user_pwd'=>$password,
             'user_pwd_salt'=>$passwordSalt,
-            'user_token_key'=>$tokenKey,
             'create_time'=>time()
         ]);
     }
