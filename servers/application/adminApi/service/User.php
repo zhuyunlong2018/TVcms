@@ -42,7 +42,7 @@ class User
         }elseif(!self::checkPassword($user,$password)) {
             throw new LoginException(['msg'=>'用户密码错误','errorCode'=>10002]);
         } else {
-            $token = Token::generateToken($user['user_id'],$user['user_email'],$user['user_name']);
+            $token = Token::generateToken($user);
             $userData = [
                 'user'=>$user,
                 'token'=>$token,

@@ -9,6 +9,7 @@
 namespace app\lib;
 
 
+use app\adminApi\service\Token;
 use think\Request;
 
 class Protect
@@ -20,7 +21,8 @@ class Protect
      */
     public static function IpAndSidCount() {
         $request = Request::instance();
-        $id = $_SESSION['member_id'];
+        $user = Token::getUser();
+        $id = $user['user_id'];
         $ip = $request->ip();
         $key = $id.DS.$ip;
         $count = Redis::init()->incr($key);

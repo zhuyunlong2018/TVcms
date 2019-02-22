@@ -11,6 +11,7 @@ namespace app\adminApi\model;
 
 
 use app\common\model\BaseModel;
+use think\Cache;
 
 class Api extends BaseModel
 {
@@ -30,7 +31,9 @@ class Api extends BaseModel
     }
 
     public static function getApi() {
-        return self::cache('api')->field('api_path')->select();
+        $result =  self::field('api_path')->select();
+        Cache::set('api',$result);
+        return $result;
     }
 
     public static function getByType($type) {
@@ -38,7 +41,9 @@ class Api extends BaseModel
         if(!empty($type) || $type === 0) {
             $condition = ['api_type'=>$type];
         }
-        return self::cache('api'.$type)->where($condition)->field('api_path')->select();
+        $result = self::where($condition)->field('api_path')->select();
+        Cache::set('api'.$type,$result);
+        return $result;
     }
 
 }

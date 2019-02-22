@@ -10,6 +10,8 @@ namespace app\api\controller;
 
 
 use app\common\controller\BaseController;
+use app\lib\exception\ParameterException;
+use app\lib\exception\ResourcesException;
 use app\lib\Protect;
 use app\lib\Redis;
 use app\lib\Response;
@@ -27,20 +29,44 @@ class Uploads extends BaseController
     {
         parent::__construct($request);
         $this->path = config('path.temporary');
+        $this->notification = config('redisNotification.uploadUnbound');
     }
 
     /**
      *上传一张图片
      */
-    public function imageBase64()
+    public function temporaryBase64($imgs)
     {
         Protect::IpAndSidCount();
-        $img = (input('image'));
-        $save = UploadsLib::saveBase64($img,$this->path);
-        if($save){
-            //保存成功，设置24小时未绑定过期未处理删除
-            Redis::init(2)->setex($this->notification.$save,$this->expire,'expired');
-            return new Response(['msg'=>'上传成功，请在10分钟内绑定图片，过期将删除','data'=>$save]);
+        if(!is_array($imgs) || empty($imgs)) {
+            throw new ParameterException();
+        }
+        $data = [];
+        foreach ($imgs as $img) {
+            $save = UploadsLib::saveBase64($img,$this->path);
+            if($save){
+                //保存成功，设置24小时未绑定过期未处理删除
+                Redis::init(2)->setex($this->notification.$save,$this->expire,'expired');
+                $data[] = $save;
+            } else {
+                throw new ParameterException();
+            }
+        }
+        return new Response(['msg'=>'上传成功，请在10分钟内绑定图片，过期将删除','data'=>$data]);
+    }
+
+    public function determineBase64($imgs,$path) {
+        if(!is_array($imgs) || empty($imgs)) {
+            throw new ParameterException();
+        }
+        $data = [];
+        foreach ($imgs as $img) {
+            $save = UploadsLib::saveBase64($img,$path);
+            if($save){
+                $data[] = $save;
+            } else {
+                throw new ParameterException();
+            }
         }
     }
 

@@ -87,5 +87,9 @@ class Index extends BaseController
        dump(BASE_SITE_URL);
     }
 
+    public function clearCache() {
+        Cache::clear();
+    }
+
 
 }

@@ -46,7 +46,7 @@ class Article extends BaseController
     public function getTitleList() {
         $user = Token::getUser();
         $condition = [
-            'user_id' => $user['userID'],
+            'user_id' => $user['user_id'],
             'status' => 1
         ];
         $field = 'a_id,a_title,published,create_time';
@@ -60,7 +60,7 @@ class Article extends BaseController
             throw new ResourcesException();
         }
         $user = Token::getUser();
-        if($article->user_id != $user['userID']) {
+        if($article->user_id != $user['user_id']) {
             throw new AuthException();
         }
         if($article->published) {
@@ -78,7 +78,7 @@ class Article extends BaseController
             throw new ResourcesException();
         }
         $user = Token::getUser();
-        if($article->user_id != $user['userID']) {
+        if($article->user_id != $user['user_id']) {
             throw new AuthException();
         }
         $article->delete();
@@ -93,7 +93,7 @@ class Article extends BaseController
             'outline' => $outline,
             'a_img' => $a_img,
             'tag_id' => $tag_id,
-            'user_id' =>$user['userID']
+            'user_id' =>$user['user_id']
         ]);
         if(!$article) {
             throw new ResourcesException();
@@ -107,7 +107,7 @@ class Article extends BaseController
             throw new ResourcesException();
         }
         $user = Token::getUser();
-        if($article->user_id != $user['userID']) {
+        if($article->user_id != $user['user_id']) {
             throw new AuthException();
         }
         $article->a_title = $a_title;

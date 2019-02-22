@@ -19,7 +19,7 @@ use think\Request;
 class Token
 {
     // 生成令牌
-    public static function generateToken($userID,$userEmail,$userName)
+    public static function generateToken($user)
     {
         $nowTime = time();
         $tokenMsg = [
@@ -29,13 +29,13 @@ class Token
             'nbf' => $nowTime + config('token.nbf'), //在什么时间之后该jwt才可用
             'exp' => $nowTime + config('token.exp'), //过期时间
             'data' => [
-                'userID' => $userID,
-                'userEmail' => $userEmail,
-                'userName' => $userName
+                'userID' => $user->user_id,
+                'userEmail' => $user->user_email,
+                'userName' => $user->user_name
             ]
         ];
         $token = JWT::encode($tokenMsg, config('token.key'));
-        Cache::set($token,$tokenMsg['data'],config('token.exp'));
+        Cache::set($token,$user,config('token.exp'));
         return $token;
     }
 
@@ -98,7 +98,7 @@ class Token
         $user = Cache::get($token);
         if($user) {
             Cache::rm($token);
-            Admin::removeAdmin($user['userID']);
+            Admin::removeAdmin($user['user_id']);
         }
     }
 

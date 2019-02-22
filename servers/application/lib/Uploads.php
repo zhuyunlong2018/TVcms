@@ -22,7 +22,7 @@ class Uploads
      * @return string
      */
     public static function getHttpPath($path) {
-        return UPLOAD_SITE_URL.DS.$path;
+        return UPLOAD_SITE_URL.DS.$path.DS;
     }
 
 
@@ -32,7 +32,7 @@ class Uploads
      * @return string
      */
     public static function getRootUpload($path) {
-        return ROOT_PATH.'public'.DS.'uploads'.DS.$path;
+        return ROOT_PATH.'public'.DS.'uploads'.DS.$path.DS;
     }
 
 
@@ -48,7 +48,7 @@ class Uploads
                 self::directory($path);
             }
             $fileName = time().getRandChar(5).".{$type}";
-            $new_file = $path.DS.$fileName;
+            $new_file = $path.$fileName;
             if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64_image_content)))){
                 return $fileName;
             }else{
@@ -88,5 +88,34 @@ class Uploads
         }else{
             return false;
         }
+    }
+
+    /*
+    * 删除图片
+    */
+    public static function unlink($fileName,$path) {
+        $path = self::getRootUpload($path);
+        new WriteLog($fileName.'---'.$path);
+        @unlink( $path.$fileName);
+    }
+
+    /**
+     *移动图片/文件
+     */
+    public static function moveFile($from, $to,$fileName) {
+        $from = self::getRootUpload($from).$fileName;
+        $to = self::getRootUpload($to);
+        if (!file_exists($from)) {
+            return false;
+        }
+        if (file_exists($to.$fileName)) {
+            return false;
+        } else {
+            //检查是否有该文件夹，如果没有就创建，并给予最高权限
+            self::directory($to);
+        }
+        dump($from);
+        dump($to);
+        return rename($from, $to.$fileName);
     }
 }

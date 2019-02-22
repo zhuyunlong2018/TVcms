@@ -39,7 +39,7 @@ class Menu extends BaseController
     public function getRouter() {
         //获取路由，1、根据用户角色生成menu_id的集合
         $user = Token::getUser();
-        $admin = AdminService::getAdmin($user['userID']);
+        $admin = AdminService::getAdmin($user['user_id']);
         $menus = [];
         foreach ($admin['roles'] as $role) {
             $roleMenus = Role::getRoleMenu($role['role_id']);

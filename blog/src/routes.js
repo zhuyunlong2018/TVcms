@@ -127,6 +127,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       store.commit("SHOW_LOGIN_BOX");
+      store.dispatch('logOut')
       next({
         path: from.fullPath,
         query: {redirect: from.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由

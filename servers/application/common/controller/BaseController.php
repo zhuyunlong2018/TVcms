@@ -13,6 +13,7 @@ namespace app\common\controller;
 use app\adminApi\model\Api;
 use app\adminApi\service\Token;
 use app\lib\exception\AuthException;
+use app\lib\exception\UnknownException;
 use app\lib\Response;
 use think\Cache;
 use think\Controller;
@@ -39,9 +40,14 @@ class BaseController extends Controller
             'api_path' => strtolower($module.'/'.$controller.'/'.$action)
         ];
         $allApi = $this->getApiByType('');
-        if(in_array($api,$allApi)) {
-            $this->checkAuth($api,$request);
+        try{
+            if(in_array($api,$allApi)) {
+                $this->checkAuth($api,$request);
+            }
+        }catch (\Exception $e) {
+            throw new UnknownException(['msg'=>[$api,$allApi]]);
         }
+
     }
 
     protected function checkAuth($api,$request) {
@@ -49,7 +55,6 @@ class BaseController extends Controller
         $allowedNoAuth = $this->getApiByType(2);
         $allowedAuth = $this->getApiByType(3);
         $checkAllowedAuth = in_array($api, $allowedAuth);
-//        throw new AuthException(['msg'=>[ $unRegisterApi]]);
 
         if(in_array($api, $allowedNoAuth) || $checkAllowedAuth) {
             $token = $request->header('X-Api-Token');

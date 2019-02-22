@@ -5,7 +5,6 @@ import { get as getWebData, addPraise } from '@/api/webData'
 
 
 
-const common = require('./common');
 
 const _axios= params => {
   return axios({
@@ -121,7 +120,7 @@ const actions = {
     },
 //新增友情链接
   add_neighbors: function({commit,state},obj) {
-    let time = common.getTime();
+    // let time = common.getTime();
     let params = {
       'act':'add_neighbors',
       'nb_name':obj.name,
