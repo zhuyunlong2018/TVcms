@@ -43,6 +43,7 @@
     
 2. 配置数据库：
     * 后端数据库参考TP5填写参数
+    * 将servers/application下的copy_config.php和copy_database.php重命名为config.php和database.php
     * 将TVcms.sql文件导入自己的数据库中
 
 
@@ -58,7 +59,7 @@
     命令行返回项目根目录
     ```bash
 	cd admin
-    npm install//按照不成功可以用cnpm install
+    npm install//安装不成功可以用cnpm install
     npm run dev
     ```
     blog模块相同

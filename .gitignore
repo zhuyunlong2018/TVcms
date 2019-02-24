@@ -2,7 +2,7 @@
 servers/runtime/*
 servers/public/static/*
 servers/public/uploads/*
-!servers/public/uploads/default/*
+!servers/public/uploads/default
 servers/application/database.php
 servers/application/config.php
 npm-debug.log
