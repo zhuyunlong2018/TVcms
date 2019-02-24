@@ -41,9 +41,7 @@ class Api extends BaseModel
         if(!empty($type) || $type === 0) {
             $condition = ['api_type'=>$type];
         }
-        $result = self::where($condition)->field('api_path')->select();
-        Cache::set('api'.$type,$result);
-        return $result;
+        return self::where($condition)->field('api_path')->select();
     }
 
 }

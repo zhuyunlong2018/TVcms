@@ -43,9 +43,7 @@ class User extends BaseController
         $page = input('page');
         $limit = input('limit');
         $list = UserModel::getListByPage($condition,$order,$page, $limit);
-        $data = ['items' => $list,
-                'total' =>$list->total()];
-        return json($data);
+        return new Response(['data'=>$list]);
     }
 
     /**
@@ -69,6 +67,14 @@ class User extends BaseController
                 throw new ParameterException(['msg'=>'type类型错误！']);
         }
     }
-
+    public function changeStatus($id,$status) {
+        $user = UserModel::get($id);
+        if(empty($user)) {
+            throw new ResourcesException();
+        }
+        $user->user_status = $status;
+        $user->save();
+        return new Response();
+    }
 
 }

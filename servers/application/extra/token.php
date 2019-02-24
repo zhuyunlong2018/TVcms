@@ -21,6 +21,7 @@ return [
     'nbf' =>  10,
 
      //过期时间4h
+//    'exp' =>  600,
     'exp' =>  14400,
 
    //leeway in seconds

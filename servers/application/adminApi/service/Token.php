@@ -18,7 +18,25 @@ use think\Request;
 
 class Token
 {
-    // 生成令牌
+    private static $token = null;
+
+    /**
+     *token初始化
+     */
+    public static function init() {
+        if(!self::$token) {
+            self::$token = Request::instance()->header('X-Api-Token');
+        }
+        return self::$token;
+    }
+
+
+
+    /**
+     * 生成令牌
+     * @param $user
+     * @return null|string
+     */
     public static function generateToken($user)
     {
         $nowTime = time();
@@ -34,70 +52,47 @@ class Token
                 'userName' => $user->user_name
             ]
         ];
-        $token = JWT::encode($tokenMsg, config('token.key'));
-        Cache::set($token,$user,config('token.exp'));
-        return $token;
+        self::$token = JWT::encode($tokenMsg, config('token.key'));
+        Cache::set(self::$token,$user,config('token.exp'));
+        return self::$token;
     }
 
 
-    /**验证token是否合法或者是否过期
-     * @param $jwt
+    /**
+     * 验证token是否合法或者是否过期
      * @return bool
      * @throws TokenException
      */
-    public static function checkToken($jwt)
+    public static function checkToken()
     {
-        if(empty($jwt)) {
+        self::init();
+        if(empty(self::$token)) {
             throw new TokenException(['msg'=>'Token不存在，请登录']);
         }
         try {
             JWT::$leeway = config('token.leeway');
-            $decoded = JWT::decode($jwt, config('token.key'), array('HS256'));
+            $decoded = JWT::decode(self::$token, config('token.key'), array('HS256'));
             $arr = (array)$decoded;
             if ($arr['exp'] < time()) {
-                self::removeToken($jwt);
+                self::removeToken();
                 throw new TokenException(['msg'=>'登录已失效，请重新登录']);
             } else {
                 return $arr['data'];
             }
         } catch(RuntimeException $e) {
-            self::removeToken($jwt);
+            self::removeToken();
             throw new TokenException(['msg'=>$e->getMessage()]);
         }
     }
 
-    public static function checkAuth($userID,$api) {
-        //获取user对应admin的role权限
-        $auth = false;
-        $admin = Admin::getAdmin($userID);
-        foreach ($admin['roles'] as $role) {
-            $roleApi = Role::getRoleApi($role['role_id']);
-            if(in_array($api,$roleApi)) {
-                $auth = true;
-                break;
-            }
-        }
-//        throw new RepeatException(['msg'=>[$roleApi,$api]]);
-        return $auth;
-
-    }
-
-    public static function getUser() {
-        $request = Request::instance();
-        $token = $request->header('X-Api-Token');
-        $user = Cache::get($token);
-        if(!$user) {
-           throw new TokenException();
-        }
-        return $user;
-    }
-
+    /**
+     *移除缓存中的token关联的用户、管理员信息
+     */
     public static function removeToken() {
-        $request = Request::instance();
-        $token = $request->header('X-Api-Token');
-        $user = Cache::get($token);
+        self::init();
+        $user = Cache::get(self::$token);
         if($user) {
-            Cache::rm($token);
+            Cache::rm(self::$token);
             Admin::removeAdmin($user['user_id']);
         }
     }

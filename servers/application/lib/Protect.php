@@ -10,6 +10,7 @@ namespace app\lib;
 
 
 use app\adminApi\service\Token;
+use app\adminApi\service\User;
 use think\Request;
 
 class Protect
@@ -21,7 +22,7 @@ class Protect
      */
     public static function IpAndSidCount() {
         $request = Request::instance();
-        $user = Token::getUser();
+        $user = User::init();
         $id = $user['user_id'];
         $ip = $request->ip();
         $key = $id.DS.$ip;

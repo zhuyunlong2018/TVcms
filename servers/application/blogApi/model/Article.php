@@ -22,13 +22,30 @@ class Article extends BaseModel
     public function tag() {
         return $this->belongsTo('tags','tag_id','tag_id');
     }
+
+    public function imagesSource() {
+        return $this->hasMany('ImagesSource','table_id','a_id')
+            ->where('table_name','article');
+    }
+
+
     public static function getListByPage($condition,$order,$page, $limit){
         return self::with(['tag','user'=>function($query) {
                     $query->field('user_id,user_name');
                 }])
                 ->field('a_content',true)
                 ->where($condition)->order($order)->paginate($limit, false, ['page' => $page]);
+    }
 
+    public static function getTitleListByPage($condition,$page,$limit,$order) {
+        return self::alias('a')
+            ->join('user u','a.user_id=u.user_id')
+            ->join('tags t','a.tag_id=t.tag_id')
+            ->where($condition)
+            ->order($order)
+            ->field('a_id,a_title,a.create_time,status,user_name,tag_name')
+//            ->fetchSql()
+            ->paginate($limit,false,['page'=>$page]);
     }
 
     public static function getOne($condition) {

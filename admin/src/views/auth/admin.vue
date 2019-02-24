@@ -137,7 +137,6 @@
 import { listAdmin, createAdmin, updateAdmin, deleteAdmin } from '@/api/admin'
 import { findRole } from '@/api/role'
 import { findUser } from '@/api/user'
-import { uploadPath } from '@/api/storage'
 import { getToken } from '@/utils/auth'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { deepClone } from '@/utils'
@@ -147,7 +146,6 @@ export default {
   components: { Pagination },
   data() {
     return {
-      uploadPath,
       list: null,
       total: 0,
       listLoading: true,

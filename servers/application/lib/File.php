@@ -11,45 +11,54 @@ namespace app\lib;
 
 /**
  * 上传类
- * Class Uploads
+ * Class File
  * @package app\lib
  */
-class Uploads
+class File
 {
+    protected static $file = null;
+
+    public static function inti($file) {
+        if(!self::$file) {
+            self::$file = self::getRootUpload($file);
+        }
+    }
+
     /**
      * 获取上传的网站路劲
-     * @param $path
+     * @param $file
      * @return string
      */
-    public static function getHttpPath($path) {
-        return UPLOAD_SITE_URL.DS.$path.DS;
+    public static function getHttpPath($file) {
+        return UPLOAD_SITE_URL.DS.$file;
     }
 
 
     /**
      * 获取上传的绝对目录
-     * @param $path
+     * @param $file
      * @return string
      */
-    public static function getRootUpload($path) {
-        return ROOT_PATH.'public'.DS.'uploads'.DS.$path.DS;
+    public static function getRootUpload($file) {
+        return ROOT_PATH.'public'.DS.'uploads'.DS.$file;
     }
 
 
     /**
      * [将Base64图片转换为本地图片并保存]
      */
-    public static function saveBase64($base64_image_content,$path){
+    public static function saveBase64($base64, $file){
+        self::inti($file);
         //匹配出图片的格式
-        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)){
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64, $result)){
             $type = $result[2];
-            if(!file_exists($path)){
+            if(!file_exists(self::$file)){
                 //检查是否有该文件夹，如果没有就创建，并给予最高权限
-                self::directory($path);
+                self::directory(self::$file);
             }
             $fileName = time().getRandChar(5).".{$type}";
-            $new_file = $path.$fileName;
-            if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64_image_content)))){
+            $new_file = self::$file.DS.$fileName;
+            if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64)))){
                 return $fileName;
             }else{
                 return false;

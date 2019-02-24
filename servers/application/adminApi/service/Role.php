@@ -88,9 +88,7 @@ class Role
             }
             $apis = $roleMenu['api'];
             foreach ($apis as $api) {
-                $apiPath = [
-                    'api_path'=>$api['api_path']
-                ];
+                $apiPath = $api['api_path'];
                 if(!in_array($apiPath,$roleApis)) {
                     $roleApis[] = $apiPath;
                 }

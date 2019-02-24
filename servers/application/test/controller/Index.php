@@ -12,8 +12,10 @@ namespace app\test\controller;
 
 use app\adminApi\model\Admin;
 use app\adminApi\model\Api;
+use app\adminApi\service\Images;
 use app\adminApi\service\Role;
 use app\common\controller\BaseController;
+use app\lib\Response;
 use ReflectionClass;
 use ReflectionMethod;
 use think\Cache;
@@ -89,6 +91,28 @@ class Index extends BaseController
 
     public function clearCache() {
         Cache::clear();
+    }
+
+    public function test() {
+
+//       $a = myConfig('path.article',1);
+       $a = config('path.article33');
+       dump($a);
+    }
+
+    public function image() {
+        $images = [
+            '111.jpg',
+            '222.jpg'
+        ];
+        $saveImages = Images::addImages($images,1,'test');
+        $data = [];
+//        foreach ($saveImages as $saveImage) {
+//            $data[] = [
+//                'image_id' => $saveImage['id'],
+//            ];
+//        }
+        return new Response(['data'=>$data]);
     }
 
 

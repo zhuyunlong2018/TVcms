@@ -12,9 +12,24 @@ namespace app\adminApi\service;
 use app\adminApi\model\WebData;
 use app\lib\exception\LoginException;
 use app\adminApi\model\User as UserModel;
+use app\lib\exception\TokenException;
+use think\Cache;
 
 class User
 {
+    protected static $user = null;
+
+    public static function init() {
+        if(!self::$user) {
+            $token = Token::init();
+            self::$user = Cache::get($token);
+            if(!self::$user) {
+                throw new TokenException();
+            }
+        }
+        return self::$user;
+    }
+
     public static function loginByName($username,$password) {
         $user = UserModel::getByName($username);
         if (!$user){

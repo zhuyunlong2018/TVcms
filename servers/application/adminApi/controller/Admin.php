@@ -18,8 +18,6 @@ use app\lib\exception\ParameterException;
 use app\lib\exception\RepeatException;
 use app\lib\exception\ResourcesException;
 use app\lib\Response;
-use think\Cache;
-use think\Request;
 use app\adminApi\model\Admin as AdminModel;
 
 class Admin extends BaseController

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import router from '../routes';
 
 
 // 创建axios实例
@@ -41,6 +42,7 @@ service.interceptors.response.use(
     }
     if(error.response.data.error_code === 10001) {
       store.dispatch('logOut')
+      router.push('/')
     }
     store.state.show_loading = false
     return Promise.reject(error)

@@ -1,16 +1,16 @@
 .DS_Store
-node_modules/
-dist/
-servers/runtime/
+servers/runtime/*
 servers/public/static/*
+servers/public/uploads/*
+!servers/public/uploads/default/*
 servers/application/database.php
 servers/application/config.php
 npm-debug.log
 yarn-error.log
-admin/node_modules/
-blog/node_modules/
-blog/static/
-doc/_book/
+admin/node_modules/*
+blog/node_modules/*
+blog/static/*
+doc/_book/*
 # Editor directories and files
 .idea
 *.suo

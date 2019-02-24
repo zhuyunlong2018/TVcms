@@ -11,7 +11,7 @@ namespace app\common\service;
 
 
 use app\lib\Redis;
-use app\lib\Uploads;
+use app\lib\File;
 use think\Cache;
 
 class RedisSubscribe
@@ -27,7 +27,7 @@ class RedisSubscribe
             $arr = explode('|#|',$msg);
             switch ($arr[0]) {
                 case 'uploadUnboundExpired':
-                    Uploads::unlink($arr[1],config('path.temporary'));
+                    File::unlink($arr[1],config('path.temporary'));
                     break;
                 default:
             }

@@ -21,7 +21,7 @@ define('ALLOW_IMG_EXT','jpg,png,gif,bmp,jpeg');#上传图片后缀
 //获取URL访问的ROOT地址 网站的相对路径
 define('BASE_SITE_ROOT', str_replace('/index.php', '', Request::instance()->root()));
 define('BASE_SITE_URL', Request::instance()->domain() . Request::instance()->root());
-
+define('UPLOAD_SITE_URL',str_replace('/index.php', '', BASE_SITE_URL).'/uploads');
 /**
  * @param string $url post请求地址
  * @param array $params
@@ -100,4 +100,18 @@ function getRandChar($length)
         $str .= $strPol[rand(0, $max)];
     }
     return $str;
+}
+
+function myConfig($config,$slot) {
+    $config = config($config);
+    if(!$config) {
+        return false;
+    }
+    return preg_replace_callback("/placeholder/",
+        function($matches) use ($slot) {
+            return $slot;
+        },
+        $config
+    );
+
 }

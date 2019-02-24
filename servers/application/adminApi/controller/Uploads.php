@@ -6,16 +6,15 @@
  * Time: 10:01
  */
 
-namespace app\api\controller;
+namespace app\adminApi\controller;
 
 
-use app\common\controller\BaseController;
+use app\adminApi\service\User;
 use app\lib\exception\ParameterException;
-use app\lib\exception\ResourcesException;
 use app\lib\Protect;
 use app\lib\Redis;
 use app\lib\Response;
-use app\lib\Uploads as UploadsLib;
+use app\lib\File;
 use think\Request;
 /*
  * 公共上传接口,本类上传为临时上传，过期未绑定将删除资源
@@ -43,7 +42,7 @@ class Uploads extends BaseController
         }
         $data = [];
         foreach ($imgs as $img) {
-            $save = UploadsLib::saveBase64($img,$this->path);
+            $save = File::saveBase64($img,$this->path);
             if($save){
                 //保存成功，设置24小时未绑定过期未处理删除
                 Redis::init(2)->setex($this->notification.$save,$this->expire,'expired');
@@ -59,15 +58,26 @@ class Uploads extends BaseController
         if(!is_array($imgs) || empty($imgs)) {
             throw new ParameterException();
         }
-        $data = [];
+        $user = User::init();
+        $file = myConfig('path.'.$path,$user['user_id']);
+        if(!$file) {
+            throw new ParameterException();
+        }
+        $filesName = [];
+        $filesPath = [];
         foreach ($imgs as $img) {
-            $save = UploadsLib::saveBase64($img,$path);
+            $save = File::saveBase64($img,$file);
             if($save){
-                $data[] = $save;
+                $filesName[] = $save;
+                $filesPath[] = File::getHttpPath($file.DS.$save);
             } else {
                 throw new ParameterException();
             }
         }
+        return new Response(['data'=>[
+            'name' => $filesName,
+            'path' => $filesPath
+        ]]);
     }
 
 

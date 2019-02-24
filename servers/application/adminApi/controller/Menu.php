@@ -12,7 +12,7 @@ namespace app\adminApi\controller;
 use app\adminApi\service\Role;
 use app\adminApi\service\Admin as AdminService;
 use app\adminApi\model\MenuApi;
-use app\adminApi\service\Token;
+use app\adminApi\service\User;
 use app\common\validate\PagingParameter;
 use app\lib\exception\RepeatException;
 use app\lib\exception\ResourcesException;
@@ -38,7 +38,7 @@ class Menu extends BaseController
      */
     public function getRouter() {
         //获取路由，1、根据用户角色生成menu_id的集合
-        $user = Token::getUser();
+        $user = User::init();
         $admin = AdminService::getAdmin($user['user_id']);
         $menus = [];
         foreach ($admin['roles'] as $role) {

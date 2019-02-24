@@ -11,6 +11,7 @@ namespace app\common\controller;
 
 
 use app\adminApi\model\Api;
+use app\adminApi\service\Auth;
 use app\adminApi\service\Token;
 use app\lib\exception\AuthException;
 use app\lib\exception\UnknownException;
@@ -36,49 +37,9 @@ class BaseController extends Controller
         if(empty($module)) $module = 'index';
         if(empty($controller)) $controller = 'Index';
         if(empty($action)) $action = 'index';
-        $api = [
-            'api_path' => strtolower($module.'/'.$controller.'/'.$action)
-        ];
-        $allApi = $this->getApiByType('');
-        try{
-            if(in_array($api,$allApi)) {
-                $this->checkAuth($api,$request);
-            }
-        }catch (\Exception $e) {
-            throw new UnknownException(['msg'=>[$api,$allApi]]);
-        }
+        $api = strtolower($module.'/'.$controller.'/'.$action);
 
-    }
-
-    protected function checkAuth($api,$request) {
-        $unRegisterApi = $this->getApiByType(0);
-        $allowedNoAuth = $this->getApiByType(2);
-        $allowedAuth = $this->getApiByType(3);
-        $checkAllowedAuth = in_array($api, $allowedAuth);
-
-        if(in_array($api, $allowedNoAuth) || $checkAllowedAuth) {
-            $token = $request->header('X-Api-Token');
-            $user = Token::checkToken($token);
-            if($checkAllowedAuth) {
-                $userID = $user->userID;
-                $auth = Token::checkAuth($userID,$api);
-                if(!$auth) {
-                    throw new AuthException(['msg'=>'访问越权，请查看用户权限']);
-                }
-            }
-        }
-        if(in_array($api,$unRegisterApi)) {
-            throw new AuthException(['msg'=>'权限错误：访问API未注册']);
-        }
-    }
-
-    protected function getApiByType($type) {
-        $api = Cache::get('api'.$type);
-        if(!$api) {
-            $api = Api::getByType($type);
-//            $api = Cache::get('api'.$type);
-        }
-        return $api;
+        Auth::init($api);
     }
 
 

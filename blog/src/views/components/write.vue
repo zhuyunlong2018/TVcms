@@ -46,8 +46,8 @@
         <div class="file f-r">
           <div class="imgBox">
             <div class="imgContainer background-box">
-              <img v-show="article_background" :src="article.a_img" alt>
-              <p v-show="!article_background" class="background-notice">暂无封面</p>
+              <img v-show="article.a_img" :src="article.a_img">
+              <p v-show="!article.a_img" class="background-notice">暂无封面</p>
               <p>文章封面</p>
             </div>
           </div>
@@ -62,19 +62,18 @@
             >点击选择图片
           </div>
           <div class="imgBox" v-show="imgs.length">
-            <div v-for="(img,index) in imgs" :key="index" class="imgContainer">
+            <div v-for="(img,index) in imgs" :key="img.name" class="imgContainer">
               <img :src="img.url" alt>
               <p @click="remove(index)">删除</p>
             </div>
           </div>
-          <button type="button" class="btn btn-info" @click="updata_imgs">立即上传</button>
-          <button type="button" class="btn btn-warning" @click="_get_all_imgs">打开图库</button>
-          <div class="imgBox" v-show="imgs_url.length">
-            <p class="add_notice">拖拽左侧加入正文</p>
-            <div v-for="(img,index) in imgs_url" :key="index" class="imgContainer">
-              <img :src="img" alt>
-              <p class="set-background" @click="_set_background(index)">设为封面</p>
-              <p @click="_add_img_article(index)">加入正文</p>
+          <button type="button" class="btn btn-info" @click="upImgs">立即上传</button>
+          <div class="imgBox" v-show="article.images.length">
+            <p class="add_notice">加入正文</p>
+            <div v-for="img in article.images" :key="img.image" class="imgContainer">
+              <img :src="img.image" alt>
+              <p class="set-background" @click="setBackground(img)">设为封面</p>
+              <p @click="addImgArticle(img)">加入正文</p>
             </div>
           </div>
         </div>
@@ -87,16 +86,17 @@
 
 <script>
 //import markdownEditor from 'vue-simplemde/src/markdown-editor';
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import { getOne, addArticle, updateArticle } from "@/api/article";
 import { getList } from "@/api/tags";
+import { upBase64 } from "@/api/file";
 export default {
   data() {
     return {
       article: {
         a_content: "",
         a_id: 0,
-        a_img: "",
+        a_img: '',
         a_title: "",
         outline: "",
         tag: {
@@ -104,6 +104,7 @@ export default {
           tag_name: "生活随笔",
           create_time: "1970-01-01 08:00:00"
         },
+        images: [],
         tag_id: 1,
         user_id: 0
       },
@@ -112,8 +113,7 @@ export default {
       tags_box: false, //控制标签选项盒子显示或隐藏
       imgs: [], //图片上传预览框中的图片地址
       images: [], //传递到后台的图片地址
-      images_name: [], //传递到后台的图片名称
-      imgs_url: [], //后台返回到页面展示的图片地址
+      savedImgs: [], //本次要保存的图片名集合
       configs: {
         status: false,
         spellChecker: false,
@@ -122,13 +122,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["get_all_imgs"]),
-    ...mapMutations([
-      "SHOW_ALERT",
-      "show_all_imgs",
-      "add_img_article",
-      "set_background"
-    ]),
+    ...mapMutations(["SHOW_ALERT"]),
     getOne(id) {
       getOne(id).then(response => {
         this.article = response.data.data;
@@ -153,11 +147,13 @@ export default {
       e.stopPropagation();
     },
     addArticle() {
+      this.article.imgs = this.savedImgs
       addArticle(this.article).then(response => {
         this.$router.push("/admin/editor");
       });
     },
     updateArticle() {
+      this.article.imgs = this.savedImgs
       updateArticle(this.article).then(respoonse => {
         this.$router.push("/admin/editor");
       });
@@ -165,15 +161,12 @@ export default {
     closeBox() {
       this.tags_box = false;
     },
-
-
-    _add_img_article: function(index) {
-      let url = this.imgs_url[index];
-      this.add_img_article(url);
+    addImgArticle(img) {
+      let content = this.article.a_content
+      this.article.a_content = content + '![](' + img.image.replace(/\\/g,'/') + ')';
     },
-    _set_background: function(index) {
-      let url = this.imgs_url[index];
-      this.set_background(url);
+    setBackground(img) {
+      this.article.a_img = img.image
     },
     fileImage(e) {
       let _this = this;
@@ -209,68 +202,39 @@ export default {
             obj.name = file[i].name;
             _this.imgs.push(obj); //将base64图片数据存入预览用的数组
             _this.images.push(dataURL); //将base64图片数据存入发送服务端用的数组
-            _this.images_name.push(file[i].name);
           };
         }
       }
     },
-    updata_imgs: function() {
-      if (!this.imgs.length) {
+    upImgs: function() {
+      if (this.imgs.length === 0) {
         this.SHOW_ALERT("请选择要上传图片");
         return;
       }
-      let _this = this;
-      let old_imgs = this.imgs_url;
-      let olds = old_imgs.length;
-      let params = {
-        act: "updata_imgs",
+      const data = {
         imgs: this.images,
-        imgs_name: this.images_name
+        path: 'article'
       };
-      this.$http({
-        method: "post",
-        url: this.URL,
-        data: params
+      upBase64(data).then(response => {
+        const data = response.data.data
+        this.imgs = []
+        this.images = []
+        this.savedImgs = this.savedImgs.concat(data.name)
+        let images = []
+        for(const v of data.path) {
+          images.push({image: v})
+        }
+        let oldImages = this.article.images
+        this.article.images = oldImages.concat(images)
       })
-        .then(function(res) {
-          if (res.data.result && res.data.data.result == "success") {
-            _this.imgs = [];
-            _this.images = [];
-            _this.images_name = [];
-            // console.log(_this.imgs_url.length);
-            let news = res.data.data.images.length;
-            if (olds > 0) {
-              for (let i = 0; i < olds; i++) {
-                for (let j = 0; j < news; j++) {
-                  //console.log(old_imgs[i]);
-                  if (old_imgs[i] == res.data.data.images[j]) {
-                    res.data.data.images.splice(j, 1);
-                  }
-                }
-              }
-            }
-            _this.imgs_url.push.apply(_this.imgs_url, res.data.data.images);
-            //console.log(_this.imgs_url);
-          }
-        })
-        .catch(function(err) {
-          console.log(err);
-          console.log("失败了");
-        });
+
     },
     remove: function(index) {
       this.imgs.splice(index, 1);
       this.images.splice(index, 1);
     },
-    _get_all_imgs: function() {
-      if (this.all_images.src.length == 0) {
-        this.get_all_imgs();
-      }
-      this.show_all_imgs(true);
-    }
   },
   computed: {
-    ...mapState(["all_images", "URL"]),
     ...mapGetters(["user"])
   },
   mounted() {
