@@ -23,7 +23,7 @@
     </transition>
     <!-- 查看大图 -->
     <transition name="show-alert">
-      <div class="mask" v-show="show_img.box" @click="close_show_img" >
+      <div class="mask" v-show="show_img.box" @click="CLOSE_SHOW_IMG" >
         <i class="glyphicon glyphicon-resize-small" ></i>
         <div class="show_img">
             <img :src="show_img.src" :style="show_width" alt="">
@@ -87,7 +87,7 @@ export default {
           }
       },
   methods: {
-    ...mapMutations(['CLOSE_ALERT','take_img_src','close_show_img','TOGGLE_SEARCH']),
+    ...mapMutations(['CLOSE_ALERT','TAKE_IMG_SRC','CLOSE_SHOW_IMG','TOGGLE_SEARCH']),
     ...mapActions(['searchfor']),
     stopProp: function(e) {
         e = e || event;
@@ -130,7 +130,7 @@ export default {
             show_width = img_width;
         }
         this.show_width.width = show_width + 'px';
-        this.take_img_src(e.target.src);
+        this.TAKE_IMG_SRC(e.target.src);
 
     }
 })

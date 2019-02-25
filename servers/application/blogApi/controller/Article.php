@@ -144,4 +144,12 @@ class Article extends BaseController
         return new Response();
     }
 
+    public function getBing() {
+        $str = file_get_contents('http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1');
+        $array = json_decode($str);
+        $imgUrl = $array->{"images"}[0]->{"url"};
+        $imgUrl = 'https://cn.bing.com'.$imgUrl;
+        return new Response(['data'=>$imgUrl]);
+    }
+
 }

@@ -62,6 +62,7 @@
 <script>
 import { mapState, mapActions,mapMutations, mapGetters } from 'vuex';
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getBing } from '@/api/article'
 
   export default {
       data(){
@@ -69,8 +70,8 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
           }
       },
     methods:{
-      ...mapActions(['logOut','get_bing','getArticleList']),
-      ...mapMutations(['SHOW_REGISTER_BOX','CLEAR_CRUMBS','TOGGLE_SEARCH','SET_ARTICLE_LIST_INFO']),
+      ...mapActions(['logOut','getArticleList']),
+      ...mapMutations(['SHOW_REGISTER_BOX','GET_BING','CLEAR_CRUMBS','TOGGLE_SEARCH','SET_ARTICLE_LIST_INFO']),
       checkLogin() {
         this.$router.push('/admin');
       },
@@ -79,7 +80,9 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
       },
       getBing:function() {
         if(!this.search.bing){
-          this.get_bing();
+          getBing().then(response => {
+            this.GET_BING(response.data.data);
+          })
         }
         this.TOGGLE_SEARCH(true);
       },

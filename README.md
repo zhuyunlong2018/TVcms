@@ -57,21 +57,35 @@
 4. 配置前端
 
     命令行返回项目根目录
+	admin管理后台模块，修改admin/config/文件夹下的dep.env.js、dev.env.js、prod.env.js中BASE_API修改为自己的地址
     ```bash
 	cd admin
     npm install//安装不成功可以用cnpm install
     npm run dev
     ```
-    blog模块相同
+    blog模块相同,修改blog/src/utils/request.js中的baseURL为自己的后台地址
+	```bash
+	cd blog
+    npm install//安装不成功可以用cnpm install
+    npm run dev
+	```
     
 5. 说明
    
    后端tp5的file类型cache实现容易有bug，即将使用redis更好，请确保安装PHP-redis扩展及redis服务端
 
+## 注意事项
+
+正式版了了无期，本版本未来一段时间将会发生较大变更，主要有以下几点：
+
+* 后台缓存或将全面使用redis
+* 后端权限验证代码、前端后台管理的权限页面将有较大改动
+* 即将加入定时任务、完善api自动注入功能
+* 即将加入对象存储管理列表
 
 ## 版本更新
 
-目前一直未dev版，细节及功能都还待修改丰富中……
+目前一直为dev版，细节及功能都还待修改丰富中……
 
    
 ## 相关截图
@@ -93,6 +107,13 @@
 > 
 > 2. [litemall](https://github.com/linlinjava/litemall)
 >一个基于springboot+vue的前后端分离商城项目
+>
 
 
+## 原博客站引用
 
+> 1. [Vue-SimpleMDE](https://github.com/F-loat/vue-simplemde)
+>一个Markdown编辑器
+>
+> 2. [PHP-JWT](https://packagist.org/packages/firebase/php-jwt)
+>登录token验证插件

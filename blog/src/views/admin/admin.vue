@@ -38,7 +38,7 @@
       allImages
     },
     methods: {
-      ...mapMutations(['CLOSE_LOGOUT_BOX','toggle_sidebar']),
+      ...mapMutations(['CLOSE_LOGOUT_BOX','TOOGLE_SIDEBAR']),
       ...mapActions(['logOut']),
       _show_sidebar:function() {
 
@@ -49,7 +49,7 @@
           this.logOut();
       },
         _show_sidebar:function() {
-            this.toggle_sidebar();
+            this.TOOGLE_SIDEBAR();
       },
       stopProp: function(e) {
       e = e || event;

@@ -16,10 +16,10 @@ export default {
   },
   methods: {
     ...mapActions(['get_webdata']),
-    ...mapMutations(['get_how_long'])
+    ...mapMutations(['GET_HOW_LONG'])
   },
   mounted:function() {
-    this.get_how_long();
+    this.GET_HOW_LONG();
   }
 }
 

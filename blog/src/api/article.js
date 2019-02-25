@@ -63,3 +63,11 @@ export function updateArticle(data) {
     data
   })
 }
+
+export function getBing(query=null) {
+  return request({
+    url: '/blogApi/article/getBing',
+    method: 'get',
+    params: query
+  })
+}

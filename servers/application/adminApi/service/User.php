@@ -21,8 +21,8 @@ class User
 
     public static function init() {
         if(!self::$user) {
-            $token = Token::init();
-            self::$user = Cache::get($token);
+            $tokenKey = Token::init();
+            self::$user = Cache::get($tokenKey);
             if(!self::$user) {
                 throw new TokenException();
             }

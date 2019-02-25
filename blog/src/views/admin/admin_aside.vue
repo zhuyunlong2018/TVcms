@@ -1,6 +1,6 @@
 <template>
 
-  <div class="admin-aside" :class="_toggle_sidebar" @click="CLOSE_LOGOUT_BOX" >
+  <div class="admin-aside" :class="_TOOGLE_SIDEBAR" @click="CLOSE_LOGOUT_BOX" >
       <ul class="sidebar-menu">
         <li class="header" >欢迎使用边泉博客管理平台</li>
         <li>
@@ -55,7 +55,7 @@ import { mapState,mapMutations,mapGetters } from 'vuex';
       };
     },
     methods: {
-      ...mapMutations(['CLOSE_LOGOUT_BOX','toggle_sidebar']),
+      ...mapMutations(['CLOSE_LOGOUT_BOX','TOOGLE_SIDEBAR']),
       slide_article:function() {
         this.treeview_menu.article = !this.treeview_menu.article;
         if(this.icon.article == 'glyphicon-menu-left') {
@@ -72,7 +72,7 @@ import { mapState,mapMutations,mapGetters } from 'vuex';
     computed: {
       ...mapState(['show_sidebar']),
       ...mapGetters(['logoutBox']),
-      _toggle_sidebar:function() {
+      _TOOGLE_SIDEBAR:function() {
         if(this.show_sidebar) {
           return 'show-sidebar';
         } else {

@@ -74,176 +74,24 @@ const actions = {
      });
 
  },
- 
 
-  //新增标签
-  add_tags: function({commit,state},tag) {
+
+
+  //搜索文章
+  searchfor:function({commit,state},key) {
     let params = {
-      'act':'add_tags',
-      'name':tag
+      'act':'searchfor',
+      'key': key
     }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-      //console.log(res.data.result);
+    _axios(params).then(function(res){
       if(res.data.result) {
-      commit("ADD_TAGS",tag);
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足');
-    }
-
-    })
-      .catch(function (err) {
-        console.log('失败了');
-      });
-
-    },
-//移除标签
-  del_tags: function({commit,state},obj) {
-    let params = {
-      'act':'del_tags',
-      'name':obj.tag
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-      commit("DEL_TAGS",obj.index);
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足');
-    }
-
-    })
-      .catch(function (err) {
-        console.log('失败了');
-      });
-
-    },
-//新增友情链接
-  add_neighbors: function({commit,state},obj) {
-    // let time = common.getTime();
-    let params = {
-      'act':'add_neighbors',
-      'nb_name':obj.name,
-      'nb_url':obj.url,
-      'nb_icon':obj.icon,
-      'nb_time':time,
-      'nb_published':obj.publish,
-    }
-    _axios(params).then(function (res) {
-      //console.log('成功了');
-      //console.log(res.data.result);
-      if(res.data.result) {
-      commit("ADD_NEIGHBORS",params);
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足');
-    }
-
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-
-    },
- 
-
-  //删除友情链接
-    del_neighbors:function({commit,state},index) {
-    let params = {
-      'act':'del_neighbors',
-      'name':state.all_neighbors[index].nb_name
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-      commit("DEL_NEIGHBORS",index);
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足');
-    }
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-
-    },
-
-  //更新about页数据
-  update_about:function({commit,state}) {
-    //  let about = escape(state.about_markdown);
-    let about = state.about_markdown;
-    let params = {
-      'act':'update_about',
-      'content':about
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-      commit("SHOW_MESSAGE",'内容更新成功');
-      commit('UPDATE_ABOUT');
-      } else {
-        commit('SHOW_ALERT','更新失败');
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足');
-    }
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-    },
-
-  //删除图片
-  del_img:function({commit,state},index) {
-    let params = {
-      'act':'del_img',
-      'url':state.all_images.src[index],
-    }
-    //console.log(state.all_images.src[index]);
-    _axios(params).then(function (res) {;
-      if(res.data.result) {
-      commit("DEL_IMG",index);
-      }
-      if(res.data.error == 1) {
-        commit('SHOW_ALERT','权限不足,无法删除图片');
-    }
-    })
-      .catch(function (err) {
-        console.log(err);
-        console.log('失败了');
-      });
-    },
-  //获取bing图片
-  get_bing:function({commit,state}) {
-    let params = {
-      'act':'get_bing'
-    }
-    _axios(params).then(function (res) {
-      if(res.data.result) {
-        commit("GET_BING",res.data.data);
+        // console.log(res.data.data);
       }
     })
-      .catch(function (err) {
-        console.log('失败了');
-      });
-    },
-  
-    //搜索文章
-    searchfor:function({commit,state},key) {
-      let params = {
-        'act':'searchfor',
-        'key': key
-      }
-      _axios(params).then(function(res){
-        if(res.data.result) {
-          // console.log(res.data.data);
-        }
-      })
-      .catch(function(err) {
-        console.log('失败了');
-      })
-    }
+    .catch(function(err) {
+      console.log('失败了');
+    })
+  }
   }
 
   export default actions

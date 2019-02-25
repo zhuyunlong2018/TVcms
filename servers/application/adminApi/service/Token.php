@@ -20,14 +20,17 @@ class Token
 {
     private static $token = null;
 
+    private static $tokenKey = null;
+
     /**
      *token初始化
      */
     public static function init() {
         if(!self::$token) {
             self::$token = Request::instance()->header('X-Api-Token');
+            self::$tokenKey = 'token:'.md5(self::$token);
         }
-        return self::$token;
+        return self::$tokenKey;
     }
 
 
@@ -53,7 +56,8 @@ class Token
             ]
         ];
         self::$token = JWT::encode($tokenMsg, config('token.key'));
-        Cache::set(self::$token,$user,config('token.exp'));
+        self::$tokenKey = 'token:'.md5(self::$token);
+        Cache::set(self::$tokenKey,$user,config('token.exp'));
         return self::$token;
     }
 
@@ -90,9 +94,9 @@ class Token
      */
     public static function removeToken() {
         self::init();
-        $user = Cache::get(self::$token);
+        $user = Cache::get(self::$tokenKey);
         if($user) {
-            Cache::rm(self::$token);
+            Cache::rm(self::$tokenKey);
             Admin::removeAdmin($user['user_id']);
         }
     }
