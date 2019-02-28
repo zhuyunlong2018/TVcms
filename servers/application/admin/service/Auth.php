@@ -116,28 +116,28 @@ class Auth
      *是否在收录的列表中
      */
     protected static function ifInAll() {
-        return Redis::init()->sIsMember(self::$allKey,self::$api);
+        return Redis::sIsMember(self::$allKey,self::$api);
     }
 
     /**
      *是否在不需要权限的列表中
      */
     protected static function ifInAllowedNo() {
-        return Redis::init()->sIsMember(self::$allowedNoAuthKey,self::$api);
+        return Redis::sIsMember(self::$allowedNoAuthKey,self::$api);
     }
 
     /**
      *是否在权限校验要求列表中
      */
     protected static function ifInAllowed() {
-        return Redis::init()->sIsMember(self::$allowedAuthKey,self::$api);
+        return Redis::sIsMember(self::$allowedAuthKey,self::$api);
     }
 
     /**
      *是否在未注册列表中
      */
     protected static function ifInUnRegister() {
-        return Redis::init()->sIsMember(self::$unRegisterKey,self::$api);
+        return Redis::sIsMember(self::$unRegisterKey,self::$api);
     }
 
     /**
@@ -153,7 +153,7 @@ class Auth
             foreach ($items as $item) {
                 $api[] = $item['api_path'];
             }
-            Redis::init()->sadd($key,...$api);
+            Redis::sAdd($key,$api);
         }
     }
 

@@ -22,7 +22,7 @@ class User
     public static function init() {
         if(!self::$user) {
             $tokenKey = Token::init();
-            self::$user = Redis::init()->hgetall($tokenKey);
+            self::$user = Redis::hGetAll($tokenKey);
             if(!self::$user) {
                 throw new TokenException();
             }
