@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/adminApi/api/getList',
+    url: '/admin/api/getList',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function changeType(data) {
   return request({
-    url: '/adminApi/api/changeType',
+    url: '/admin/api/changeType',
     method: 'post',
     data
   })

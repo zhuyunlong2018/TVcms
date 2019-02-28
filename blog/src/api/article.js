@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(query) {
   return request({
-    url: '/blogApi/article/getList',
+    url: '/blog/article/getList',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function getList(query) {
 
 export function getOne(ID) {
   return request({
-    url: '/blogApi/article/getOne',
+    url: '/blog/article/getOne',
     method: 'get',
     params: { ID }
   })
@@ -18,7 +18,7 @@ export function getOne(ID) {
 
 export function getAll(query=null) {
   return request({
-    url: '/blogApi/article/getAllPublished',
+    url: '/blog/article/getAllPublished',
     method: 'get',
     params: query
   })
@@ -26,7 +26,7 @@ export function getAll(query=null) {
 
 export function getTitleList(query=null) {
   return request({
-    url: '/blogApi/article/getTitleList',
+    url: '/blog/article/getTitleList',
     method: 'get',
     params: query
   })
@@ -34,7 +34,7 @@ export function getTitleList(query=null) {
 
 export function changePublish(data) {
   return request({
-    url: '/blogApi/article/changePublish',
+    url: '/blog/article/changePublish',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function changePublish(data) {
 
 export function delArticle(data) {
   return request({
-    url: '/blogApi/article/del',
+    url: '/blog/article/del',
     method: 'post',
     data
   })
@@ -50,7 +50,7 @@ export function delArticle(data) {
 
 export function addArticle(data) {
   return request({
-    url: '/blogApi/article/add',
+    url: '/blog/article/add',
     method: 'post',
     data
   })
@@ -58,7 +58,7 @@ export function addArticle(data) {
 
 export function updateArticle(data) {
   return request({
-    url: '/blogApi/article/update',
+    url: '/blog/article/update',
     method: 'post',
     data
   })
@@ -66,7 +66,7 @@ export function updateArticle(data) {
 
 export function getBing(query=null) {
   return request({
-    url: '/blogApi/article/getBing',
+    url: '/blog/article/getBing',
     method: 'get',
     params: query
   })

@@ -10,7 +10,7 @@
 namespace app\lib;
 
 
-use app\adminApi\model\Api;
+use app\admin\model\Api;
 use ReflectionMethod;
 use think\Cache;
 

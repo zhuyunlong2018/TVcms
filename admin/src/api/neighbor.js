@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/blogApi/neighbors/getAll',
+    url: '/blog/neighbors/getAll',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function addNeighbor(data) {
   return request({
-    url: '/blogApi/neighbors/add',
+    url: '/blog/neighbors/add',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function addNeighbor(data) {
 
 export function updateNeighbor(data) {
   return request({
-    url: '/blogApi/neighbors/update',
+    url: '/blog/neighbors/update',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function updateNeighbor(data) {
 
 export function delNeighbor(data) {
   return request({
-    url: '/blogApi/neighbors/del',
+    url: '/blog/neighbors/del',
     method: 'post',
     data
   })

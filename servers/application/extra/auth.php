@@ -8,8 +8,8 @@
  */
 return [
     'allowedNoToken' => [
-        'adminApi/user/login',
-        'adminApi/admin/login'
+        'admin/user/login',
+        'admin/admin/login'
     ],
     'allowedNoAuth' =>[]
 ];

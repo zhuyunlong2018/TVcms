@@ -10,9 +10,9 @@
 namespace app\common\controller;
 
 
-use app\adminApi\model\Api;
-use app\adminApi\service\Auth;
-use app\adminApi\service\Token;
+use app\admin\model\Api;
+use app\admin\service\Auth;
+use app\admin\service\Token;
 use app\lib\exception\AuthException;
 use app\lib\exception\UnknownException;
 use app\lib\Response;

@@ -98,26 +98,26 @@ CREATE TABLE `tv_api`  (
 INSERT INTO `tv_api` VALUES (1, '会员管理1', '/api/user1', NULL, NULL, NULL, 1);
 INSERT INTO `tv_api` VALUES (2, '会员调整', '/api/user2', NULL, NULL, NULL, 1);
 INSERT INTO `tv_api` VALUES (5, '测试用接口数据', 'index/index/hello', NULL, NULL, NULL, 2);
-INSERT INTO `tv_api` VALUES (9, '获取管理员列表', 'adminapi/admin/getlist', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (17, '退出登录接口', 'adminapi/admin/logout', NULL, NULL, NULL, 1);
-INSERT INTO `tv_api` VALUES (18, '获取后台用户对应权限菜单路由', 'adminapi/menu/getrouter', NULL, NULL, NULL, 2);
-INSERT INTO `tv_api` VALUES (19, '通过名称查找一个角色', 'adminapi/role/findbyname', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (20, '获取角色列表', 'adminapi/role/getlist', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (21, '获取系统存在的所有菜单', 'adminapi/menu/getmenu', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (22, '更新指定角色信息', 'adminapi/role/update', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (23, '根据条件获取一名用户信息', 'adminapi/user/getone', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (24, '更新管理员信息', 'adminapi/admin/update', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (25, '创建管理员', 'adminapi/admin/create', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (26, '删除管理员', 'adminapi/admin/delete', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (27, '获取系统菜单列表', 'adminapi/menu/getlist', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (28, '根据类型获取api列表', 'adminapi/api/getlist', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (29, '对指定api和菜单权限关联进行解绑', 'adminapi/menu/unlinkapi', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (9, '获取管理员列表', 'admin/admin/getlist', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (17, '退出登录接口', 'admin/admin/logout', NULL, NULL, NULL, 1);
+INSERT INTO `tv_api` VALUES (18, '获取后台用户对应权限菜单路由', 'admin/menu/getrouter', NULL, NULL, NULL, 2);
+INSERT INTO `tv_api` VALUES (19, '通过名称查找一个角色', 'admin/role/findbyname', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (20, '获取角色列表', 'admin/role/getlist', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (21, '获取系统存在的所有菜单', 'admin/menu/getmenu', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (22, '更新指定角色信息', 'admin/role/update', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (23, '根据条件获取一名用户信息', 'admin/user/getone', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (24, '更新管理员信息', 'admin/admin/update', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (25, '创建管理员', 'admin/admin/create', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (26, '删除管理员', 'admin/admin/delete', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (27, '获取系统菜单列表', 'admin/menu/getlist', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (28, '根据类型获取api列表', 'admin/api/getlist', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (29, '对指定api和菜单权限关联进行解绑', 'admin/menu/unlinkapi', NULL, NULL, NULL, 3);
 INSERT INTO `tv_api` VALUES (30, '测试用接口描述', 'test/index/index', NULL, NULL, NULL, 1);
-INSERT INTO `tv_api` VALUES (31, '根据id修改api的类型', 'adminapi/api/changetype', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (32, '后台登录接口', 'adminapi/admin/login', NULL, NULL, NULL, 1);
-INSERT INTO `tv_api` VALUES (40, '将指定api权限关联到对应菜单', 'adminapi/menu/linkapi', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (41, '删除指定角色', 'adminapi/role/delete', NULL, NULL, NULL, 3);
-INSERT INTO `tv_api` VALUES (42, '创建新角色', 'adminapi/role/create', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (31, '根据id修改api的类型', 'admin/api/changetype', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (32, '后台登录接口', 'admin/admin/login', NULL, NULL, NULL, 1);
+INSERT INTO `tv_api` VALUES (40, '将指定api权限关联到对应菜单', 'admin/menu/linkapi', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (41, '删除指定角色', 'admin/role/delete', NULL, NULL, NULL, 3);
+INSERT INTO `tv_api` VALUES (42, '创建新角色', 'admin/role/create', NULL, NULL, NULL, 3);
 
 -- ----------------------------
 -- Table structure for tv_article

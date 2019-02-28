@@ -6,7 +6,7 @@ export function loginByUsername(username, password) {
     password
   }
   return request({
-    url: '/adminApi/admin/login',
+    url: '/admin/admin/login',
     method: 'post',
     data
   })
@@ -14,14 +14,14 @@ export function loginByUsername(username, password) {
 
 export function logout() {
   return request({
-    url: '/adminApi/admin/logout',
+    url: '/admin/admin/logout',
     method: 'post'
   })
 }
 
 export function getUserInfo(token) {
   return request({
-    url: '/adminApi/mock/info',
+    url: '/admin/mock/info',
     method: 'get',
     params: { token }
   })

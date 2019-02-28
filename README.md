@@ -12,7 +12,11 @@
 
 ## 演示
 
-还未搭建好，敬请期待……
+说明：演示只是最为基础版本、且存在异常和bug，有兴趣最好可以直接clone到本地部署查看
+
+* [admin](http://zhuzu.top/dist)
+* [blog](http://zhuzu.top)
+
 
 ## 项目代码
 
@@ -37,7 +41,7 @@
 
     打开命令行，输入以下命令
     ```bash
-    git clone 项目地址
+    git clone https://gitee.com/zhuyunlong2018/TVcms.git
     cd TVcms
     ```
     
@@ -87,7 +91,7 @@
 
 目前一直为dev版，细节及功能都还待修改丰富中……
 
-   
+
 ## 相关截图
 
 管理总后台（cms)

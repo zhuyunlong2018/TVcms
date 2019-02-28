@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listMenu(query) {
   return request({
-    url: '/adminApi/menu/getList',
+    url: '/admin/menu/getList',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listMenu(query) {
 
 export function getUserRouter(query) {
   return request({
-    url: '/adminApi/menu/getRouter',
+    url: '/admin/menu/getRouter',
     method: 'get',
     params: query
   })
@@ -18,7 +18,7 @@ export function getUserRouter(query) {
 
 export function linkApi(data) {
   return request({
-    url: '/adminApi/menu/linkApi',
+    url: '/admin/menu/linkApi',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function linkApi(data) {
 
 export function unLinkApi(data) {
   return request({
-    url: '/adminApi/menu/unLinkApi',
+    url: '/admin/menu/unLinkApi',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function unLinkApi(data) {
 
 export function getMenu(query) {
   return request({
-    url: '/adminApi/menu/getMenu',
+    url: '/admin/menu/getMenu',
     method: 'get',
     params: query
   })

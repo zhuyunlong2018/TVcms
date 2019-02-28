@@ -13,7 +13,7 @@
 return [
     // 应用初始化
     'app_init'     => [
-        'app\\adminApi\\behavior\\CORS'
+        'app\admin\behavior\CORS'
     ],
     // 应用开始
     'app_begin'    => [],
@@ -29,6 +29,6 @@ return [
     'log_write'    => [],
     // 应用结束
     'app_end'      => [
-        'app\\adminApi\\behavior\\API'
+        'app\admin\behavior\API'
     ],
 ];

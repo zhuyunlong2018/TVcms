@@ -9,8 +9,8 @@
 namespace app\lib;
 
 
-use app\adminApi\service\Token;
-use app\adminApi\service\User;
+use app\admin\service\Token;
+use app\admin\service\User;
 use think\Request;
 
 class Protect

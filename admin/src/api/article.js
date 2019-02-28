@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: 'blogApi/Article/getTitleListByPage',
+    url: 'blog/Article/getTitleListByPage',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function changeStatus(data) {
   return request({
-    url: 'blogApi/Article/changeStatus',
+    url: 'blog/Article/changeStatus',
     method: 'post',
     data
   })

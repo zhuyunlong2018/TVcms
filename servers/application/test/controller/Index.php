@@ -10,17 +10,17 @@
 namespace app\test\controller;
 
 
-use app\adminApi\model\Admin;
-use app\adminApi\model\Api;
-use app\adminApi\service\Images;
-use app\adminApi\service\Role;
+use app\admin\model\Admin;
+use app\admin\model\Api;
+use app\admin\service\Images;
+use app\admin\service\Role;
 use app\common\controller\BaseController;
 use app\lib\Response;
 use ReflectionClass;
 use ReflectionMethod;
 use think\Cache;
 use think\Controller;
-use app\adminApi\service\Role as RoleService;
+use app\admin\service\Role as RoleService;
 use think\Request;
 
 class Index extends BaseController
@@ -71,12 +71,12 @@ class Index extends BaseController
 
 //        return Admin::getAuth();
 //        return Admin::getList();
-//        $method = new ReflectionMethod('app\adminApi\controller\Admin', 'login');
+//        $method = new ReflectionMethod('app\admin\controller\Admin', 'login');
 //        echo $this->getDocComment($method->getDocComment(), '@API');
 //        echo $this->getDocComment($method->getDocComment(), '@desc');
 
 
-//        $ref = new ReflectionClass('app\adminApi\controller\Admin');
+//        $ref = new ReflectionClass('app\admin\controller\Admin');
 //        echo $ref->getName();
 //        echo $ref->getFileName();
 

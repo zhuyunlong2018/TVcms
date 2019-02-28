@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listRole(query) {
   return request({
-    url: '/adminApi/role/getList',
+    url: '/admin/role/getList',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listRole(query) {
 
 export function updateRole(data) {
   return request({
-    url: '/adminApi/role/update',
+    url: '/admin/role/update',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function updateRole(data) {
 
 export function createRole(data) {
   return request({
-    url: '/adminApi/role/create',
+    url: '/admin/role/create',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function createRole(data) {
 
 export function deleteRole(data) {
   return request({
-    url: '/adminApi/role/delete',
+    url: '/admin/role/delete',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function deleteRole(data) {
 
 export function findRole(query) {
   return request({
-    url: '/adminApi/role/findByName',
+    url: '/admin/role/findByName',
     method: 'get',
     params: query
   })
