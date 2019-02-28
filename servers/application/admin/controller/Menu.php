@@ -16,6 +16,7 @@ use app\admin\service\User;
 use app\common\validate\PagingParameter;
 use app\lib\exception\RepeatException;
 use app\lib\exception\ResourcesException;
+use app\lib\Redis;
 use app\lib\Response;
 use app\admin\model\SystemMenu;
 use think\Cache;

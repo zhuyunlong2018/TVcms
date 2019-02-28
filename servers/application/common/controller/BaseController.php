@@ -31,6 +31,7 @@ class BaseController extends Controller
             return json(['msg'=>'success'],200);
         }
 //        Cache::clear();
+        $method = $request->method();
         $module = $request->module();
         $controller = $request->controller();
         $action = $request->action();
@@ -39,7 +40,7 @@ class BaseController extends Controller
         if(empty($action)) $action = 'index';
         $api = strtolower($module.'/'.$controller.'/'.$action);
 
-        Auth::init($api);
+        Auth::init($api,$method);
     }
 
 

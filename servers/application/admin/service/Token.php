@@ -8,13 +8,11 @@
  */
 
 namespace app\admin\service;
-use app\admin\model\Admin as AdminModel;
-use app\lib\exception\RepeatException;
 use app\lib\exception\TokenException;
 use Firebase\JWT\JWT;
 use RuntimeException;
-use think\Cache;
 use think\Request;
+use app\lib\Redis;
 
 class Token
 {
@@ -28,7 +26,7 @@ class Token
     public static function init() {
         if(!self::$token) {
             self::$token = Request::instance()->header('X-Api-Token');
-            self::$tokenKey = 'token:'.md5(self::$token);
+            self::$tokenKey = myConfig('redisKey.userToken',md5(self::$token));
         }
         return self::$tokenKey;
     }
@@ -50,14 +48,15 @@ class Token
             'nbf' => $nowTime + config('token.nbf'), //在什么时间之后该jwt才可用
             'exp' => $nowTime + config('token.exp'), //过期时间
             'data' => [
-                'userID' => $user->user_id,
-                'userEmail' => $user->user_email,
-                'userName' => $user->user_name
+                'userID' => $user['user_id'],
+                'userEmail' => $user['user_email'],
+                'userName' => $user['user_name']
             ]
         ];
         self::$token = JWT::encode($tokenMsg, config('token.key'));
         self::$tokenKey = 'token:'.md5(self::$token);
-        Cache::set(self::$tokenKey,$user,config('token.exp'));
+        Redis::init()->hmset(self::$tokenKey,$user);
+        Redis::init()->expire(self::$tokenKey,config('token.exp'));
         return self::$token;
     }
 
@@ -94,9 +93,9 @@ class Token
      */
     public static function removeToken() {
         self::init();
-        $user = Cache::get(self::$tokenKey);
+        $user = Redis::init()->hgetall(self::$tokenKey);
         if($user) {
-            Cache::rm(self::$tokenKey);
+            Redis::init()->del(self::$tokenKey);
             Admin::removeAdmin($user['user_id']);
         }
     }

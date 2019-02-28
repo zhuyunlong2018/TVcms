@@ -11,6 +11,7 @@ namespace app\admin\model;
 
 
 use app\common\model\BaseModel;
+use app\lib\Redis;
 use think\Cache;
 
 class Admin extends BaseModel
@@ -26,8 +27,7 @@ class Admin extends BaseModel
 
     public static function getByUserID($id){
         $admin = self::with('roles')->where('user_id', '=', $id)->find();
-        Cache::tag('admin-role')->set('admin-user'.$id,$admin,14400);
-        return $admin;
+        return $admin->toArray();
     }
 
     public static function getList($name,$page,$limit,$order,$sort) {

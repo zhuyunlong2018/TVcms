@@ -12,10 +12,22 @@ namespace app\admin\service;
 
 use app\admin\model\RoleMenu;
 use app\admin\model\Role as RoleModel;
+use app\lib\Redis;
 use think\Cache;
 
 class Role
 {
+    protected static $roleMenusKey=null;
+    protected static $roleApisKey=null;
+
+    public static function init($roleID=0) {
+        if(!self::$roleMenusKey) {
+            self::$roleMenusKey = myConfig('redisKey.roleMenus',$roleID);
+        }
+        if(!self::$roleApisKey) {
+            self::$roleApisKey = myConfig('redisKey.roleApis',$roleID);
+        }
+    }
     public static function updateRoleMenus($role_id,$menus) {
         $roleMenus = RoleMenu::all(['role_id'=>$role_id]);
         $getMenus = [];
@@ -79,6 +91,7 @@ class Role
     }
 
     public static function getRole($roleID) {
+        self::init($roleID);
         $roleMenus = RoleModel::getRoleApi($roleID);
         $roleApis = [];
         $menus = [];
@@ -94,24 +107,26 @@ class Role
                 }
             }
         }
-        Cache::tag('role-api')->set('role-api'.$roleID,$roleApis);
-        Cache::tag('role-menu')->set('role-menu'.$roleID,$menus);
+        Redis::init()->sadd(self::$roleApisKey,...$roleApis);
+        Redis::init()->sadd(self::$roleMenusKey,...$menus);
     }
 
     public static function getRoleApi($roleID) {
-        $roleApi = Cache::get('role-api'.$roleID);
+        self::init($roleID);
+        $roleApi = Redis::init()->smembers(self::$roleApisKey);
         if(!$roleApi) {
             self::getRole($roleID);
-            $roleApi = Cache::get('role-api'.$roleID);
+            $roleApi = Redis::init()->smembers(self::$roleApisKey);
         }
         return $roleApi;
     }
 
     public static function getRoleMenu($roleID) {
-        $roleMenu = Cache::get('role-menu'.$roleID);
+        self::init($roleID);
+        $roleMenu = Redis::init()->smembers(self::$roleMenusKey);
         if(!$roleMenu) {
             self::getRole($roleID);
-            $roleMenu = Cache::get('role-menu'.$roleID);
+            $roleMenu = Redis::init()->smembers(self::$roleMenusKey);
         }
         return $roleMenu;
     }

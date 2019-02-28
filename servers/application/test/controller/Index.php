@@ -12,9 +12,11 @@ namespace app\test\controller;
 
 use app\admin\model\Admin;
 use app\admin\model\Api;
+use app\admin\model\User;
 use app\admin\service\Images;
 use app\admin\service\Role;
 use app\common\controller\BaseController;
+use app\lib\Redis;
 use app\lib\Response;
 use ReflectionClass;
 use ReflectionMethod;
@@ -31,9 +33,11 @@ class Index extends BaseController
      */
     public function index() {
 
-        $role = Role::getRoleApi(1);
-        $role = Cache::get('role-menu1');
-        $admin = Admin::getByUserID(1);
+        $role = Role::getRole(1);
+//        $role = Cache::get('role-menu1');
+//        $admin = Admin::getByUserID(1);
+        dump($role);
+        die;
 //        Cache::rm('admin-user1');
         $admin = Cache::get('admin-user1');
 //        Cache::clear('role-api');
@@ -113,6 +117,20 @@ class Index extends BaseController
 //            ];
 //        }
         return new Response(['data'=>$data]);
+    }
+
+    public function redis() {
+//        $admin = Admin::getByUserID(1);
+//        dump($admin);
+//        die;
+        $key = 'testuser';
+//        $user = User::get(1);
+        $redis = Redis::init();
+//        $user = get_object_vars($user);
+//        $user = ($user->toArray());
+//        $redis->hmset($key,$user);
+        $a = $redis->hgetall('admin_user_id:1');
+        dump($a);
     }
 
 

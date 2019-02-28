@@ -12,44 +12,55 @@ namespace app\admin\service;
 
 use app\admin\model\Api;
 use app\lib\exception\AuthException;
-use think\Cache;
+use app\lib\Redis;
+use think\Exception;
 
 class Auth
 {
     //系统全部已收录的api
-    private static $allApi = null;
+    private static $allKey = null;
 
     //未注册的api
-    private static $unRegisterApi = null;
+    private static $unRegisterKey = null;
 
     //允许不校验权限的api
-    private static $allowedNoAuth = null;
+    private static $allowedNoAuthKey = null;
 
     //需要校验权限的api
-    private static $allowedAuth = null;
+    private static $allowedAuthKey = null;
 
     //访问api
     private static $api = null;
+
+    private static $method = null;
 
     /**
      * 初始化
      * @param $api
      */
-    public static function init($api) {
-        if(!self::$allApi) {
-            self::$allApi = self::getApiByType('');
+    public static function init($api,$method) {
+
+        if(!self::$allKey) {
+            self::$allKey = myConfig('redisKey.apisType','all');
+            self::getApiByType('all',self::$allKey);
         }
-        if(!self::$unRegisterApi) {
-            self::$unRegisterApi = self::getApiByType(0);
+        if(!self::$unRegisterKey) {
+            self::$unRegisterKey = myConfig('redisKey.apisType',0);
+            self::getApiByType(0,self::$unRegisterKey);
         }
-        if(!self::$allowedNoAuth) {
-            self::$allowedNoAuth = self::getApiByType(2);
+        if(!self::$allowedNoAuthKey) {
+            self::$allowedNoAuthKey = myConfig('redisKey.apisType',2);
+            self::getApiByType(2,self::$allowedNoAuthKey);
         }
-        if(!self::$allowedAuth) {
-            self::$allowedAuth = self::getApiByType(3);
+        if(!self::$allowedAuthKey) {
+            self::$allowedAuthKey = myConfig('redisKey.apisType',3);
+            self::getApiByType(3,self::$allowedAuthKey);
         }
         if(!self::$api) {
             self::$api = $api;
+        }
+        if(!self::$method) {
+            self::$method = $method;
         }
         self::check();
     }
@@ -60,11 +71,9 @@ class Auth
     protected static function check() {
         if(self::ifInAll()) {
             //访问api在权限列表中
-
             if(self::ifInAllowedNo() || self::ifInAllowed()) {
                 //访问api在需要登录权限列表中
                 Token::checkToken();
-
                 if(self::ifInAllowed()) {
                     //访问api在需要特定权限表中
                     if(!self::ifBoundToAdmin()) {
@@ -88,6 +97,10 @@ class Auth
         $auth = false;
         $admin = Admin::getAdmin($user['user_id']);
         foreach ($admin['roles'] as $role) {
+            if($role['write_auth']==0 && self::$method=='POST') {
+                //如果本角色只有只读权限，而请求为写入，则跳过本角色验证
+                continue;
+            }
             $roleApi = Role::getRoleApi($role['role_id']);
             if(in_array(self::$api,$roleApi)) {
                 $auth = true;
@@ -103,28 +116,28 @@ class Auth
      *是否在收录的列表中
      */
     protected static function ifInAll() {
-        return in_array(self::$api,self::$allApi);
+        return Redis::init()->sIsMember(self::$allKey,self::$api);
     }
 
     /**
      *是否在不需要权限的列表中
      */
     protected static function ifInAllowedNo() {
-        return in_array(self::$api,self::$allowedNoAuth);
+        return Redis::init()->sIsMember(self::$allowedNoAuthKey,self::$api);
     }
 
     /**
      *是否在权限校验要求列表中
      */
     protected static function ifInAllowed() {
-        return in_array(self::$api,self::$allowedAuth);
+        return Redis::init()->sIsMember(self::$allowedAuthKey,self::$api);
     }
 
     /**
      *是否在未注册列表中
      */
     protected static function ifInUnRegister() {
-        return in_array(self::$api,self::$unRegisterApi);
+        return Redis::init()->sIsMember(self::$unRegisterKey,self::$api);
     }
 
     /**
@@ -132,17 +145,16 @@ class Auth
      * @param $type
      * @return array|mixed
      */
-    protected static function getApiByType($type) {
-        $api = Cache::get('api'.$type);
+    protected static function getApiByType($type,$key) {
+        $api = Redis::init()->smembers($key);
         if(!$api) {
             $api = [];
             $items = Api::getByType($type);
             foreach ($items as $item) {
                 $api[] = $item['api_path'];
             }
-            Cache::set('api'.$type,$api);
+            Redis::init()->sadd($key,...$api);
         }
-        return $api;
     }
 
 

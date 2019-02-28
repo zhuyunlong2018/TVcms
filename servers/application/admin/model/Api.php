@@ -38,7 +38,7 @@ class Api extends BaseModel
 
     public static function getByType($type) {
         $condition = [];
-        if(!empty($type) || $type === 0) {
+        if($type != 'all') {
             $condition = ['api_type'=>$type];
         }
         return self::where($condition)->field('api_path')->select();

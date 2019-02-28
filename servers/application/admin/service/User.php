@@ -13,7 +13,7 @@ use app\admin\model\WebData;
 use app\lib\exception\LoginException;
 use app\admin\model\User as UserModel;
 use app\lib\exception\TokenException;
-use think\Cache;
+use app\lib\Redis;
 
 class User
 {
@@ -22,7 +22,7 @@ class User
     public static function init() {
         if(!self::$user) {
             $tokenKey = Token::init();
-            self::$user = Cache::get($tokenKey);
+            self::$user = Redis::init()->hgetall($tokenKey);
             if(!self::$user) {
                 throw new TokenException();
             }
@@ -37,7 +37,7 @@ class User
         }elseif(!self::checkPassword($user,$password)) {
             throw new LoginException(['msg'=>'用户密码错误','errorCode'=>10002]);
         } else {
-            return $user;
+            return $user->toArray();
         }
     }
 

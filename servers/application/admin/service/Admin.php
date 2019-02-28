@@ -12,10 +12,17 @@ namespace app\admin\service;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\AdminRole;
 use app\lib\exception\LoginException;
-use think\Cache;
+use app\lib\Redis;
 
 class Admin
 {
+    protected static $adminKey=null;
+
+    public static function init($userID=0) {
+        if(!self::$adminKey) {
+            self::$adminKey = myConfig('redisKey.adminInfo',$userID);
+        }
+    }
 
     public static function adminLogin($username,$password) {
         $user = User::loginByName($username,$password);
@@ -103,16 +110,22 @@ class Admin
     }
 
     public static function getAdmin($userID) {
-        $admin = Cache::get('admin-user'.$userID);
+        self::init($userID);
+        $admin = Redis::init()->hgetall(self::$adminKey);
         if(!$admin) {
-            AdminModel::getByUserID($userID);
-            $admin = Cache::get('admin-user'.$userID);
+            $admin = AdminModel::getByUserID($userID);
+            $admin['roles'] = serialize($admin['roles']);
+            //设置管理员信息哈希缓存
+            Redis::init()->hmset(self::$adminKey,$admin);
+            Redis::init()->expire(self::$adminKey,14400);
         }
+        $admin['roles'] = unserialize($admin['roles']);
         return $admin;
     }
 
     public static function removeAdmin($userID) {
-        Cache::rm('admin-user'.$userID);
+        self::init($userID);
+        Redis::init()->del(self::$adminKey);
     }
 
 
