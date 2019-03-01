@@ -10,10 +10,8 @@
 namespace app\admin\service;
 
 
-use app\admin\model\Api;
 use app\lib\exception\AuthException;
 use app\lib\Redis;
-use think\Exception;
 
 class Auth
 {
@@ -42,19 +40,19 @@ class Auth
 
         if(!self::$allKey) {
             self::$allKey = myConfig('redisKey.apisType','all');
-            self::getApiByType('all',self::$allKey);
+            Api::getApiByType('all',self::$allKey);
         }
         if(!self::$unRegisterKey) {
             self::$unRegisterKey = myConfig('redisKey.apisType',0);
-            self::getApiByType(0,self::$unRegisterKey);
+            Api::getApiByType(0,self::$unRegisterKey);
         }
         if(!self::$allowedNoAuthKey) {
             self::$allowedNoAuthKey = myConfig('redisKey.apisType',2);
-            self::getApiByType(2,self::$allowedNoAuthKey);
+            Api::getApiByType(2,self::$allowedNoAuthKey);
         }
         if(!self::$allowedAuthKey) {
             self::$allowedAuthKey = myConfig('redisKey.apisType',3);
-            self::getApiByType(3,self::$allowedAuthKey);
+            Api::getApiByType(3,self::$allowedAuthKey);
         }
         if(!self::$api) {
             self::$api = $api;
@@ -140,22 +138,6 @@ class Auth
         return Redis::sIsMember(self::$unRegisterKey,self::$api);
     }
 
-    /**
-     * 根据api权限类型获取对应api的列表
-     * @param $type
-     * @return array|mixed
-     */
-    protected static function getApiByType($type,$key) {
-        $api = Redis::init()->smembers($key);
-        if(!$api) {
-            $api = [];
-            $items = Api::getByType($type);
-            foreach ($items as $item) {
-                $api[] = $item['api_path'];
-            }
-            Redis::sAdd($key,$api);
-        }
-    }
 
 
 }

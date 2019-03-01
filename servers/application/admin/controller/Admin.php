@@ -23,8 +23,7 @@ use app\admin\model\Admin as AdminModel;
 class Admin extends BaseController
 {
     /**
-     * @API(admin/Admin/login)
-     * @DESC(后台登录接口)
+     * @Api(后台登录接口,1,POST)
      */
     public function login($username,$password) {
         $adminData = AdminService::adminLogin($username,$password);
@@ -32,8 +31,7 @@ class Admin extends BaseController
     }
 
     /**
-     * @API(admin/Admin/getList)
-     * @DESC(获取管理员列表)
+     * @Api(获取管理员列表,3,GET)
      */
     public function getList($name='',$page=1,$limit=10,$order='desc',$sort='create_time') {
         (new PagingParameter())->goCheck();
@@ -42,8 +40,7 @@ class Admin extends BaseController
     }
 
     /**
-     * @API(admin/Admin/update)
-     * @DESC(更新管理员信息)
+     * @Api(更新管理员信息,3,POST)
      */
     public function update($admin_id,$admin_name,$user,$roles) {
         if(empty($roles) || empty($user)) {
@@ -63,8 +60,7 @@ class Admin extends BaseController
     }
 
     /**
-     * @API(admin/Admin/create)
-     * @DESC(创建管理员)
+     * @Api(创建管理员,3,POST)
      */
     public function create($admin_name,$user,$roles) {
         if(empty($roles) || empty($user)) {
@@ -83,8 +79,7 @@ class Admin extends BaseController
         return new Response(['data'=>$admin]);
     }
     /**
-     * @API(admin/Admin/delete)
-     * @DESC(删除管理员)
+     * @Api(删除管理员,3,POST)
      */
     public function delete($admin_id) {
         if($admin_id==1) {
@@ -101,8 +96,7 @@ class Admin extends BaseController
     }
 
     /**
-     * @API(admin/Admin/logout)
-     * @DESC(退出登录接口)
+     * @Api(退出登录接口,2,POST)
      */
     public function  logout() {
         Token::removeToken();

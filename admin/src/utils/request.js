@@ -42,7 +42,7 @@ service.interceptors.response.use(
     })
     if (error.response.data.error_code === 10001) {
       store.dispatch('FedLogOut').then(() => {
-        // location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     }
 

@@ -2,6 +2,7 @@
 servers/runtime/*
 servers/public/static/*
 servers/public/uploads/*
+servers/application/log/*
 !servers/public/uploads/default
 servers/application/database.php
 servers/application/config.php

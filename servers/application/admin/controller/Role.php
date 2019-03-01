@@ -19,8 +19,7 @@ use think\Cache;
 class Role extends BaseController
 {
     /**
-     * @API(admin/Role/getList)
-     * @DESC(获取角色列表)
+     * @Api(获取角色列表,2,GET)
      */
     public function getList($name='',$page=1,$limit=10,$order='desc',$sort='create_time') {
         (new PagingParameter())->goCheck();
@@ -29,8 +28,7 @@ class Role extends BaseController
     }
 
     /**
-     * @API(admin/Role/update)
-     * @DESC(更新指定角色信息)
+     * @Api(更新指定角色信息,3,POST)
      */
     public function update($role_id,$role_name,$role_desc,$menus) {
         $role = RoleModel::get($role_id);
@@ -41,14 +39,11 @@ class Role extends BaseController
         $role->role_desc = $role_desc;
         $role->save();
         $result = RoleService::updateRoleMenus($role_id,$menus);
-        Cache::rm('role-api'.$role_id);
-        Cache::rm('role-menu'.$role_id);
         return new Response(['data'=>$result]);
     }
 
     /**
-     * @API(admin/Role/create)
-     * @DESC(创建新角色)
+     * @Api(创建新角色,3,POST)
      */
     public function create($role_name,$role_desc,$menus) {
         $role = RoleModel::get(['role_name'=>$role_name]);
@@ -65,8 +60,7 @@ class Role extends BaseController
     }
 
     /**
-     * @API(admin/Role/delete)
-     * @DESC(删除指定角色)
+     * @Api(删除指定角色,3,POST)
      */
     public function delete($role_id) {
         $role = RoleModel::destroy($role_id,true);
@@ -74,14 +68,11 @@ class Role extends BaseController
             throw new ResourcesException();
         }
         RoleService::deleteRoleMenus($role_id);
-        Cache::rm('role-api'.$role_id);
-        Cache::rm('role-menu'.$role_id);
         return new Response();
     }
 
     /**
-     * @API(admin/Role/findByName)
-     * @DESC(通过名称查找一个角色)
+     * @Api(通过名称查找一个角色,3,POST)
      */
     public function findByName($name) {
         $role = RoleModel::get(['role_name'=>$name]);

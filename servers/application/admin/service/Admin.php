@@ -111,13 +111,13 @@ class Admin
 
     public static function getAdmin($userID) {
         self::init($userID);
-        $admin = Redis::init()->hgetall(self::$adminKey);
+        $admin = Redis::hGetAll(self::$adminKey);
         if(!$admin) {
             $admin = AdminModel::getByUserID($userID);
             $admin['roles'] = serialize($admin['roles']);
             //设置管理员信息哈希缓存
-            Redis::init()->hmset(self::$adminKey,$admin);
-            Redis::init()->expire(self::$adminKey,14400);
+            Redis::hSet(self::$adminKey,$admin);
+            Redis::expire(self::$adminKey,14400);
         }
         $admin['roles'] = unserialize($admin['roles']);
         return $admin;
@@ -125,7 +125,7 @@ class Admin
 
     public static function removeAdmin($userID) {
         self::init($userID);
-        Redis::init()->del(self::$adminKey);
+        Redis::del(self::$adminKey);
     }
 
 

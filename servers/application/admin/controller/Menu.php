@@ -24,8 +24,7 @@ use think\Cache;
 class Menu extends BaseController
 {
     /**
-     * @API(admin/Menu/getList)
-     * @DESC(获取系统菜单列表)
+     * @Api(获取系统菜单列表,3,GET)
      */
     public function getList($name='',$page=1,$limit=10,$order='desc',$sort='create_time') {
         (new PagingParameter())->goCheck();
@@ -34,8 +33,7 @@ class Menu extends BaseController
     }
 
     /**
-     * @API(admin/Menu/getRouter)
-     * @DESC(获取后台用户对应权限菜单路由)
+     * @Api(获取后台用户对应权限菜单路由,2,GET)
      */
     public function getRouter() {
         //获取路由，1、根据用户角色生成menu_id的集合
@@ -52,8 +50,7 @@ class Menu extends BaseController
     }
 
     /**
-     * @API(admin/Menu/linkApi)
-     * @DESC(将指定api权限关联到对应菜单)
+     * @Api(将指定api权限关联到对应菜单,3,POST)
      */
     public function linkApi($menu,$api) {
         $condition = [
@@ -65,13 +62,13 @@ class Menu extends BaseController
             throw new RepeatException();
         }
         $result = MenuApi::insert($condition);
-        Cache::clear('role-api');
+        Role::delRoleApisCache();
+        Role::delRoleMenusCache();
         return new Response(['data'=>$result]);
     }
 
     /**
-     * @API(admin/Menu/unLinkApi)
-     * @DESC(对指定api和菜单权限关联进行解绑)
+     * @Api(对指定api和菜单权限关联进行解绑,3,POST)
      */
     public function unLinkApi($menu,$api) {
         $condition = [
@@ -83,13 +80,13 @@ class Menu extends BaseController
             throw new ResourcesException(['msg'=>'找不到相应的关联数据']);
         }
         $result = MenuApi::destroy($condition,true);
-        Cache::clear('role-api');
+        Role::delRoleApisCache();
+        Role::delRoleMenusCache();
         return new Response(['data'=>$result]);
     }
 
     /**
-     * @API(admin/Menu/getMenu)
-     * @DESC(获取系统存在的所有菜单)
+     * @Api(获取系统存在的所有菜单,2,GET)
      */
     public function getMenu() {
         $router = SystemMenu::getRouter('all');

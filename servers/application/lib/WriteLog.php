@@ -32,8 +32,7 @@ class WriteLog
     public function write() {
         $file = fopen($this->file,"a+");
         $time = date('Y-m-d H:i:s',time());
-        $tag = "\r\n------------------------------------------\n
-            [ $time ]\r\n";
+        $tag = "\r\n------------------------------------------\n[ $time ]\r\n";
         fwrite($file,$tag);
         fwrite($file,print_r($this->content, true));
         fclose($file);

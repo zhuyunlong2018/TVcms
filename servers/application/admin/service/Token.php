@@ -93,9 +93,9 @@ class Token
      */
     public static function removeToken() {
         self::init();
-        $user = Redis::init()->hgetall(self::$tokenKey);
+        $user = Redis::hGetAll(self::$tokenKey);
         if($user) {
-            Redis::init()->del(self::$tokenKey);
+            Redis::del(self::$tokenKey);
             Admin::removeAdmin($user['user_id']);
         }
     }

@@ -57,6 +57,8 @@ class Role
         if(!empty($insertMenus)) {
             (new RoleMenu())->saveAll($insertMenus);
         }
+        self::delRoleApisCache($role_id);
+        self::delRoleMenusCache($role_id);
         return true;
     }
 
@@ -87,6 +89,8 @@ class Role
         if(!empty($deleteMenus)) {
             RoleMenu::destroy($deleteMenus,true);
         }
+        self::delRoleApisCache($role_id);
+        self::delRoleMenusCache($role_id);
         return true;
     }
 
@@ -107,8 +111,8 @@ class Role
                 }
             }
         }
-        Redis::init()->sadd(self::$roleApisKey,...$roleApis);
-        Redis::init()->sadd(self::$roleMenusKey,...$menus);
+        Redis::sAdd(self::$roleApisKey,$roleApis);
+        Redis::sAdd(self::$roleMenusKey,$menus);
     }
 
     public static function getRoleApi($roleID) {
@@ -131,4 +135,12 @@ class Role
         return $roleMenu;
     }
 
+    public static function delRoleApisCache($roleID='*') {
+        $keys = myConfig('redis.roleApis',$roleID);
+        Redis::del($keys);
+    }
+    public static function delRoleMenusCache($roleID='*') {
+        $keys = myConfig('redis.roleMenus',$roleID);
+        Redis::del($keys);
+    }
 }

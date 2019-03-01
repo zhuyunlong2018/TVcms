@@ -11,6 +11,7 @@ namespace app\admin\model;
 
 
 use app\common\model\BaseModel;
+use app\lib\exception\AuthException;
 use think\Cache;
 
 class Api extends BaseModel
@@ -23,13 +24,6 @@ class Api extends BaseModel
     }
 
 
-    public static function injection($path,$desc) {
-        return self::insert([
-            'api_path' => $path,
-            'api_name' => $desc,
-            ]);
-    }
-
     public static function getApi() {
         $result =  self::field('api_path')->select();
         Cache::set('api',$result);
@@ -37,11 +31,14 @@ class Api extends BaseModel
     }
 
     public static function getByType($type) {
-        $condition = [];
-        if($type != 'all') {
-            $condition = ['api_type'=>$type];
+        $condition = ['api_type'=>$type];
+        if($type === 'all') {
+            $condition = [];
         }
-        return self::where($condition)->field('api_path')->select();
+
+        $result = self::where($condition)->field('api_path')->select();
+
+        return $result;
     }
 
 }

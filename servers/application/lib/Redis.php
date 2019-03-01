@@ -44,6 +44,21 @@ class Redis
     }
 
     /*
+     *KEYS => 接收数组，删除一个或多个缓存
+     */
+    public static function del($key) {
+        self::init();
+            return self::$redis->del($key);
+
+    }
+    /*
+     * KEYS => 设定键的存活时间
+     */
+    public static function expire($key,$time) {
+        return self::init()->expire($key,$time);
+    }
+
+    /*
      * STRING => 获取键值对
      */
     public static function get($key){
@@ -76,21 +91,27 @@ class Redis
         $func = is_array($field) ? 'hmGet' : 'hGet';
         return self::$redis->{$func}($key,$field);
     }
+    /*
+     *HASH => 设置一个hash字段或字段数组
+     */
+    public static function hSet($key,$field) {
+        self::init();
+        $func = is_array($field) ? 'hmSet' : 'hSet';
+        return self::$redis->{$func}($key,$field);
+    }
 
     /*
      *HASH => 获取一个哈希的所有字段值
      */
     public static function hGetAll($key) {
-        self::init();
-        return self::$redis->hGetAll($key);
+        return self::init()->hGetAll($key);
     }
 
     /*
      * SET => 判断元素是否在集合中
      */
     public static function sIsMember($key,$field) {
-        self::init();
-        return self::$redis->sIsMember($key,$field);
+        return self::init()->sIsMember($key,$field);
     }
 
     /*
@@ -98,9 +119,19 @@ class Redis
      */
     public static function sAdd($key,$value)
     {
-        self::init();
-        return self::$redis->sadd($key,...$value);
+        if(is_array($value)) {
+            self::init()->sadd($key,...$value);
+        } else {
+            self::init()->sadd($key,$value);
+        }
     }
 
+    /*
+     * SET => 提取集合中所有元素
+     */
+    public static function sMembers($key)
+    {
+        self::init()->sMembers($key);
+    }
 
 }

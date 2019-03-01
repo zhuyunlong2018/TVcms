@@ -28,18 +28,17 @@ use think\Request;
 class Index extends BaseController
 {
     /**
-     * @API(test/index/index)
-     * @DESC(测试用接口描述)
+     * @Api(获取管理员列表,3,GET)
      */
-    public function index() {
+    public function index($i=null,$H=1) {
 
+    $a = Redis::init()->keys('api_list_type*');
+    dump($a);
         $role = Role::getRole(1);
 //        $role = Cache::get('role-menu1');
 //        $admin = Admin::getByUserID(1);
-        dump($role);
-        die;
+//        dump('action');
 //        Cache::rm('admin-user1');
-        $admin = Cache::get('admin-user1');
 //        Cache::clear('role-api');
 //        Role::getRoleApi(1);
 //        $admin = Cache::get('role1');
@@ -57,7 +56,7 @@ class Index extends BaseController
 //        $a = Cache::get($token);
 //        return ($role);
 //        return ($a);
-//        Api::injection('index/index/hello','测试用接口数据');
+//        ApiInjection::injection('index/index/hello','测试用接口数据');
 //        $api = [
 //            'api_name' => '会员管1理1',
 //            'api_path' =>'/api/user1'
@@ -66,7 +65,7 @@ class Index extends BaseController
 //        dump($data);
 //        if(!$data) {
 //            dump(1);
-//            Api::getApi();
+//            ApiInjection::getApi();
 //            $data = Cache::get('api');
 //            dump($data);
 //        }
@@ -76,7 +75,7 @@ class Index extends BaseController
 //        return Admin::getAuth();
 //        return Admin::getList();
 //        $method = new ReflectionMethod('app\admin\controller\Admin', 'login');
-//        echo $this->getDocComment($method->getDocComment(), '@API');
+//        echo $this->getDocComment($method->getDocComment(), '@ApiInjection');
 //        echo $this->getDocComment($method->getDocComment(), '@desc');
 
 
@@ -89,8 +88,8 @@ class Index extends BaseController
 //
 //       echo Request::instance()->root();
 
-       dump(BASE_SITE_ROOT);
-       dump(BASE_SITE_URL);
+//       dump(BASE_SITE_ROOT);
+//       dump(BASE_SITE_URL);
     }
 
     public function clearCache() {

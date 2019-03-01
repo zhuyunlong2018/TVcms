@@ -9,9 +9,9 @@
 
 namespace app\admin\controller;
 
-use app\common\controller\BaseController as CommonBaseController;
+use think\Controller;
 
-class BaseController extends CommonBaseController
+class BaseController extends Controller
 {
     protected function _initialize()
     {

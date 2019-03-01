@@ -12,13 +12,13 @@ namespace app\admin\controller;
 
 use app\lib\Response;
 use app\admin\model\Api as ApiModel;
-use think\Cache;
+use app\admin\service\Api as ApiService;
+
 
 class Api extends BaseController
 {
     /**
-     * @API(admin/Api/getList)
-     * @DESC(根据类型获取API列表)
+     * @Api(根据类型获取API列表,2,GET)
      */
     public function getList($type=0) {
         $list = ApiModel::getList($type,'asc','api_path');
@@ -26,15 +26,13 @@ class Api extends BaseController
     }
 
     /**
-     * @API(admin/Api/changeType)
-     * @DESC(根据id修改API的类型)
+     * @Api(根据id修改API的类型,3,POST)
      */
     public function changeType($id,$type) {
         $api = ApiModel::get($id);
-        Cache::rm('api'.($api->api_type));
-        Cache::rm('api'.$type);
         $api->api_type = $type;
         $result = $api->save();
+        ApiService::delCache();
         return new Response(['data'=>$result]);
     }
 

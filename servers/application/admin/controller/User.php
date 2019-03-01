@@ -21,17 +21,25 @@ use app\lib\Response;
 
 class User extends BaseController
 {
-
+    /**
+     * @Api(通过邮箱登录,1,POST)
+     */
     public function login($email,$password) {
         $userData = UserService::loginByEmail($email,$password);
         return new Response(['data'=>$userData]);
     }
 
+    /**
+     * @Api(用户注册,1,POST)
+     */
     public function register($name,$email,$password) {
         $result = UserService::register($name,$email,$password);
         return new Response(['msg'=>'注册成功','data'=>$result]);
     }
 
+    /**
+     * @Api(获取用户列表,3,GET)
+     */
     public function getList() {
         (new PagingParameter())->goCheck();
         $condition = [];
@@ -47,8 +55,7 @@ class User extends BaseController
     }
 
     /**
-     * @API(admin/User/getOne)
-     * @DESC(根据条件获取一名用户信息)
+     * @Api(根据条件获取一名用户信息,3,GET)
      */
     public function getOne($type,$value) {
         switch ($type) {
@@ -67,6 +74,10 @@ class User extends BaseController
                 throw new ParameterException(['msg'=>'type类型错误！']);
         }
     }
+
+    /**
+     * @Api(修改用户状态,3,POST)
+     */
     public function changeStatus($id,$status) {
         $user = UserModel::get($id);
         if(empty($user)) {
