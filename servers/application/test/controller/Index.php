@@ -34,6 +34,7 @@ class Index extends BaseController
 
     $a = Redis::init()->keys('api_list_type*');
     dump($a);
+    Redis::del($a);
         $role = Role::getRole(1);
 //        $role = Cache::get('role-menu1');
 //        $admin = Admin::getByUserID(1);

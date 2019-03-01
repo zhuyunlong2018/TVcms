@@ -54,7 +54,6 @@ class Admin extends BaseController
         $admin->user_id = $user['user_id'];
         $admin->save();
         AdminService::removeAdmin($user['user_id']);
-
         $result = AdminService::updateAdminRoles($admin_id,$roles);
         return new Response(['data'=>$result]);
     }

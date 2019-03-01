@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use app\admin\model\Role as RoleModel;
 use app\admin\service\Role as RoleService;
 use app\common\validate\PagingParameter;
+use app\lib\exception\AuthException;
 use app\lib\exception\RepeatException;
 use app\lib\exception\ResourcesException;
 use app\lib\Response;
@@ -30,13 +31,24 @@ class Role extends BaseController
     /**
      * @Api(更新指定角色信息,3,POST)
      */
-    public function update($role_id,$role_name,$role_desc,$menus) {
+    public function update($role_id,$role_name,$role_desc,$write_auth,$menus) {
+        $roleCheck = RoleModel::get([
+            'role_id' => ['<>',$role_id],
+            'role_name'=>$role_name
+        ]);
+        if(!empty($roleCheck)) {
+            throw new RepeatException(['msg'=>$role_name.'管理员已存在']);
+        }
         $role = RoleModel::get($role_id);
         if(empty($role)) {
             throw new ResourcesException();
         }
+        if($role->role_name == 'admin') {
+            throw new AuthException(['msg'=>'超级管理员角色不能编辑']);
+        }
         $role->role_name = $role_name;
         $role->role_desc = $role_desc;
+        $role->write_auth = $write_auth;
         $role->save();
         $result = RoleService::updateRoleMenus($role_id,$menus);
         return new Response(['data'=>$result]);
@@ -45,14 +57,15 @@ class Role extends BaseController
     /**
      * @Api(创建新角色,3,POST)
      */
-    public function create($role_name,$role_desc,$menus) {
+    public function create($role_name,$role_desc,$write_auth,$menus) {
         $role = RoleModel::get(['role_name'=>$role_name]);
         if(!empty($role)) {
-            throw new RepeatException();
+            throw new RepeatException(['msg'=>$role_name.'管理员已存在']);
         }
         $role = RoleModel::create([
             'role_name' => $role_name,
-            'role_desc' => $role_desc
+            'role_desc' => $role_desc,
+            'write_auth' => $write_auth
         ]);
         $roleID = $role->role_id;
         RoleService::createRoleMenus($roleID,$menus);
@@ -63,10 +76,14 @@ class Role extends BaseController
      * @Api(删除指定角色,3,POST)
      */
     public function delete($role_id) {
-        $role = RoleModel::destroy($role_id,true);
+        $role = RoleModel::get($role_id);
         if(empty($role)) {
             throw new ResourcesException();
         }
+        if($role->role_name == 'admin') {
+            throw new AuthException(['msg'=>'超级管理员角色不能删除']);
+        }
+        $role->delete();
         RoleService::deleteRoleMenus($role_id);
         return new Response();
     }

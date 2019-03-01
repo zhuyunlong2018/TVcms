@@ -48,7 +48,7 @@ class Redis
      */
     public static function del($key) {
         self::init();
-            return self::$redis->del($key);
+        return self::$redis->del($key);
 
     }
     /*
@@ -57,6 +57,13 @@ class Redis
     public static function expire($key,$time) {
         return self::init()->expire($key,$time);
     }
+    /*
+     * KEYS => 判断键是否存在
+     */
+    public static function exists($key) {
+        return self::init()->exists($key);
+    }
+
 
     /*
      * STRING => 获取键值对
@@ -119,10 +126,11 @@ class Redis
      */
     public static function sAdd($key,$value)
     {
+        self::init();
         if(is_array($value)) {
-            self::init()->sadd($key,...$value);
+            return self::$redis->sadd($key,...$value);
         } else {
-            self::init()->sadd($key,$value);
+            return self::$redis->sadd($key,$value);
         }
     }
 
@@ -131,7 +139,7 @@ class Redis
      */
     public static function sMembers($key)
     {
-        self::init()->sMembers($key);
+        return self::init()->sMembers($key);
     }
 
 }

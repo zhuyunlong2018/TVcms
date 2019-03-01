@@ -23,15 +23,15 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" @click="changeApi(scope.row)">编辑</el-button>
+          <el-button type="text" v-if='scope.row.father_id != 0' @click="changeApi(scope.row)">更改关联api接口</el-button>
         </template>
       </el-table-column>
     </tree-table>
-    <el-dialog :title="dialogTitle" width="1000px" :visible.sync="dialogFormVisible">
-      <Transfer 
-      :apiList="selectedMenu.apiList" 
-      :menuApi="selectedMenu.menuApi"
-      v-show="selectedMenu.father_id!==0" />
+
+
+    <el-dialog :title="dialogTitle" width="70%" :visible.sync="dialogFormVisible">
+      <code>菜单栏目名称：{{selectedMenu.title}}</code>
+      <dnd-list :list1="selectedMenu.menuApi" :list2="selectedMenu.apiList" :menu_id="selectedMenu.id" list1-title="已关联api" list2-title="未关联api"/>
     </el-dialog>
 
 
@@ -44,13 +44,13 @@
   Created: 2018/1/19-14:54
 */
 import treeTable from '@/components/TreeTable'
-import Transfer from './components/Transfer'
+import DndList from '@/views/auth/components/DndList'
 import treeToArray from './customEval'
 import { listMenu } from '@/api/menu'
 import { fetchList } from '@/api/api'
 export default {
   name: 'CustomTreeTableDemo',
-  components: { treeTable, Transfer },
+  components: { treeTable, DndList },
   data() {
     return {
       func: treeToArray,
@@ -70,8 +70,7 @@ export default {
         id: 0,
         title: '',
         apiList: [],
-        menuApi: [],
-        father_id: 0
+        menuApi: []
       },
     }
   },
@@ -99,16 +98,8 @@ export default {
     changeApi(row) {
       this.selectedMenu.title = row.title
       this.selectedMenu.id = row.menu_id
-      this.selectedMenu.father_id = row.father_id
+      this.selectedMenu.menuApi = row.api
       this.dialogFormVisible = true
-      let api = []
-      if(typeof row.api !== 'undefined') {
-        for(const v of row.api) {
-          api.push(v.api_id)
-        }
-        this.selectedMenu.menuApi = api
-      }
-      console.log(api)
     }
   }
 }

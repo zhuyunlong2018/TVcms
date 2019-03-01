@@ -94,8 +94,7 @@ class Role
         return true;
     }
 
-    public static function getRole($roleID) {
-        self::init($roleID);
+    public static function getRoleInfo($roleID) {
         $roleMenus = RoleModel::getRoleApi($roleID);
         $roleApis = [];
         $menus = [];
@@ -117,20 +116,20 @@ class Role
 
     public static function getRoleApi($roleID) {
         self::init($roleID);
-        $roleApi = Redis::init()->smembers(self::$roleApisKey);
+        $roleApi = Redis::sMembers(self::$roleApisKey);
         if(!$roleApi) {
-            self::getRole($roleID);
-            $roleApi = Redis::init()->smembers(self::$roleApisKey);
+            self::getRoleInfo($roleID);
+            $roleApi = Redis::sMembers(self::$roleApisKey);
         }
         return $roleApi;
     }
 
     public static function getRoleMenu($roleID) {
         self::init($roleID);
-        $roleMenu = Redis::init()->smembers(self::$roleMenusKey);
+        $roleMenu = Redis::sMembers(self::$roleMenusKey);
         if(!$roleMenu) {
-            self::getRole($roleID);
-            $roleMenu = Redis::init()->smembers(self::$roleMenusKey);
+            self::getRoleInfo($roleID);
+            $roleMenu = Redis::sMembers(self::$roleMenusKey);
         }
         return $roleMenu;
     }

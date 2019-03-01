@@ -54,7 +54,7 @@
         status-icon
         label-position="left"
         label-width="100px"
-        style="width: 400px; margin-left:50px;"
+        style="max-width: 400px; margin-left:50px;"
       >
         <el-form-item label="角色名称" prop="role_name">
           <el-input v-model="dataForm.role_name"/>
@@ -62,6 +62,14 @@
         <el-form-item label="角色描述" prop="role_desc">
           <el-input v-model="dataForm.role_desc"/>
         </el-form-item>
+        <el-form-item label="权限设置" prop="write_auth">
+          <el-switch
+          v-model="auth"
+          active-text="读写模式"
+          inactive-text="只读模式">
+          </el-switch>
+        </el-form-item>
+        
         <div v-for='(menu,index) in menus' :key="menu.menu_id">
           <el-checkbox
           :indeterminate="dataForm.menus[index].isIndeterminate"
@@ -137,6 +145,7 @@ export default {
         role_id: undefined,
         role_name: undefined,
         role_desc: undefined,
+        write_auth: 0,
         menus: undefined
       },
       dialogFormVisible: false,
@@ -151,6 +160,7 @@ export default {
         ],
         role_desc: [{ required: true, message: "角色描述不能为空", trigger: "blur" }]
       },
+      auth: false,
       menus: [],
       handleMenus: []
     };
@@ -184,13 +194,15 @@ export default {
         element.children = []
         element.checkAll = false
         element.isIndeterminate = false
-      });
+      })
+      this.auth = false
       this.dataForm = {
         role_id: undefined,
         role_name: undefined,
         role_desc: undefined,
+        write_auth: 0,
         menus
-      };
+      }
 
     },
     handleCreate() {
@@ -199,11 +211,12 @@ export default {
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].clearValidate();
-      });
+      })
     },
     createData() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
+          this.dataForm.write_auth = this.auth?1:0
           createRole(this.dataForm)
             .then(response => {
               let menus = deepClone(this.dataForm.menus)
@@ -242,6 +255,7 @@ export default {
         element.checkAll = checkedCount === this.handleMenus[index].children.length;
         element.isIndeterminate = checkedCount > 0 && checkedCount < this.handleMenus[index].children.length;
       });
+      this.auth = data.write_auth==1?true:false
       this.dataForm = data
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
@@ -252,12 +266,14 @@ export default {
     updateData() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
+          this.dataForm.write_auth = this.auth?1:0
           updateRole(this.dataForm)
             .then(() => {
               for (const v of this.list) {
                 if (v.role_id === this.dataForm.role_id) {
                   v.role_name = this.dataForm.role_name
                   v.role_desc = this.dataForm.role_desc
+                  v.write_auth = this.dataForm.write_auth
                   let menus = deepClone(this.dataForm.menus)
                   menus.forEach((element,index) => {
                     let children = []

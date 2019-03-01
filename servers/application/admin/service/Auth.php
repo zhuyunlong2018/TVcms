@@ -95,6 +95,10 @@ class Auth
         $auth = false;
         $admin = Admin::getAdmin($user['user_id']);
         foreach ($admin['roles'] as $role) {
+            if($role['role_name'] == 'admin') {
+                $auth = true;
+                break;
+            }
             if($role['write_auth']==0 && self::$method=='POST') {
                 //如果本角色只有只读权限，而请求为写入，则跳过本角色验证
                 continue;

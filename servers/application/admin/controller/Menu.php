@@ -41,6 +41,10 @@ class Menu extends BaseController
         $admin = AdminService::getAdmin($user['user_id']);
         $menus = [];
         foreach ($admin['roles'] as $role) {
+            if($role['role_name'] == 'admin') {
+                $menus = 'all';
+                break;
+            }
             $roleMenus = Role::getRoleMenu($role['role_id']);
             $menus = array_merge($roleMenus,$menus);
         }
