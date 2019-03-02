@@ -8,7 +8,7 @@ export function get(query) {
   })
 }
 
-export function addPraise(data) { 
+export function addPraise(data) {
   return request({
     url: 'blog/Web_Data/addPraise',
     method: 'post',

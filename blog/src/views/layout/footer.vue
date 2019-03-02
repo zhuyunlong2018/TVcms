@@ -6,7 +6,6 @@
   </div>
 </template>
 
-
 <style>
 
   footer {

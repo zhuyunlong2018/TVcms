@@ -85,24 +85,24 @@
 </template>
 
 <script>
-//import markdownEditor from 'vue-simplemde/src/markdown-editor';
-import { mapMutations, mapGetters } from "vuex";
-import { getOne, addArticle, updateArticle } from "@/api/article";
-import { getList } from "@/api/tags";
-import { upBase64 } from "@/api/file";
+// import markdownEditor from 'vue-simplemde/src/markdown-editor';
+import { mapMutations, mapGetters } from 'vuex'
+import { getOne, addArticle, updateArticle } from '@/api/article'
+import { getList } from '@/api/tags'
+import { upBase64 } from '@/api/file'
 export default {
   data() {
     return {
       article: {
-        a_content: "",
+        a_content: '',
         a_id: 0,
         a_img: '',
-        a_title: "",
-        outline: "",
+        a_title: '',
+        outline: '',
         tag: {
           tag_id: 1,
-          tag_name: "生活随笔",
-          create_time: "1970-01-01 08:00:00"
+          tag_name: '生活随笔',
+          create_time: '1970-01-01 08:00:00'
         },
         images: [],
         tag_id: 1,
@@ -110,146 +110,143 @@ export default {
       },
       create: true,
       tags: [],
-      tags_box: false, //控制标签选项盒子显示或隐藏
-      imgs: [], //图片上传预览框中的图片地址
-      images: [], //传递到后台的图片地址
-      savedImgs: [], //本次要保存的图片名集合
+      tags_box: false, // 控制标签选项盒子显示或隐藏
+      imgs: [], // 图片上传预览框中的图片地址
+      images: [], // 传递到后台的图片地址
+      savedImgs: [], // 本次要保存的图片名集合
       configs: {
         status: false,
         spellChecker: false,
-        placeholder: "内容"
+        placeholder: '内容'
       }
-    };
+    }
   },
   methods: {
-    ...mapMutations(["SHOW_ALERT"]),
+    ...mapMutations(['SHOW_ALERT']),
     getOne(id) {
       getOne(id).then(response => {
-        this.article = response.data.data;
-      });
+        this.article = response.data.data
+      })
     },
     getTags() {
-      getList("").then(response => {
-        this.tags = response.data.data;
-      });
+      getList('').then(response => {
+        this.tags = response.data.data
+      })
     },
     showTags() {
-      this.tags_box = true;
-      this.stopProp();
+      this.tags_box = true
+      this.stopProp()
     },
     selectTag(tag) {
-      this.article.tag = tag;
-      this.article.tag_id = tag.tag_id;
-      this.tags_box = false;
+      this.article.tag = tag
+      this.article.tag_id = tag.tag_id
+      this.tags_box = false
     },
     stopProp(e) {
-      e = e || event;
-      e.stopPropagation();
+      e = e || event
+      e.stopPropagation()
     },
     addArticle() {
       this.article.imgs = this.savedImgs
       addArticle(this.article).then(response => {
-        this.$router.push("/admin/editor");
-      });
+        this.$router.push('/admin/editor')
+      })
     },
     updateArticle() {
       this.article.imgs = this.savedImgs
       updateArticle(this.article).then(respoonse => {
-        this.$router.push("/admin/editor");
-      });
+        this.$router.push('/admin/editor')
+      })
     },
     closeBox() {
-      this.tags_box = false;
+      this.tags_box = false
     },
     addImgArticle(img) {
-      let content = this.article.a_content
-      this.article.a_content = content + '![](' + img.image.replace(/\\/g,'/') + ')';
+      const content = this.article.a_content
+      this.article.a_content = content + '![](' + img.image.replace(/\\/g, '/') + ')'
     },
     setBackground(img) {
       this.article.a_img = img.image
     },
     fileImage(e) {
-      let _this = this;
-      let file = e.target.files;
+      const _this = this
+      const file = e.target.files
       // console.log(file[0].name);
       if (this.imgs.length > 9 || this.imgs.length + file.length > 9) {
-        this.SHOW_ALERT("图片超过9九张，请分多次上传");
-        return;
+        this.SHOW_ALERT('图片超过9九张，请分多次上传')
+        return
       }
       for (let i = 0; i < file.length; i++) {
         if (this.imgs.length > 0) {
           for (let j = 0; j < this.imgs.length; j++) {
-            if (file[i].name == this.imgs[j].name) {
-              this.SHOW_ALERT("请不要选择重复图片");
-              return;
+            if (file[i].name === this.imgs[j].name) {
+              this.SHOW_ALERT('请不要选择重复图片')
+              return
             } else {
-              continue;
+              continue
             }
           }
         }
-        let imgSize = file[i].size / 1024;
+        const imgSize = file[i].size / 1024
         if (imgSize > 500) {
-          this.SHOW_ALERT("请上传大小不要超过500KB的图片");
-          continue;
+          this.SHOW_ALERT('请上传大小不要超过500KB的图片')
+          continue
         } else {
-          let reader = new FileReader();
-          reader.readAsDataURL(file[i]); // 读出 base64
+          const reader = new FileReader()
+          reader.readAsDataURL(file[i]) // 读出 base64
           reader.onloadend = function() {
             // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
-            let dataURL = reader.result;
-            let obj = {};
-            obj.url = dataURL;
-            obj.name = file[i].name;
-            _this.imgs.push(obj); //将base64图片数据存入预览用的数组
-            _this.images.push(dataURL); //将base64图片数据存入发送服务端用的数组
-          };
+            const dataURL = reader.result
+            const obj = {}
+            obj.url = dataURL
+            obj.name = file[i].name
+            _this.imgs.push(obj) // 将base64图片数据存入预览用的数组
+            _this.images.push(dataURL) // 将base64图片数据存入发送服务端用的数组
+          }
         }
       }
     },
     upImgs: function() {
       if (this.imgs.length === 0) {
-        this.SHOW_ALERT("请选择要上传图片");
-        return;
+        this.SHOW_ALERT('请选择要上传图片')
+        return
       }
       const data = {
         imgs: this.images,
         path: 'article'
-      };
+      }
       upBase64(data).then(response => {
         const data = response.data.data
         this.imgs = []
         this.images = []
         this.savedImgs = this.savedImgs.concat(data.name)
-        let images = []
-        for(const v of data.path) {
-          images.push({image: v})
+        const images = []
+        for (const v of data.path) {
+          images.push({ image: v })
         }
-        let oldImages = this.article.images
+        const oldImages = this.article.images
         this.article.images = oldImages.concat(images)
       })
-
     },
     remove: function(index) {
-      this.imgs.splice(index, 1);
-      this.images.splice(index, 1);
-    },
+      this.imgs.splice(index, 1)
+      this.images.splice(index, 1)
+    }
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(['user'])
   },
   mounted() {
-    this.getTags();
-    const id = this.$route.params.id;
+    this.getTags()
+    const id = this.$route.params.id
     if (id) {
-      this.create = false;
-      this.getOne(id);
+      this.create = false
+      this.getOne(id)
     }
-    this.article.user_id = this.user.user_id;
+    this.article.user_id = this.user.user_id
   }
-};
+}
 </script>
-
-
 
 <style scoped>
 /*@import '~simplemde/dist/simplemde.min.css';*/

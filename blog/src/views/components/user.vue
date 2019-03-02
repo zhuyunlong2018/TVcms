@@ -17,12 +17,12 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  export default {
-      computed: {
-        ...mapState(["commenter","commenterEmail"])
-      }
+import { mapState } from 'vuex'
+export default {
+  computed: {
+    ...mapState(['commenter', 'commenterEmail'])
   }
+}
 </script>
 
 <style scoped>
@@ -97,11 +97,6 @@
     width: 90%;
   }
 
-
   }
-
-
-
-
 
 </style>

@@ -16,7 +16,7 @@ export function getOne(ID) {
   })
 }
 
-export function getAll(query=null) {
+export function getAll(query = null) {
   return request({
     url: '/blog/article/getAllPublished',
     method: 'get',
@@ -24,7 +24,7 @@ export function getAll(query=null) {
   })
 }
 
-export function getTitleList(query=null) {
+export function getTitleList(query = null) {
   return request({
     url: '/blog/article/getTitleList',
     method: 'get',
@@ -64,7 +64,7 @@ export function updateArticle(data) {
   })
 }
 
-export function getBing(query=null) {
+export function getBing(query = null) {
   return request({
     url: '/blog/article/getBing',
     method: 'get',

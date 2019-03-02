@@ -9,32 +9,30 @@
 </template>
 
 <script>
-import comment from "./comment.vue";
-import { mapState,mapActions,mapMutations } from "vuex";
-  export default {
-      data() {
-          return{
-            articleID: 0
-          }
-      },
-      components: {
-        comment
-      },
-    methods: {
-      
-      },
-    mounted() {
+import comment from './comment.vue'
+export default {
+  data() {
+    return {
+      articleID: 0
     }
+  },
+  components: {
+    comment
+  },
+  methods: {
+
+  },
+  mounted() {
   }
+}
 
 </script>
 <style>
-  .main .comment .commentBox .markdown-editor .CodeMirror, 
+  .main .comment .commentBox .markdown-editor .CodeMirror,
   .main .comment .commentBox .markdown-editor .CodeMirror-scroll {
     min-height: 100px;
   }
 </style>
-
 
 <style scoped>
   .main .msgborder {
@@ -45,7 +43,6 @@ import { mapState,mapActions,mapMutations } from "vuex";
     border-radius: 10px;
     box-shadow: 3px 3px 8px 2px #ccc;
   }
-
 
   .main .msgborder .title {
     color: rgba(33,33,33,0.8);
@@ -62,14 +59,11 @@ import { mapState,mapActions,mapMutations } from "vuex";
     color: #000;
   }
 
-
-
   @media only screen and (max-width: 500px) {
     .main .msgborder .title {
       font-size: 18px;
       height: 25px;
     }
   }
-
 
 </style>

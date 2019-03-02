@@ -1,27 +1,27 @@
 export function getStorage(key) {
-    let obj = window.localStorage.getItem(key)
-    return  JSON.parse(obj)
-  }
-  
-export function setStorage(key,val) {
-    let obj = JSON.stringify(val)
-    return window.localStorage.setItem(key, obj)
+  const obj = window.localStorage.getItem(key)
+  return JSON.parse(obj)
+}
+
+export function setStorage(key, val) {
+  const obj = JSON.stringify(val)
+  return window.localStorage.setItem(key, obj)
 }
 
 export function removeStorage(key) {
-    return window.localStorage.removeItem(key)
+  return window.localStorage.removeItem(key)
 }
 
 export function getSession(key) {
-    const obj = window.sessionStorage.getItem(key)
-    return JSON.parse(obj)
+  const obj = window.sessionStorage.getItem(key)
+  return JSON.parse(obj)
 }
 
 export function setSession(key, val) {
-    const obj = JSON.stringify(val)
-    return window.sessionStorage.setItem(key, obj)
+  const obj = JSON.stringify(val)
+  return window.sessionStorage.setItem(key, obj)
 }
 
 export function removeSession(key) {
-    return window.sessionStorage.removeItem(key)
+  return window.sessionStorage.removeItem(key)
 }

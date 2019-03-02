@@ -43,128 +43,121 @@
 
 <script>
 
+import NavHeader from './header.vue'
+import NavFooter from './footer.vue'
+import ArticleList from '@/views/article/articleList.vue'
+import AsideBar from './aside.vue'
+import LogIn from '@/views/login.vue'
 
-  import NavHeader from './header.vue';
-  import NavFooter from './footer.vue';
-  import ArticleList from '@/views/article/articleList.vue';
-  import AsideBar from './aside.vue';
-  import LogIn from '@/views/login.vue';
+import { mapMutations, mapState, mapActions } from 'vuex'
 
-  import { mapMutations,mapState,mapActions } from 'vuex';
-
-
-
-  export default {
-    name: 'home',
-    methods:{
-      ...mapActions(['getArticleList']),
-      ...mapMutations(['SHOW_NAV','CHANGE_CRUMBS','CLEAR_CRUMBS','IF_TOUCHED','SET_ARTICLE_LIST_INFO']),
-      touch:function(e) {
-        let w = document.documentElement.clientWidth || document.body.clientWidth;
-        this.IF_TOUCHED();
-        if(w< 501) {
-          this.SHOW_NAV(false);
-        }
-      },
-      scrollBar:function(e) {
-        if (e.deltaY>0 ){
-          this.SHOW_NAV(false);
-        } else {
-          this.SHOW_NAV(true);
-        }
-      },
-      showNav:function() {
-        if(this.showHeaderNav) {
-          this.SHOW_NAV(false);
-        } else {
-          this.SHOW_NAV(true);
-        }
-      },
-      getListByTag() {
-        let tagName = this.crumbs.tagName
-        let tagID = this.crumbs.tagID
-        if(tagID && tagName) {
-          let listObj = {
-            page: 1,
-            tagID
-          }
-          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
-          this.getArticleList()
-          let obj = {
-            tagName,
-            tagID,
-            title: ''
-          }
-          this.CHANGE_CRUMBS(obj)
-          this.$router.push('/');
-        }
-      },
-      goHome:function() {
-        if(this.$route.name == 'articleList') {
-          let listObj = {
-            page: 1,
-            tagID: ''
-          }
-          this.$store.commit('SET_ARTICLE_LIST_INFO',listObj)
-          this.getArticleList()
-        }   
-        this.CLEAR_CRUMBS();
-        this.$router.push('/');
+export default {
+  name: 'Home',
+  methods: {
+    ...mapActions(['getArticleList']),
+    ...mapMutations(['SHOW_NAV', 'CHANGE_CRUMBS', 'CLEAR_CRUMBS', 'IF_TOUCHED', 'SET_ARTICLE_LIST_INFO']),
+    touch: function(e) {
+      const w = document.documentElement.clientWidth || document.body.clientWidth
+      this.IF_TOUCHED()
+      if (w < 501) {
+        this.SHOW_NAV(false)
       }
     },
-    computed: {
-      ...mapState(['showHeaderNav','crumbs','show_article']),
-      change_color: function() {
-        if(this.showHeaderNav) {
-          return 'white glyphicon-option-horizontal';
-        } else {
-          return 'black glyphicon-option-vertical';
-        }
-      },
-      _crumbs:function() {
-        let tagName
-        switch(this.$route.name) {
-          case 'articleList':
-            if(this.crumbs.tagName) {
-              tagName = this.crumbs.tagName
-            } else {
-              tagName = '所有文章'
-            }
-            return tagName
-            break
-          case 'article':
-            tagName = this.crumbs.tagName
-            return tagName
-            break
-          case 'msgborder':
-            tagName = '留言板'
-            break;
-          case 'timer':
-            tagName = '时间轴'
-            break;
-          case 'about':
-            tagName = '关于'
-            break;
-          default:
-        }
-        this.CLEAR_CRUMBS()
-        return tagName
+    scrollBar: function(e) {
+      if (e.deltaY > 0) {
+        this.SHOW_NAV(false)
+      } else {
+        this.SHOW_NAV(true)
       }
     },
-    components: {
-      NavHeader,
-      NavFooter,
-      ArticleList,
-      AsideBar,
-      LogIn
+    showNav: function() {
+      if (this.showHeaderNav) {
+        this.SHOW_NAV(false)
+      } else {
+        this.SHOW_NAV(true)
+      }
+    },
+    getListByTag() {
+      const tagName = this.crumbs.tagName
+      const tagID = this.crumbs.tagID
+      if (tagID && tagName) {
+        const listObj = {
+          page: 1,
+          tagID
+        }
+        this.$store.commit('SET_ARTICLE_LIST_INFO', listObj)
+        this.getArticleList()
+        const obj = {
+          tagName,
+          tagID,
+          title: ''
+        }
+        this.CHANGE_CRUMBS(obj)
+        this.$router.push('/')
+      }
+    },
+    goHome: function() {
+      if (this.$route.name === 'articleList') {
+        const listObj = {
+          page: 1,
+          tagID: ''
+        }
+        this.$store.commit('SET_ARTICLE_LIST_INFO', listObj)
+        this.getArticleList()
+      }
+      this.CLEAR_CRUMBS()
+      this.$router.push('/')
     }
+  },
+  computed: {
+    ...mapState(['showHeaderNav', 'crumbs', 'show_article']),
+    change_color: function() {
+      if (this.showHeaderNav) {
+        return 'white glyphicon-option-horizontal'
+      } else {
+        return 'black glyphicon-option-vertical'
+      }
+    },
+    _crumbs: function() {
+      let tagName
+      switch (this.$route.name) {
+        case 'articleList':
+          if (this.crumbs.tagName) {
+            tagName = this.crumbs.tagName
+          } else {
+            tagName = '所有文章'
+          }
+          return tagName
+        case 'article':
+          tagName = this.crumbs.tagName
+          return tagName
+        case 'msgborder':
+          tagName = '留言板'
+          break
+        case 'timer':
+          tagName = '时间轴'
+          break
+        case 'about':
+          tagName = '关于'
+          break
+        default:
+      }
+      this.CLEAR_CRUMBS()
+      return tagName
+    }
+  },
+  components: {
+    NavHeader,
+    NavFooter,
+    ArticleList,
+    AsideBar,
+    LogIn
   }
+}
 
 </script>
 
-
 <style scoped>
-
 
   .bg-pic img {
     width: 100%;
@@ -201,8 +194,6 @@
     color: #339;
   }
 
-
-
 .show-nav-btn {
   display: none;
   opacity: 0;
@@ -237,11 +228,8 @@
 .return-top a {
   bottom: 10px;
 }
-  
-
 
 }
-
 
 @media screen and (min-width:768px) {
   main {
@@ -254,6 +242,5 @@
     max-width: 80%;
   }
 }
-
 
 </style>

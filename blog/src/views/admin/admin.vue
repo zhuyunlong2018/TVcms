@@ -1,91 +1,84 @@
 <template>
-    <div class="admin">
-      <admin-header></admin-header>
-      <all-images></all-images>
-      <div class="admin-main" @click="CLOSE_LOGOUT_BOX" >
-            <transition name="logoutbox" >
-                <p class="logout" @click="stopProp" v-show="logoutBox" >
-                    <i class="glyphicon glyphicon-off" ></i>
-                    <span @click="logout" >退出登录</span>
-                </p>
-            </transition>
-            <router-view></router-view>
-        </div>
-        <admin-aside></admin-aside>
-        <div class="show-sidebar-btn" @click="_show_sidebar"  >
-        <i class="glyphicon" :class="_change_color" ></i>
-        </div>
+  <div class="admin">
+    <admin-header></admin-header>
+    <all-images></all-images>
+    <div class="admin-main" @click="CLOSE_LOGOUT_BOX">
+      <transition name="logoutbox">
+        <p class="logout" @click="stopProp" v-show="logoutBox">
+          <i class="glyphicon glyphicon-off"></i>
+          <span @click="logout">退出登录</span>
+        </p>
+      </transition>
+      <router-view></router-view>
     </div>
+    <admin-aside></admin-aside>
+    <div class="show-sidebar-btn" @click="_show_sidebar">
+      <i class="glyphicon" :class="_change_color"></i>
+    </div>
+  </div>
 </template>
 
-
-
 <script>
-  import adminHeader from './admin_header.vue';
-  import adminAside from './admin_aside.vue';
-  import allImages from '@/views/components/all_images.vue';
-  import { mapActions,mapState,mapMutations,mapGetters } from 'vuex';
+import adminHeader from './admin_header.vue'
+import adminAside from './admin_aside.vue'
+import allImages from '@/views/components/all_images.vue'
+import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 
-  export default {
-    data () {
-      return {
-        isCollapsed: false
-      }
+export default {
+  data() {
+    return {
+      isCollapsed: false
+    }
+  },
+  components: {
+    adminHeader,
+    adminAside,
+    allImages
+  },
+  methods: {
+    ...mapMutations(['CLOSE_LOGOUT_BOX', 'TOOGLE_SIDEBAR']),
+    ...mapActions(['logOut']),
+    _show_sidebar: function() {},
+    logout: function() {
+      this.$router.push('/')
+      this.CLOSE_LOGOUT_BOX()
+      this.logOut()
     },
-    components: {
-      adminHeader,
-      adminAside,
-      allImages
+    _show_sidebar: function() {
+      this.TOOGLE_SIDEBAR()
     },
-    methods: {
-      ...mapMutations(['CLOSE_LOGOUT_BOX','TOOGLE_SIDEBAR']),
-      ...mapActions(['logOut']),
-      _show_sidebar:function() {
-
-      },
-      logout:function() {
-          this.$router.push('/');
-          this.CLOSE_LOGOUT_BOX();
-          this.logOut();
-      },
-        _show_sidebar:function() {
-            this.TOOGLE_SIDEBAR();
-      },
-      stopProp: function(e) {
-      e = e || event;
-      e.stopPropagation();
-      }
-    },
-    computed: {
-      ...mapState(['show_sidebar']),
-      ...mapGetters(['logoutBox']),
-      _change_color: function() {
-        if(this.show_sidebar) {
-        return 'white glyphicon-circle-arrow-left';
-        } else {
-        return 'black glyphicon-circle-arrow-right';
-        }
+    stopProp: function(e) {
+      e = e || event
+      e.stopPropagation()
+    }
+  },
+  computed: {
+    ...mapState(['show_sidebar']),
+    ...mapGetters(['logoutBox']),
+    _change_color: function() {
+      if (this.show_sidebar) {
+        return 'white glyphicon-circle-arrow-left'
+      } else {
+        return 'black glyphicon-circle-arrow-right'
       }
     }
-          
   }
+}
 </script>
-
-
 
 <style scoped>
 .admin-main {
-    position: absolute;
-	top: 38px;
-	left: 230px;
-    right: 0;
-    bottom: 0;
-    height: auto;
-	width: auto;
-    overflow-y: scroll;
-	z-index: 810;
-    box-shadow: inset 1px 1px 1px #ccc;
-	background-color: #edf1f2;
+  position: absolute;
+  top: 38px;
+  left: 230px;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  width: auto;
+  overflow-y: scroll;
+  z-index: 810;
+  box-shadow: inset 1px 1px 1px #ccc;
+  background-color: #edf1f2;
 }
 .logout {
   position: fixed;
@@ -96,17 +89,17 @@
   width: 100px;
   text-align: center;
   z-index: 9999;
-  background:#fff;
+  background: #fff;
   border-radius: 8px;
   box-shadow: 1px 1px 1px #ccc;
   cursor: pointer;
 }
 
 .logoutbox-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .logoutbox-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .logoutbox-enter, .logoutbox-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
@@ -131,33 +124,27 @@
   transition: all 0.5s;
 }
 
-
- @media only screen and (max-width: 1024px) {
-     .admin-main {
-         left: 130px;
-     }
- }
-
- @media only screen and (max-width: 500px) {
-      .admin-main {
-         left: 0px;
-     }
- .show-sidebar-btn {
-   position: fixed;
-  font-size: 30px;
-  z-index: 9998;
-  display: block;
-  bottom: 10px;
-  left: 0px;
-  opacity: 1;
+@media only screen and (max-width: 1024px) {
+  .admin-main {
+    left: 130px;
+  }
 }
- }
 
-
-
+@media only screen and (max-width: 500px) {
+  .admin-main {
+    left: 0px;
+  }
+  .show-sidebar-btn {
+    position: fixed;
+    font-size: 30px;
+    z-index: 9998;
+    display: block;
+    bottom: 10px;
+    left: 0px;
+    opacity: 1;
+  }
+}
 </style>
-
-
 
 <style>
 .el-switch,
@@ -176,7 +163,7 @@
 .el-switch .el-switch-style {
   height: 1.6em;
   left: 0;
-  background: #C0CCDA;
+  background: #c0ccda;
   -webkit-border-radius: 0.8em;
   border-radius: 0.8em;
   display: inline-block;
@@ -189,7 +176,7 @@
 }
 .el-switch .el-switch-style:before {
   display: block;
-  content: '';
+  content: "";
   height: 1.4em;
   position: absolute;
   width: 1.4em;
@@ -206,7 +193,7 @@
 }
 .el-switch > input[type="checkbox"][disabled] + .el-switch-style {
   cursor: not-allowed;
-  background-color: #D3DCE6;
+  background-color: #d3dce6;
 }
 .el-switch > input[type="checkbox"]:checked + .el-switch-style {
   background-color: #20a0ff;
@@ -215,28 +202,25 @@
   left: 50%;
 }
 
-
 .editor-toolbar.fullscreen,
 .CodeMirror-fullscreen {
   left: 230px !important;
 }
 .CodeMirror-sided {
-    right: 40%;
-    width: auto!important
+  right: 40%;
+  width: auto !important;
 }
 .editor-preview-side {
-    width: 40%;
+  width: 40%;
 }
 .editor-preview-side img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
-
- @media only screen and (max-width: 1024px) {
-     .editor-toolbar.fullscreen,
-    .CodeMirror-fullscreen {
+@media only screen and (max-width: 1024px) {
+  .editor-toolbar.fullscreen,
+  .CodeMirror-fullscreen {
     left: 130px !important;
-    }
- }
-
+  }
+}
 </style>

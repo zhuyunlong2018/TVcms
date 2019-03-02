@@ -93,134 +93,134 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex";
+import { mapActions, mapState, mapMutations } from 'vuex'
 import { getList } from '@/api/tags'
 import { getList as getNeighborsList } from '@/api/neighbors'
 import { getTime } from '@/utils'
 export default {
   data() {
     return {
-      msg_text: "按control+d收藏本站",
-      width: 250, //svg宽度
-      height: 300, //svg高度
-      RADIUS: 150, //球的半径
-      speedX: Math.PI / 360, //球一帧绕x轴旋转的角度
-      speedY: Math.PI / 360, //球-帧绕y轴旋转的角度
+      msg_text: '按control+d收藏本站',
+      width: 250, // svg宽度
+      height: 300, // svg高度
+      RADIUS: 150, // 球的半径
+      speedX: Math.PI / 360, // 球一帧绕x轴旋转的角度
+      speedY: Math.PI / 360, // 球-帧绕y轴旋转的角度
       tags: [],
       neighbors: [],
       time: '',
       setInterval: null
-    };
+    }
   },
   methods: {
-    ...mapActions(["addPraise", "getArticleList",'getWebData']),
-    ...mapMutations(["CHANGE_CRUMBS",'SET_ARTICLE_LIST_INFO']),
+    ...mapActions(['addPraise', 'getArticleList', 'getWebData']),
+    ...mapMutations(['CHANGE_CRUMBS', 'SET_ARTICLE_LIST_INFO']),
     getTagsList() {
-        getList('').then(response => {
-            let tags = response.data.data
-            let handler_tags = [];
-            for (let i = 0; i < tags.length; i++) {
-            let tag = {};
-            let k = -1 + (2 * (i + 1) - 1) / tags.length;
-            let a = Math.acos(k);
-            let b = a * Math.sqrt(tags.length * Math.PI); //计算标签相对于球心的角度
-            tag.name = tags[i].tag_name;
-            tag.id = tags[i].tag_id;
-            tag.x = this.CX + this.RADIUS * Math.sin(a) * Math.cos(b); //根据标签角度求出标签的x,y,z坐标
-            tag.y = this.CY + this.RADIUS * Math.sin(a) * Math.sin(b);
-            tag.z = this.RADIUS * Math.cos(a);
-            handler_tags.push(tag);
-            }
-            this.tags = handler_tags;
-        })
+      getList('').then(response => {
+        const tags = response.data.data
+        const handler_tags = []
+        for (let i = 0; i < tags.length; i++) {
+          const tag = {}
+          const k = -1 + (2 * (i + 1) - 1) / tags.length
+          const a = Math.acos(k)
+          const b = a * Math.sqrt(tags.length * Math.PI)// 计算标签相对于球心的角度
+          tag.name = tags[i].tag_name
+          tag.id = tags[i].tag_id
+          tag.x = this.CX + this.RADIUS * Math.sin(a) * Math.cos(b) // 根据标签角度求出标签的x,y,z坐标
+          tag.y = this.CY + this.RADIUS * Math.sin(a) * Math.sin(b)
+          tag.z = this.RADIUS * Math.cos(a)
+          handler_tags.push(tag)
+        }
+        this.tags = handler_tags
+      })
     },
     getNeighborsList() {
-        getNeighborsList(1).then(response => {
-            this.neighbors = response.data.data
-        })
+      getNeighborsList(1).then(response => {
+        this.neighbors = response.data.data
+      })
     },
     addArticlePraise(id) {
-        this.addPraise(id).then(() => {
-          this.webdata.praise_num++
-          const e = {target:{className:'glyphicon glyphicon-thumbs-up'}}
-          this.showText(e)
-        })
+      this.addPraise(id).then(() => {
+        this.webdata.praise_num++
+        const e = { target: { className: 'glyphicon glyphicon-thumbs-up' }}
+        this.showText(e)
+      })
     },
     showText(e) {
-      let element = e.target.className;
+      const element = e.target.className
       switch (element) {
-        case "glyphicon glyphicon-star-empty":
-          this.msg_text = "按control+d收藏本站";
-          break;
-        case "glyphicon glyphicon-envelope":
-          this.msg_text = "给我发送邮件";
-          break;
-        case "glyphicon glyphicon-comment":
-          this.msg_text = "累计获得" + this.webdata.comment_num + "条评论";
-          break;
-        case "glyphicon glyphicon-thumbs-up":
-          this.msg_text = "累计获赞" + this.webdata.praise_num + "个";
-          break;
+        case 'glyphicon glyphicon-star-empty':
+          this.msg_text = '按control+d收藏本站'
+          break
+        case 'glyphicon glyphicon-envelope':
+          this.msg_text = '给我发送邮件'
+          break
+        case 'glyphicon glyphicon-comment':
+          this.msg_text = '累计获得' + this.webdata.comment_num + '条评论'
+          break
+        case 'glyphicon glyphicon-thumbs-up':
+          this.msg_text = '累计获赞' + this.webdata.praise_num + '个'
+          break
       }
     },
     stopProp: function(e) {
-      e = e || event;
-      e.stopPropagation();
+      e = e || event
+      e.stopPropagation()
     },
     rotateX(angleX) {
-      var cos = Math.cos(angleX);
-      var sin = Math.sin(angleX);
-      for (let tag of this.tags) {
-        var y1 = (tag.y - this.CY) * cos - tag.z * sin + this.CY;
-        var z1 = tag.z * cos + (tag.y - this.CY) * sin;
-        tag.y = y1;
-        tag.z = z1;
+      var cos = Math.cos(angleX)
+      var sin = Math.sin(angleX)
+      for (const tag of this.tags) {
+        var y1 = (tag.y - this.CY) * cos - tag.z * sin + this.CY
+        var z1 = tag.z * cos + (tag.y - this.CY) * sin
+        tag.y = y1
+        tag.z = z1
       }
     },
     rotateY(angleY) {
-      var cos = Math.cos(angleY);
-      var sin = Math.sin(angleY);
-      for (let tag of this.tags) {
-        var x1 = (tag.x - this.CX) * cos - tag.z * sin + this.CX;
-        var z1 = tag.z * cos + (tag.x - this.CX) * sin;
-        tag.x = x1;
-        tag.z = z1;
+      var cos = Math.cos(angleY)
+      var sin = Math.sin(angleY)
+      for (const tag of this.tags) {
+        var x1 = (tag.x - this.CX) * cos - tag.z * sin + this.CX
+        var z1 = tag.z * cos + (tag.x - this.CX) * sin
+        tag.x = x1
+        tag.z = z1
       }
     },
     listener(event) {
-      //响应鼠标移动
-      var x = event.clientX - this.CX;
-      var y = event.clientY - this.CY;
+      // 响应鼠标移动
+      var x = event.clientX - this.CX
+      var y = event.clientY - this.CY
       this.speedX =
         x * 0.0001 > 0
           ? Math.min(this.RADIUS * 0.00002, x * 0.0001)
-          : Math.max(-this.RADIUS * 0.00002, x * 0.0001);
+          : Math.max(-this.RADIUS * 0.00002, x * 0.0001)
       this.speedY =
         y * 0.0001 > 0
           ? Math.min(this.RADIUS * 0.00002, y * 0.0001)
-          : Math.max(-this.RADIUS * 0.00002, y * 0.0001);
+          : Math.max(-this.RADIUS * 0.00002, y * 0.0001)
     },
     getArticleByTag: function(tag) {
-        let listObj = {
-            page: 1,
-            tagID: tag.id
-        }
-        this.SET_ARTICLE_LIST_INFO(listObj)
-        this.getArticleList()
-        let obj = {
-            tagName: tag.name,
-            tagID: tag.id,
-            title: ''
-        }
-        this.CHANGE_CRUMBS(obj)
-        this.$router.push('/')
+      const listObj = {
+        page: 1,
+        tagID: tag.id
+      }
+      this.SET_ARTICLE_LIST_INFO(listObj)
+      this.getArticleList()
+      const obj = {
+        tagName: tag.name,
+        tagID: tag.id,
+        title: ''
+      }
+      this.CHANGE_CRUMBS(obj)
+      this.$router.push('/')
     }
   },
   mounted() {
     setInterval(() => {
-      this.rotateX(this.speedX);
-      this.rotateY(this.speedY);
-    }, 17);
+      this.rotateX(this.speedX)
+      this.rotateY(this.speedY)
+    }, 17)
   },
   created() {
     this.getTagsList()
@@ -228,29 +228,28 @@ export default {
     this.getWebData()
     clearInterval(this.setInterval)
     this.setInterval = setInterval(() => {
-        this.time = getTime()
-    },1000)
+      this.time = getTime()
+    }, 1000)
   },
-  destroyed(){
+  destroyed() {
     clearInterval(this.setInterval)
   },
   computed: {
     ...mapState([
-      "webdata",
-      "how_long"
+      'webdata',
+      'how_long'
     ]),
     CX() {
-      //球心x坐标
-      return this.width / 2;
+      // 球心x坐标
+      return this.width / 2
     },
     CY() {
-      //球心y坐标
-      return this.height / 2;
+      // 球心y坐标
+      return this.height / 2
     }
   }
-};
+}
 </script>
-
 
 <style scoped>
 /* 网站内容-侧边区 */

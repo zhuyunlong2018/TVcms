@@ -72,16 +72,16 @@ export function formatTime(time, option) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
-//格式化时间
+// 格式化时间
 export function getTime() {
-  let now = new Date();
-  let year = now.getFullYear();
-  let month = now.getMonth()+1;
-  let day = now.getDate();
-  let hour = now.getHours();
-  let minute = now.getMinutes();
-  let second = now.getSeconds();
-  month = month.length < 2 ?  "0" + month : month;
-  day = day.length < 2 ?  "0" + day : day;
-  return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+  const now = new Date()
+  const year = now.getFullYear()
+  let month = now.getMonth() + 1
+  let day = now.getDate()
+  const hour = now.getHours()
+  const minute = now.getMinutes()
+  const second = now.getSeconds()
+  month = month.length < 2 ? '0' + month : month
+  day = day.length < 2 ? '0' + day : day
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
 }

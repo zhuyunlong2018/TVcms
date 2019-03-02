@@ -7,8 +7,8 @@
 
 <script>
 
-import components from '@/views/components/components.vue';
-import { mapActions,mapMutations } from 'vuex';
+import components from '@/views/components/components.vue'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -18,17 +18,15 @@ export default {
     ...mapActions(['get_webdata']),
     ...mapMutations(['GET_HOW_LONG'])
   },
-  mounted:function() {
-    this.GET_HOW_LONG();
+  mounted: function() {
+    this.GET_HOW_LONG()
   }
 }
 
 </script>
 
-
 <style>
   @import '~simplemde/dist/simplemde.min.css';
-
 
   pre {
     border: none;
@@ -36,8 +34,6 @@ export default {
   }
 </style>
 
-
 <style scoped>
-
 
 </style>

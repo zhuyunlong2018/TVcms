@@ -61,31 +61,29 @@
 </template>
 
 <script>
-  import { getTime } from '@/utils'
-  import { mapState } from 'vuex';
-  export default {
-    data() {
-      return {
-        time: '',
-        setInterval: null
-      }
-    },
-    created() {
-      clearInterval(this.setInterval)
-      this.setInterval = setInterval(() => {
-          this.time = getTime()
-      },1000)
-    },
-    destroyed(){
-      clearInterval(this.setInterval)
-    },
-    computed: {
-      ...mapState(["webdata","now_time","how_long"])
+import { getTime } from '@/utils'
+import { mapState } from 'vuex'
+export default {
+  data() {
+    return {
+      time: '',
+      setInterval: null
     }
+  },
+  created() {
+    clearInterval(this.setInterval)
+    this.setInterval = setInterval(() => {
+      this.time = getTime()
+    }, 1000)
+  },
+  destroyed() {
+    clearInterval(this.setInterval)
+  },
+  computed: {
+    ...mapState(['webdata', 'now_time', 'how_long'])
   }
+}
 </script>
-
-
 
 <style>
   .outline {
@@ -105,16 +103,10 @@
     .outline {
     width: 95%;
   }
-  
+
 }
 
-
-
-
-
 </style>
-
-
 
 <style scoped>
 
@@ -159,7 +151,7 @@
   .message ul li {
     border: 1px solid #aaa;
     margin-bottom: -1px;
-    
+
   }
   .message ul li span {
     text-align: center;
@@ -173,7 +165,6 @@
     padding: 0 20px;
   }
 
-
 @media only screen and (max-width:600px) {
     .message ul li span {
     padding: 10px 0;
@@ -186,8 +177,5 @@
     overflow: hidden;
   }
 }
-
-
-
 
 </style>

@@ -7,7 +7,6 @@
   </div>
 </template>
 
-
 <script>
 import { get } from '@/api/about'
 import simplemde from 'simplemde'
@@ -20,18 +19,17 @@ export default {
   methods: {
     get() {
       get(1).then(response => {
-        this.about = simplemde.prototype.markdown(response.data.data.about_content);
+        this.about = simplemde.prototype.markdown(response.data.data.about_content)
       })
     }
   },
-  created(){
+  created() {
     this.get()
   },
   computed: {
   }
 }
 </script>
-
 
 <style scoped>
   .main .content {
@@ -48,6 +46,5 @@ export default {
   .main .about img {
     max-width: 100%;
   }
-
 
 </style>

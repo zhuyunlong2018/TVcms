@@ -1,14 +1,10 @@
 import axios from 'axios'
 import store from '../store'
 import { getToken } from '@/utils/auth'
-import router from '../routes';
-
-
+import router from '../routes'
 // 创建axios实例
 const service = axios.create({
-  //baseURL: process.env.BASE_API, // api 的 base_url
-  // baseURL: "http://zhuzu.top/tvcms/public/index.php", // api 的 base_url
-  baseURL: "http://www.bianquan.com/index.php", // api 的 base_url
+  baseURL: process.env.BASE_API, // api 的 base_url
   timeout: 5000 // 请求超时时间
 })
 
@@ -36,12 +32,12 @@ service.interceptors.response.use(
   },
   error => {
     // console.log('err' + error) // for debug
-    if(typeof error.response.data.msg == 'undefined') {
-      store.commit('SHOW_ALERT','未知错误')
+    if (typeof error.response.data.msg === 'undefined') {
+      store.commit('SHOW_ALERT', '未知错误')
     } else {
-      store.commit('SHOW_ALERT',error.response.data.msg)
+      store.commit('SHOW_ALERT', error.response.data.msg)
     }
-    if(error.response.data.error_code === 10001) {
+    if (error.response.data.error_code === 10001) {
       store.dispatch('logOut')
       router.push('/')
     }
