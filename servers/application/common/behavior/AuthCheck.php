@@ -32,7 +32,7 @@ class AuthCheck
         $api = strtolower($module.'/'.$controller.'/'.$action);
         $class = 'app'.DS.$module.DS.'controller'.DS.$controller;
         ActionInfo::init($class,$action,$api);
-        if($method !== ActionInfo::$method) {
+        if(ActionInfo::$method && $method !== ActionInfo::$method) {
             throw new RequestMethodException();
         }
         Auth::init($api,$method);

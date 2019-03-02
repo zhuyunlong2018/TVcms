@@ -43,6 +43,9 @@ class ActionInfo
 
     protected static function getApi($tag) {
         $str = self::getDocComment(self::$ref->getDocComment(), $tag);
+        if(empty($str)) {
+            return;
+        }
         $infos = explode(',',$str);
         try{
             self::$desc = $infos[0];

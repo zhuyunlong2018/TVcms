@@ -293,7 +293,7 @@ export function toRoutes(menus) {
   const userRouters = []
   menus.forEach(menu => {
     let {
-      id,
+      menu_id,
       path,
       component,
       name,
@@ -305,7 +305,7 @@ export function toRoutes(menus) {
     if (children && children instanceof Array) {
       children = toRoutes(children)
     }
-    meta.id = id
+    meta.id = menu_id
     meta.title = title
     meta.icon = icon
 

@@ -16,26 +16,26 @@ export function getUserRouter(query) {
   })
 }
 
-export function linkApi(data) {
-  return request({
-    url: '/admin/menu/linkApi',
-    method: 'post',
-    data
-  })
-}
-
-export function unLinkApi(data) {
-  return request({
-    url: '/admin/menu/unLinkApi',
-    method: 'post',
-    data
-  })
-}
-
 export function getMenu(query) {
   return request({
     url: '/admin/menu/getMenu',
     method: 'get',
     params: query
+  })
+}
+
+export function update(data) {
+  return request({
+    url: '/admin/menu/update',
+    method: 'post',
+    data
+  })
+}
+
+export function create(data) {
+  return request({
+    url: '/admin/menu/create',
+    method: 'post',
+    data
   })
 }

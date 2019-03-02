@@ -26,8 +26,11 @@ class SystemMenu extends BaseModel
         return $this->hasMany('SystemMenu','father_id','menu_id');
     }
 
-    public static function getList() {
-        return self::with(['children.api'])->where('father_id',0)->select();
+    public static function getList($name,$page,$limit,$order,$sort) {
+        return self::with(['children.api'])
+            ->where('father_id',0)
+            ->order( "$sort $order")
+            ->select();
     }
 
     public static function getRouter($menus) {
@@ -36,8 +39,11 @@ class SystemMenu extends BaseModel
             $condition = ['menu_id'=>['in',$menus]];
         }
         return self::with(['children'=>function($query) use($condition) {
-            $query->where($condition);
-        }])->where('father_id',0)->select();
+            $query->where($condition)->order('sort asc');
+        }])->where('father_id',0)
+            ->order('sort asc')
+//            ->fetchSql()
+            ->select();
     }
 
     public static function getRoleMenu($menusID) {

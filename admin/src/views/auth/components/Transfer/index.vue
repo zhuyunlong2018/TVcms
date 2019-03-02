@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p style="text-align: center; margin: 0 0 20px">使用 render-content 自定义数据项</p>
     <div style="text-align: center">
       <el-transfer
         style="text-align: left; display: inline-block"
@@ -15,23 +14,19 @@
         }"
         @change="handleChange"
         :data="data"
-      >
-      </el-transfer>
+      ></el-transfer>
     </div>
-
-
-
   </div>
 </template>
 
 <style>
-  .transfer-footer {
-    margin-left: 20px;
-    padding: 6px 5px;
-  }
-  .el-transfer-panel {
-    width: 400px;
-  }
+.transfer-footer {
+  margin-left: 20px;
+  padding: 6px 5px;
+}
+.el-transfer-panel {
+  width: 400px;
+}
 </style>
 
 <script>
@@ -47,14 +42,7 @@ export default {
         });
       }
       return data;
-    }
-    const checked = arr => {
-      let data = []
-      for(const v of arr) {
-        data.push(v)
-      }
-      return data
-    }
+    };
     return {
       data: generateData(this.apiList),
       // value: checked(this.menuApi),
@@ -69,23 +57,32 @@ export default {
     };
   },
   props: {
-      apiList: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
-      menuApi: {
-        type: Array,
-        default() {
-          return []
-        }
+    apiList: {
+      type: Array,
+      default() {
+        return [];
       }
+    },
+    menuApi: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
   },
-
+  watch: {
+    menuApi: {
+      handler(newValue, oldValue) {
+        //父组件param对象改变会触发此函数
+        this.value = newValue
+      },
+      deep: true
+    }
+  },
   methods: {
     handleChange(value, direction, movedKeys) {
-      console.log(value, direction, movedKeys);
+      // console.log(value, direction, movedKeys);
+      this.$emit('changeApi',value)
     }
   }
 };
