@@ -7,7 +7,7 @@
 
 * 概要：提供动态权限控制、api自动注入、前端路由动态生成的管理平台
 
-* [文档](https://gitee.com/zhuyunlong2018/TVcms/wikis)（暂未书写，有空会补充进去）
+* [文档](https://gitee.com/zhuyunlong2018/TVcms/wikis)（有空会陆续更新）
 
  
 
@@ -15,7 +15,7 @@
 
 说明：演示只是最为基础版本、且存在异常和bug，有兴趣最好可以直接clone到本地部署查看
 
-* [admin](http://zhuzu.top/dist)
+* [admin](http://zhuzu.top/admin)
 * [blog](http://zhuzu.top)
 
 
