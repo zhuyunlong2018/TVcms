@@ -7,7 +7,7 @@
 
 * 概要：提供动态权限控制、api自动注入、前端路由动态生成的管理平台
 
-* [文档](https://gitee.com/zhuyunlong2018/TVcms/wikis)（有空会陆续更新）
+* [文档](https://gitee.com/zhuyunlong2018/TVcms/wikis/pages)（有空会陆续更新）
 
  
 

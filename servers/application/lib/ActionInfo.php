@@ -15,6 +15,11 @@ use app\lib\exception\DevException;
 use ReflectionMethod;
 use think\Cache;
 
+/**
+ * 通过反射获取api对应函数信息
+ * Class ActionInfo
+ * @package app\lib
+ */
 class ActionInfo
 {
 

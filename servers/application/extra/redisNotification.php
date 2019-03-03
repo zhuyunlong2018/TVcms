@@ -14,8 +14,6 @@
  * 3、传入回调函数的参数值
  */
 return [
-
-
     //上传图片未绑定且过期,
     'uploadUnbound'   => 'app\admin\service\Uploads|#|uploadUnboundExpired|#|'
 
