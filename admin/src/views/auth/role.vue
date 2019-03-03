@@ -54,7 +54,7 @@
         status-icon
         label-position="left"
         label-width="100px"
-        style="max-width: 400px; margin-left:50px;"
+        style="max-width: 400px; margin-left:20px;"
       >
         <el-form-item label="角色名称" prop="role_name">
           <el-input v-model="dataForm.role_name"/>
@@ -69,19 +69,17 @@
           inactive-text="只读模式">
           </el-switch>
         </el-form-item>
-        
-        <div v-for='(menu,index) in menus' :key="menu.menu_id">
-          <el-checkbox
-          :indeterminate="dataForm.menus[index].isIndeterminate"
-          v-model="dataForm.menus[index].checkAll"
-          @change="((val) => { handleCheckAllChange(val, index) })"
-          >{{menu.title}}</el-checkbox>
-          <el-checkbox-group v-model="dataForm.menus[index].children" @change="((val) => { handleCheckedMenusChange(val, index, menu) })">
-            <el-checkbox v-for="subMenu in menu.children" :label="subMenu.menu_id" :key="subMenu.menu_id">{{subMenu.title}}</el-checkbox>
-          </el-checkbox-group>
-        </div>
-        
       </el-form>
+      <div class="checkbox-group" v-for='(menu,index) in menus' :key="menu.menu_id">
+        <el-checkbox
+        :indeterminate="dataForm.menus[index].isIndeterminate"
+        v-model="dataForm.menus[index].checkAll"
+        @change="((val) => { handleCheckAllChange(val, index) })"
+        >{{menu.title}}</el-checkbox>
+        <el-checkbox-group class="el-checkbox-group" v-model="dataForm.menus[index].children" @change="((val) => { handleCheckedMenusChange(val, index, menu) })">
+          <el-checkbox v-for="subMenu in menu.children" :label="subMenu.menu_id" :key="subMenu.menu_id">{{subMenu.title}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
@@ -92,31 +90,12 @@
 </template>
 
 <style>
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #20a0ff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
-.avatar {
-  width: 120px;
-  height: 120px;
-  display: block;
-}
 .el-tag + .el-tag {
   margin-left: 10px;
+}
+.checkbox-group {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 </style>
 

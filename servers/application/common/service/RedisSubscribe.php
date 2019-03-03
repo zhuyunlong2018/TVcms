@@ -11,26 +11,31 @@ namespace app\common\service;
 
 
 use app\lib\Redis;
-use app\lib\File;
-use think\Cache;
+use app\lib\WriteLog;
+use ReflectionClass;
 
 class RedisSubscribe
 {
 
     public function sub()
     {
-
         $redis = Redis::init(2);
         $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
         $redis->psubscribe(array('__keyevent@2__:expired'), function ($redis, $pattern, $chan, $msg) {
             echo "Notifyload: $msg\n";
-            $arr = explode('|#|',$msg);
-            switch ($arr[0]) {
-                case 'uploadUnboundExpired':
-                    File::unlink($arr[1],config('path.temporary'));
-                    break;
-                default:
+            try{
+                $arr = explode('|#|',$msg);
+                $class = new ReflectionClass($arr[0]);
+                $instance  = $class->newInstanceArgs();
+                $instance->{$arr[1]}($arr[2]);
+            } catch (\Exception $e) {
+                $data = [
+                    'error' => $e->getMessage(),
+                    'data' => $msg
+                ];
+                new WriteLog($data);
             }
+
 
         });
     }

@@ -23,7 +23,7 @@ use ReflectionMethod;
 use think\Cache;
 use think\Controller;
 use app\admin\service\Role as RoleService;
-use think\Request;
+use think\Exception;use think\Request;
 
 class Index extends BaseController
 {
@@ -131,6 +131,15 @@ class Index extends BaseController
 //        $redis->hmset($key,$user);
         $a = $redis->hgetall('admin_user_id:1');
         dump($a);
+    }
+
+    public function reflection() {
+//        try {
+//            $method = new ReflectionMethod('app\test\service\Test', 'test');
+//            $method->invoke('test');
+//        } catch (\ReflectionException $e) {
+//        }
+
     }
 
 

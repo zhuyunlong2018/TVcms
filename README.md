@@ -72,7 +72,7 @@
     npm install//安装不成功可以用cnpm install
     npm run dev
     ```
-    blog模块相同,修改blog/src/utils/request.js中的baseURL为自己的后台地址
+    blog模块相同,修改blog//config/文件夹下的dev.env.js、prod.env.js中BASE_API修改为自己的地址
 	```bash
 	cd blog
     npm install//安装不成功可以用cnpm install

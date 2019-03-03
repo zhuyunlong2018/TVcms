@@ -27,7 +27,7 @@
         </template>
       </el-table-column>
     </tree-table>
-    <el-dialog :title="dialogTitle" width="1000px" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" width="1000px" :visible.sync="dialogFormVisible">
       
       <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; float: left; margin-left:50px;">
         <el-form-item label="菜单栏标题" prop="title">
@@ -106,6 +106,10 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       dialogTitle: '编辑菜单',
+      textMap: {
+        update: '编辑',
+        create: '创建'
+      },
       dataForm: {
         menu_id: undefined,
         father_id: 0,
@@ -198,6 +202,7 @@ export default {
       })
     },
     handleUpdate(row) {
+      this.dialogStatus = 'update'
       this.dataForm = {
         menu_id: row.menu_id,
         father_id: row.father_id,
